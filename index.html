@@ -81,7 +81,12 @@
                     title: "단위 변환기",
                     input: "입력",
                     result: "결과",
-                    types: { length: "길이", weight: "무게", temp: "온도" }
+                    types: { length: "길이", weight: "무게", temp: "온도" },
+                    labels: {
+                        cm: "cm", m: "m", km: "km", inch: "inch", ft: "ft", yard: "yard",
+                        kg: "kg", g: "g", lb: "lb", oz: "oz",
+                        Celsius: "섭씨 (℃)", Fahrenheit: "화씨 (℉)"
+                    }
                 },
                 bmi: {
                     title: "BMI 비만도 계산기",
@@ -90,6 +95,7 @@
                     calcBtn: "계산하기",
                     myBmi: "나의 BMI",
                     inputPrompt: "키와 몸무게를 입력하세요",
+                    error: "정확한 수치를 입력해주세요",
                     status: { under: "저체중", normal: "정상", over: "과체중", obese: "비만" }
                 },
                 stopwatch: {
@@ -154,7 +160,12 @@
                     title: "Unit Converter",
                     input: "Input",
                     result: "Result",
-                    types: { length: "Length", weight: "Weight", temp: "Temp" }
+                    types: { length: "Length", weight: "Weight", temp: "Temp" },
+                    labels: {
+                        cm: "cm", m: "m", km: "km", inch: "inch", ft: "ft", yard: "yard",
+                        kg: "kg", g: "g", lb: "lb", oz: "oz",
+                        Celsius: "Celsius (℃)", Fahrenheit: "Fahrenheit (℉)"
+                    }
                 },
                 bmi: {
                     title: "BMI Calculator",
@@ -163,6 +174,7 @@
                     calcBtn: "Calculate",
                     myBmi: "My BMI",
                     inputPrompt: "Enter height and weight",
+                    error: "Please enter valid numbers",
                     status: { under: "Underweight", normal: "Normal", over: "Overweight", obese: "Obese" }
                 },
                 stopwatch: {
@@ -390,7 +402,9 @@
                                 <div class="flex gap-2">
                                     <input type="number" value={val} onChange={e => setVal(e.target.value)} class="flex-1 p-3 border rounded-lg outline-none focus:ring-2 focus:ring-orange-500" placeholder="0" />
                                     <select value={from} onChange={e => setFrom(e.target.value)} class="p-3 border rounded-lg outline-none bg-white">
-                                        {units[category].map(u => <option key={u} value={u}>{u}</option>)}
+                                        {units[category].map(u => (
+                                            <option key={u} value={u}>{t.labels[u] || u}</option>
+                                        ))}
                                     </select>
                                 </div>
                             </div>
@@ -404,7 +418,9 @@
                                 <div class="flex gap-2">
                                     <input type="text" readOnly value={result} class="flex-1 p-3 bg-slate-50 border rounded-lg outline-none text-orange-600 font-bold" placeholder="0" />
                                     <select value={to} onChange={e => setTo(e.target.value)} class="p-3 border rounded-lg outline-none bg-white">
-                                        {units[category].map(u => <option key={u} value={u}>{u}</option>)}
+                                        {units[category].map(u => (
+                                            <option key={u} value={u}>{t.labels[u] || u}</option>
+                                        ))}
                                     </select>
                                 </div>
                             </div>
@@ -422,17 +438,32 @@
             const t = translations[lang].bmi;
 
             const calculate = () => {
-                if(height && weight) {
-                    const h = height / 100;
-                    const result = weight / (h * h);
-                    setBmi(result.toFixed(1));
+                // Safety check: Ensure inputs are positive numbers
+                const h = parseFloat(height);
+                const w = parseFloat(weight);
+                
+                if (h > 0 && w > 0) {
+                    const h_meters = h / 100;
+                    const result = w / (h_meters * h_meters);
+                    
+                    if (isFinite(result) && !isNaN(result)) {
+                        setBmi(result.toFixed(1));
+                    } else {
+                        setBmi(null);
+                        alert(t.error);
+                    }
+                } else {
+                    setBmi(null);
                 }
             };
 
             const getStatus = (b) => {
-                if(b < 18.5) return { text: t.status.under, color: 'text-blue-500', bg: 'bg-blue-100' };
-                if(b < 23) return { text: t.status.normal, color: 'text-green-500', bg: 'bg-green-100' };
-                if(b < 25) return { text: t.status.over, color: 'text-yellow-500', bg: 'bg-yellow-100' };
+                const val = parseFloat(b);
+                if (isNaN(val)) return { text: '-', color: 'text-slate-400', bg: 'bg-slate-100' };
+
+                if(val < 18.5) return { text: t.status.under, color: 'text-blue-500', bg: 'bg-blue-100' };
+                if(val < 23) return { text: t.status.normal, color: 'text-green-500', bg: 'bg-green-100' };
+                if(val < 25) return { text: t.status.over, color: 'text-yellow-500', bg: 'bg-yellow-100' };
                 return { text: t.status.obese, color: 'text-red-500', bg: 'bg-red-100' };
             };
 
@@ -462,7 +493,7 @@
                             </div>
 
                             <div class="flex items-center justify-center">
-                                {bmi ? (
+                                {bmi && status ? (
                                     <div class={`text-center p-8 rounded-full h-48 w-48 flex flex-col items-center justify-center border-4 ${status.color.replace('text', 'border')} ${status.bg} bg-opacity-20`}>
                                         <div class="text-sm text-slate-500 mb-1">{t.myBmi}</div>
                                         <div class={`text-4xl font-bold ${status.color} mb-1`}>{bmi}</div>
