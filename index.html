@@ -95,7 +95,7 @@
                     calcBtn: "계산하기",
                     myBmi: "나의 BMI",
                     inputPrompt: "키와 몸무게를 입력하세요",
-                    error: "정확한 수치를 입력해주세요",
+                    error: "정확한 수치를 입력해주세요 (0보다 커야 함)",
                     status: { under: "저체중", normal: "정상", over: "과체중", obese: "비만" }
                 },
                 stopwatch: {
@@ -174,7 +174,7 @@
                     calcBtn: "Calculate",
                     myBmi: "My BMI",
                     inputPrompt: "Enter height and weight",
-                    error: "Please enter valid numbers",
+                    error: "Please enter valid numbers (> 0)",
                     status: { under: "Underweight", normal: "Normal", over: "Overweight", obese: "Obese" }
                 },
                 stopwatch: {
@@ -430,30 +430,36 @@
             );
         };
 
-        // 4. BMI 계산기
+        // 4. BMI 계산기 (수정됨)
         const BMICalculator = ({ lang }) => {
             const [height, setHeight] = useState('');
             const [weight, setWeight] = useState('');
             const [bmi, setBmi] = useState(null);
+            const [errorMsg, setErrorMsg] = useState(''); // 에러 메시지 상태 추가
             const t = translations[lang].bmi;
 
             const calculate = () => {
-                // Safety check: Ensure inputs are positive numbers
+                setErrorMsg(''); // 초기화
+                
+                // 입력값 보호: 숫자로 변환
                 const h = parseFloat(height);
                 const w = parseFloat(weight);
                 
-                if (h > 0 && w > 0) {
-                    const h_meters = h / 100;
-                    const result = w / (h_meters * h_meters);
-                    
-                    if (isFinite(result) && !isNaN(result)) {
-                        setBmi(result.toFixed(1));
-                    } else {
-                        setBmi(null);
-                        alert(t.error);
-                    }
+                // 유효성 검사: 0 이하 또는 빈 값일 경우 에러 처리
+                if (!h || !w || h <= 0 || w <= 0) {
+                     setBmi(null);
+                     setErrorMsg(t.error); 
+                     return;
+                }
+
+                const h_meters = h / 100;
+                const result = w / (h_meters * h_meters);
+                
+                if (isFinite(result) && !isNaN(result)) {
+                    setBmi(result.toFixed(1));
                 } else {
                     setBmi(null);
+                    setErrorMsg(t.error);
                 }
             };
 
@@ -490,6 +496,12 @@
                                 <button onClick={calculate} class="w-full bg-cyan-500 hover:bg-cyan-600 text-white font-bold py-3 rounded-lg transition-colors">
                                     {t.calcBtn}
                                 </button>
+                                {/* 에러 메시지 표시 영역 */}
+                                {errorMsg && (
+                                    <div class="text-red-500 text-sm text-center font-medium animate-pulse">
+                                        ⚠️ {errorMsg}
+                                    </div>
+                                )}
                             </div>
 
                             <div class="flex items-center justify-center">
