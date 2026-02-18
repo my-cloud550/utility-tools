@@ -149,3 +149,146 @@ function WordCounterTool() {
     const words = text.trim() === "" ? 0 : text.trim().split(/\s+/).length;
     const lines = text === "" ? 0 : text.split(/\n/).length;
     return { withSpace, noSpace, words, lines };
+  }, [text]);
+
+  return (
+    <div className="space-y-6">
+      <div className="rounded-3xl border bg-white p-8 shadow-sm">
+        <textarea
+          className="w-full h-48 p-6 rounded-2xl bg-slate-50 border border-slate-200 focus:bg-white focus:border-blue-500 outline-none resize-none"
+          placeholder="텍스트를 입력하거나 붙여넣으세요..."
+          value={text}
+          onChange={(e) => setText(e.target.value)}
+        />
+
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mt-6">
+          <StatCard label="공백 포함" value={stats.withSpace} tone="bg-blue-50" />
+          <StatCard label="공백 제외" value={stats.noSpace} tone="bg-indigo-50" />
+          <StatCard label="단어 수" value={stats.words} tone="bg-emerald-50" />
+          <StatCard label="줄 수" value={stats.lines} tone="bg-amber-50" />
+        </div>
+      </div>
+
+      <div className="rounded-3xl border bg-white p-8 shadow-sm">
+        <div className="flex items-start gap-3">
+          <div className="w-1.5 self-stretch bg-blue-600 rounded-full" />
+          <div className="flex-1">
+            <div className="flex items-center gap-2 text-slate-900 font-bold">
+              <span className="inline-flex items-center justify-center w-8 h-8 rounded-xl bg-blue-50 text-blue-700">
+                ?
+              </span>
+              활용 꿀팁
+            </div>
+            <div className="mt-3 text-slate-800 font-semibold">
+              자소서.블로그 필수.글자 수 세기
+            </div>
+            <p className="mt-2 text-slate-600 leading-relaxed">
+              네이버 글자수세기와 동일한 기준으로 공백 포함 글자 수와 공백 제외 글자 수를 정확하게 계산합니다.
+              자기소개서(자소서) 작성, 블로그 포스팅, 리포트 작성 시 500자, 1000자 제한을 맞출 때 자주 쓰입니다.
+            </p>
+
+            <div className="mt-4 flex flex-wrap gap-2">
+              {["#글자수세기", "#공백포함", "#공백제외", "#자소서글자수", "#블로그글자수"].map((t) => (
+                <span
+                  key={t}
+                  className="px-3 py-1.5 rounded-full bg-slate-100 text-slate-600 text-xs font-medium"
+                >
+                  {t}
+                </span>
+              ))}
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+function Home() {
+  const cards = [
+    {
+      title: "글자 수 세기",
+      desc: "공백 포함/제외, 단어/줄까지 한 번에.",
+      href: "/tools/word-counter/",
+    },
+    {
+      title: "대소문자 변환",
+      desc: "준비중 (URL은 /#case 로 임시 연결).",
+      href: "/#case",
+    },
+    {
+      title: "퍼센트 계산",
+      desc: "준비중 (URL은 /#percent 로 임시 연결).",
+      href: "/#percent",
+    },
+  ];
+
+  return (
+    <div className="space-y-6">
+      <div className="rounded-3xl border bg-white p-8 shadow-sm">
+        <div className="inline-flex items-center px-3 py-1 rounded-full bg-blue-50 text-blue-700 text-xs font-semibold">
+          스마트 툴 모음
+        </div>
+        <h1 className="mt-3 text-3xl font-extrabold text-slate-900">
+          UtilityBox 도구 모음
+        </h1>
+        <p className="mt-2 text-slate-600">
+          각 도구는 고유 링크로 운영됩니다. (예: /tools/word-counter/)
+        </p>
+      </div>
+
+      <div className="grid md:grid-cols-3 gap-5">
+        {cards.map((c) => (
+          <a key={c.title} href={c.href} className="rounded-3xl border bg-white p-7 shadow-sm hover:shadow transition">
+            <div className="text-lg font-extrabold text-slate-900">{c.title}</div>
+            <div className="mt-2 text-slate-600">{c.desc}</div>
+            <div className="mt-4 text-sm font-semibold text-blue-700">열기 →</div>
+          </a>
+        ))}
+      </div>
+    </div>
+  );
+}
+
+function App() {
+  // 각 페이지(index.html)에서 window.__PAGE__ 로 지정
+  const page = (window.__PAGE__ || "").trim();
+
+  // 페이지별 활성 메뉴 선택
+  const activeId = page === "wordCounter" ? "wordCounter" : "home";
+
+  return (
+    <div className="bg-slate-50 min-h-screen">
+      <div className="flex">
+        <Sidebar activeId={activeId === "home" ? "wordCounter" : "wordCounter"} />
+        <main className="flex- composed w-full">
+          <div className="w-full max-w-5xl mx-auto px-6 py-10">
+            <div className="hidden md:block text-center text-slate-400 text-sm mb-8">
+              Display Ad (Responsive)
+            </div>
+
+            {page === "wordCounter" ? (
+              <>
+                <div className="inline-flex items-center px-3 py-1 rounded-full bg-blue-50 text-blue-700 text-xs font-semibold">
+                  텍스트 도구
+                </div>
+                <h1 className="mt-3 text-4xl font-extrabold text-slate-900">글자 수 세기</h1>
+                <div className="mt-8">
+                  <WordCounterTool />
+                </div>
+              </>
+            ) : (
+              <Home />
+            )}
+
+            <footer className="mt-14 text-center text-slate-500 text-sm">
+              © 2026 Utility Box. All tools run locally in your browser.
+            </footer>
+          </div>
+        </main>
+      </div>
+    </div>
+  );
+}
+
+ReactDOM.createRoot(document.getElementById("root")).render(<App />);
