@@ -2,285 +2,447 @@
 <html lang="ko">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Utility Box Pro - Essential Smart Tools</title>
-    <!-- 파비콘 설정 -->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Utility Box - Premium Tools</title>
+    <!-- 파비콘 -->
     <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>📦</text></svg>">
     
-    <!-- 최신 라이브러리 로드 -->
+    <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Inter', 'Noto Sans KR', 'sans-serif'],
+                        mono: ['JetBrains Mono', 'monospace'],
+                    },
+                    colors: {
+                        primary: { 50: '#eff6ff', 100: '#dbeafe', 500: '#3b82f6', 600: '#2563eb', 700: '#1d4ed8' },
+                    },
+                    boxShadow: {
+                        'soft': '0 4px 20px -2px rgba(0, 0, 0, 0.05)',
+                        'glow': '0 0 15px rgba(59, 130, 246, 0.5)',
+                    }
+                }
+            }
+        }
+    </script>
+
+    <!-- React & ReactDOM -->
     <script crossorigin src="https://unpkg.com/react@18/umd/react.development.js"></script>
     <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.development.js"></script>
+    <!-- Babel -->
     <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+    <!-- Lucide Icons -->
     <script src="https://unpkg.com/lucide@latest"></script>
 
-    <!-- Firebase SDK (호환 모드) -->
-    <script src="https://www.gstatic.com/firebasejs/11.0.1/firebase-app-compat.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/11.0.1/firebase-auth-compat.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/11.0.1/firebase-firestore-compat.js"></script>
-
+    <!-- Fonts -->
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;700;900&display=swap');
-        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;700;900&display=swap');
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&family=JetBrains+Mono:wght@400;700&family=Noto+Sans+KR:wght@300;400;500;700&display=swap');
         
-        body { font-family: 'Inter', 'Noto Sans KR', sans-serif; }
-        .hide-scrollbar::-webkit-scrollbar { display: none; }
-        .hide-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
-        
-        /* 프리미엄 디자인 토큰 */
-        .glass-panel { @apply bg-white/80 backdrop-blur-md border border-slate-200/50 shadow-xl shadow-slate-200/50; }
-        .tool-card { @apply bg-white p-8 rounded-[40px] border border-slate-100 shadow-sm transition-all hover:shadow-xl hover:shadow-slate-200/50; }
-        .admin-input { @apply w-full p-4 bg-slate-50 border border-slate-200 rounded-3xl focus:ring-4 focus:ring-blue-500/10 focus:border-blue-500 outline-none transition-all font-bold; }
-        
-        /* 로또 번호 공 애니메이션 */
-        .ball-bounce { animation: bounce 0.5s ease-out; }
-        @keyframes bounce { 0% { transform: scale(0); } 70% { transform: scale(1.1); } 100% { transform: scale(1); } }
-        
-        /* 커스텀 슬라이더 스타일 */
-        input[type=range]::-webkit-slider-thumb {
-            -webkit-appearance: none;
-            height: 24px; width: 24px;
-            border-radius: 50%;
-            background: #2563eb;
-            cursor: pointer;
-            box-shadow: 0 0 10px rgba(37, 99, 235, 0.3);
+        body { 
+            font-family: 'Inter', 'Noto Sans KR', sans-serif; 
+            background-color: #f8fafc;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar { width: 6px; height: 6px; }
+        ::-webkit-scrollbar-track { background: transparent; }
+        ::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 3px; }
+        ::-webkit-scrollbar-thumb:hover { background: #94a3b8; }
+
+        .glass-panel {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.5);
+        }
+
+        .gradient-text {
+            background: linear-gradient(135deg, #2563eb, #7c3aed);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .animate-fade-in { animation: fadeIn 0.3s ease-out; }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* 3D Ball Effect */
+        .lotto-ball {
+            background: radial-gradient(circle at 30% 30%, rgba(255,255,255,0.8), transparent 20%),
+                        linear-gradient(135deg, var(--bg-color-from), var(--bg-color-to));
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1), inset 0 -4px 6px rgba(0,0,0,0.1);
         }
     </style>
 </head>
-<body class="bg-[#F8FAFC] text-[#1E293B]">
+<body class="text-slate-800 h-screen overflow-hidden selection:bg-blue-100 selection:text-blue-900">
     <div id="root"></div>
 
     <script type="text/babel">
-        const { useState, useEffect, useRef, useMemo } = React;
+        const { useState, useEffect, useRef } = React;
 
-        // --- 1. 파이어베이스 설정 (주인장님 정보) ---
-        const firebaseConfig = {
-            apiKey: "AIzaSyDwYItXXCjm8srVigEHhYXs3pPaeo5Ee2k",
-            authDomain: "my-utility-box-b8fb2.firebaseapp.com",
-            projectId: "my-utility-box-b8fb2",
-            storageBucket: "my-utility-box-b8fb2.firebasestorage.app",
-            messagingSenderId: "939448415088",
-            appId: "1:939448415088:web:afe31f30b71fb554a5d5b5",
-            measurementId: "G-TCGYQ9YDD8"
-        };
-
-        if (!firebase.apps.length) firebase.initializeApp(firebaseConfig);
-        const db = firebase.firestore();
-        const auth = firebase.auth();
-        const appId = "my-utility-box-b8fb2";
-
-        // --- 2. 다국어 사전 (전 기능 포함) ---
+        // --- Translations (유지) ---
         const translations = {
             ko: {
-                title: "유틸리티 박스", subtitle: "당신의 모든 요구를 위한 스마트 툴박스",
-                categories: { text: "텍스트 도구", calc: "계산 및 변환", time: "시간 및 생산성", security: "보안", fun: "재미" },
+                title: "Utility Box",
+                subtitle: "스마트 툴 모음",
+                categories: { text: "텍스트", calc: "계산", time: "시간 관리", security: "보안", fun: "재미" },
                 tools: {
-                    text: "글자 수 세기", discount: "할인율 계산", unit: "단위 변환기",
-                    stopwatch: "스톱워치", pomodoro: "뽀모도로 타이머", password: "비밀번호 생성기",
-                    dday: "D-Day 계산기", lotto: "로또 번호 생성"
+                    text: "글자 수 세기",
+                    discount: "할인 계산기",
+                    unit: "단위 변환",
+                    stopwatch: "스톱워치",
+                    pomodoro: "포모도로",
+                    password: "비밀번호 생성",
+                    dday: "D-Day",
+                    lotto: "로또 번호"
                 },
-                wordCounter: { title: "글자 수 세기 & 검사기", placeholder: "이곳에 텍스트를 입력하거나 붙여넣으세요...", withSpace: "공백 포함", noSpace: "공백 제외", words: "단어 수", lines: "줄 수" },
-                discount: { title: "할인율 계산기", price: "원래 가격", rate: "할인율(%)", saved: "할인된 금액", final: "최종 구매 가격", currency: "원" },
-                unit: { 
-                    title: "만능 단위 변환기", input: "입력", result: "결과",
-                    length: "길이", weight: "무게", temp: "온도",
-                    labels: {
-                        cm: "센티미터(cm)", m: "미터(m)", km: "킬로미터(km)", inch: "인치(in)", ft: "피트(ft)", yard: "야드(yd)",
-                        kg: "킬로그램(kg)", g: "그램(g)", lb: "파운드(lb)", oz: "온스(oz)",
-                        Celsius: "섭씨(℃)", Fahrenheit: "화씨(℉)", Kelvin: "켈빈(K)", Rankine: "랭킨(°R)", Delisle: "덜릴(°De)", Newton: "뉴턴(°N)", Reaumur: "열씨(°Re)", Romer: "로머(°Rø)"
-                    }
+                wordCounter: {
+                    title: "글자 수 세기",
+                    placeholder: "내용을 입력하세요...",
+                    withSpace: "공백 포함",
+                    noSpace: "공백 제외",
+                    words: "단어",
+                    lines: "줄",
                 },
-                pomodoro: { title: "뽀모도로 집중 타이머", work: "집중 시간", break: "휴식 시간", start: "시작하기", pause: "일시 정지", reset: "초기화", statusWork: "🔥 지금은 집중할 시간!", statusBreak: "☕ 잠시 쉬어가세요", switchToWork: "집중 모드", switchToBreak: "휴식 모드" },
-                password: { title: "안전한 비밀번호 생성기", length: "비밀번호 길이", generate: "강력한 비밀번호 생성", copied: "클립보드에 복사됨!" },
-                dday: { title: "D-Day 계산기", label: "날짜 선택", result: "남은 날짜", isToday: "🎉 오늘이 바로 그날!", guide: "* 기념일이나 중요한 일정을 선택하세요." },
-                lotto: { title: "로또 행운 번호 생성", btn: "번호 추첨하기", guide: "오늘의 행운을 시험해보세요!" },
-                admin: { title: "개발자 마스터 센터", login: "Google 계정으로 관리자 로그인", save: "설정 저장 및 반영", success: "성공적으로 저장되었습니다!", labelTitle: "사이트 제목", labelSubtitle: "사이트 소제목", labelTools: "활성화된 도구 설정", logout: "로그아웃" },
-                tip: { title: "💡 유틸리티 박스 활용 팁", desc: "이 모든 도구는 서버로 데이터를 전송하지 않고 브라우저 내에서만 안전하게 실행됩니다. 개인정보 걱정 없이 사용하세요!" }
+                discount: {
+                    title: "할인율 계산기",
+                    price: "원래 가격",
+                    rate: "할인율 (%)",
+                    saved: "할인 금액",
+                    final: "최종 가격"
+                },
+                unit: {
+                    title: "단위 변환기",
+                    input: "입력값",
+                    result: "변환값",
+                    types: { length: "길이", weight: "무게", temp: "온도" },
+                },
+                stopwatch: {
+                    title: "스톱워치",
+                    start: "시작",
+                    stop: "정지",
+                    reset: "초기화"
+                },
+                pomodoro: {
+                    title: "포모도로 타이머",
+                    statusWork: "🔥 집중 시간",
+                    statusBreak: "☕ 휴식 시간",
+                    start: "타이머 시작",
+                    pause: "일시 정지",
+                    reset: "리셋",
+                    switchWork: "집중 모드",
+                    switchBreak: "휴식 모드"
+                },
+                password: {
+                    title: "비밀번호 생성",
+                    length: "길이",
+                    numbers: "숫자 (0-9)",
+                    symbols: "특수문자 (!@#)",
+                    generate: "새로 생성",
+                    copied: "복사 완료!"
+                },
+                dday: {
+                    title: "D-Day 계산",
+                    label: "날짜 선택",
+                    guide: "기념일이나 목표일을 선택하세요",
+                    isToday: "🎉 오늘입니다!",
+                    daysLeft: "일 남음",
+                    daysPast: "일 지남"
+                },
+                lotto: {
+                    title: "로또 생성기",
+                    btn: "번호 추첨하기",
+                    guide: "행운의 번호를 확인해보세요"
+                },
+                tip: {
+                    title: "💡 Privacy Note",
+                    desc: "모든 기능은 브라우저 내에서만 작동하며 서버로 전송되지 않습니다."
+                }
             },
             en: {
-                title: "Utility Box", subtitle: "Smart Tools for Your Productivity",
-                categories: { text: "Text Tools", calc: "Calc & Convert", time: "Time & Productivity", security: "Security", fun: "Fun" },
+                title: "Utility Box",
+                subtitle: "Smart Tools",
+                categories: { text: "Text", calc: "Calc", time: "Time", security: "Security", fun: "Fun" },
                 tools: {
-                    text: "Word Counter", discount: "Discount Calc", unit: "Unit Converter",
-                    stopwatch: "Stopwatch", pomodoro: "Pomodoro Timer", password: "Password Generator",
-                    dday: "D-Day Counter", lotto: "Lotto Generator"
+                    text: "Word Counter",
+                    discount: "Discount",
+                    unit: "Converter",
+                    stopwatch: "Stopwatch",
+                    pomodoro: "Pomodoro",
+                    password: "Password",
+                    dday: "D-Day",
+                    lotto: "Lotto"
                 },
-                wordCounter: { title: "Word Counter & Checker", placeholder: "Type or paste your text here...", withSpace: "With Space", noSpace: "No Space", words: "Words", lines: "Lines" },
-                discount: { title: "Discount Calculator", price: "Original Price", rate: "Discount(%)", saved: "You Save", final: "Final Price", currency: "$" },
-                unit: { 
-                    title: "Universal Unit Converter", input: "Input", result: "Result",
-                    length: "Length", weight: "Weight", temp: "Temp",
-                    labels: {
-                        cm: "Centimeter(cm)", m: "Meter(m)", km: "Kilometer(km)", inch: "Inch(in)", ft: "Foot(ft)", yard: "Yard(yd)",
-                        kg: "Kilogram(kg)", g: "Gram(g)", lb: "Pound(lb)", oz: "Ounce(oz)",
-                        Celsius: "Celsius(℃)", Fahrenheit: "Fahrenheit(℉)", Kelvin: "Kelvin(K)", Rankine: "Rankine(°R)", Delisle: "Delisle(°De)", Newton: "Newton(°N)", Reaumur: "Réaumur(°Re)", Romer: "Rømer(°Rø)"
-                    }
+                wordCounter: {
+                    title: "Word Counter",
+                    placeholder: "Type here...",
+                    withSpace: "Chars (Space)",
+                    noSpace: "Chars (No Space)",
+                    words: "Words",
+                    lines: "Lines",
                 },
-                pomodoro: { title: "Pomodoro Focus Timer", work: "Work Time", break: "Break Time", start: "Start", pause: "Pause", reset: "Reset", statusWork: "🔥 Time to Focus!", statusBreak: "☕ Time to Rest", switchToWork: "Work Mode", switchToBreak: "Break Mode" },
-                password: { title: "Secure Password Gen", length: "Password Length", generate: "Generate Strong Password", copied: "Copied to Clipboard!" },
-                dday: { title: "D-Day Counter", label: "Select Date", result: "Result", isToday: "🎉 It's Today!", guide: "* Pick a special date to track." },
-                lotto: { title: "Lotto Number Generator", btn: "Generate Lucky Numbers", guide: "Test your luck today!" },
-                admin: { title: "Developer Admin Center", login: "Login with Google", save: "Save Configuration", success: "Settings updated successfully!", labelTitle: "Site Title", labelSubtitle: "Site Subtitle", labelTools: "Active Tools Mgmt", logout: "Logout" },
-                tip: { title: "💡 Pro Tip", desc: "All tools run locally in your browser for 100% privacy and security. No data leaves your device." }
+                discount: {
+                    title: "Discount Calc",
+                    price: "Original",
+                    rate: "Discount (%)",
+                    saved: "Saved",
+                    final: "Final Price"
+                },
+                unit: {
+                    title: "Unit Converter",
+                    input: "Input",
+                    result: "Result",
+                    types: { length: "Length", weight: "Weight", temp: "Temp" },
+                },
+                stopwatch: {
+                    title: "Stopwatch",
+                    start: "Start",
+                    stop: "Stop",
+                    reset: "Reset"
+                },
+                pomodoro: {
+                    title: "Pomodoro",
+                    statusWork: "🔥 Focus Time",
+                    statusBreak: "☕ Break Time",
+                    start: "Start",
+                    pause: "Pause",
+                    reset: "Reset",
+                    switchWork: "Focus Mode",
+                    switchBreak: "Break Mode"
+                },
+                password: {
+                    title: "Password Gen",
+                    length: "Length",
+                    numbers: "Numbers",
+                    symbols: "Symbols",
+                    generate: "Generate",
+                    copied: "Copied!"
+                },
+                dday: {
+                    title: "D-Day Calc",
+                    label: "Target Date",
+                    guide: "Select your target date",
+                    isToday: "🎉 It's Today!",
+                    daysLeft: "days left",
+                    daysPast: "days past"
+                },
+                lotto: {
+                    title: "Lotto Gen",
+                    btn: "Draw Numbers",
+                    guide: "Check your lucky numbers"
+                },
+                tip: {
+                    title: "💡 Privacy Note",
+                    desc: "All tools run locally. No data is sent to servers."
+                }
             }
         };
 
-        // --- 3. 개별 도구 로직 컴포넌트들 ---
+        // --- Helper Components ---
+        
+        const Icon = ({ name, size = 20, className = "" }) => {
+            useEffect(() => {
+                if (window.lucide) window.lucide.createIcons();
+            });
+            return <i data-lucide={name} width={size} height={size} className={className}></i>;
+        };
 
-        // (1) 글자 수 세기
-        const WordCounter = ({ lang }) => {
-            const [text, setText] = useState('');
-            const t = translations[lang].wordCounter;
-            const stats = {
-                withSpace: text.length,
-                noSpace: text.replace(/\s/g, '').length,
-                words: text.trim() ? text.trim().split(/\s+/).length : 0,
-                lines: text ? text.split('\n').length : 0
+        const Card = ({ children, className = "" }) => (
+            <div className={`bg-white rounded-3xl shadow-soft p-6 border border-slate-100 animate-fade-in ${className}`}>
+                {children}
+            </div>
+        );
+
+        const Button = ({ children, onClick, variant = "primary", className = "", ...props }) => {
+            const baseStyle = "px-6 py-3 rounded-xl font-semibold transition-all duration-200 active:scale-95 flex items-center justify-center gap-2 shadow-sm";
+            const variants = {
+                primary: "bg-blue-600 hover:bg-blue-700 text-white shadow-blue-200",
+                secondary: "bg-slate-100 hover:bg-slate-200 text-slate-700",
+                danger: "bg-rose-500 hover:bg-rose-600 text-white shadow-rose-200",
+                success: "bg-emerald-500 hover:bg-emerald-600 text-white shadow-emerald-200",
+                outline: "border-2 border-slate-200 text-slate-600 hover:border-blue-500 hover:text-blue-600 bg-transparent"
             };
             return (
-                <div className="tool-card">
-                    <div className="flex items-center gap-4 mb-8">
-                        <div className="w-14 h-14 bg-blue-100 rounded-2xl flex items-center justify-center text-blue-600"><i data-lucide="type" className="w-8 h-8"></i></div>
-                        <h2 className="text-3xl font-black tracking-tight">{t.title}</h2>
-                    </div>
-                    <textarea 
-                        className="w-full h-80 p-6 bg-slate-50 border border-slate-100 rounded-[32px] focus:ring-8 focus:ring-blue-500/5 focus:border-blue-500 outline-none resize-none mb-8 text-xl leading-relaxed" 
-                        placeholder={t.placeholder} 
-                        value={text} 
-                        onChange={e=>setText(e.target.value)} 
-                    />
-                    <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-                        {[
-                            { label: t.withSpace, value: stats.withSpace, color: "text-blue-600", bg: "bg-blue-50" },
-                            { label: t.noSpace, value: stats.noSpace, color: "text-indigo-600", bg: "bg-indigo-50" },
-                            { label: t.words, value: stats.words, color: "text-emerald-600", bg: "bg-emerald-50" },
-                            { label: t.lines, value: stats.lines, color: "text-amber-600", bg: "bg-amber-50" }
-                        ].map((s, i) => (
-                            <div key={i} className={`p-6 ${s.bg} rounded-[28px] text-center`}>
-                                <div className="text-[10px] text-slate-400 font-black uppercase tracking-widest mb-2">{s.label}</div>
-                                <div className={`text-3xl font-black ${s.color}`}>{s.value.toLocaleString()}</div>
-                            </div>
-                        ))}
-                    </div>
-                </div>
+                <button onClick={onClick} className={`${baseStyle} ${variants[variant]} ${className}`} {...props}>
+                    {children}
+                </button>
             );
         };
 
-        // (2) 할인율 계산기
-        const DiscountCalculator = ({ lang }) => {
-            const [price, setPrice] = useState('');
-            const [rate, setRate] = useState('');
-            const t = translations[lang].discount;
-            const saved = price && rate ? (price * (rate / 100)) : 0;
-            const final = price && rate ? price - saved : 0;
+        const InputGroup = ({ label, children }) => (
+            <div className="space-y-2">
+                <label className="text-xs font-bold text-slate-400 uppercase tracking-wider ml-1">{label}</label>
+                {children}
+            </div>
+        );
+
+        // --- Tools ---
+
+        const WordCounter = ({ lang, t }) => {
+            const [text, setText] = useState('');
+            const stats = {
+                charWithSpace: text.length,
+                charNoSpace: text.replace(/\s/g, '').length,
+                words: text.trim() === '' ? 0 : text.trim().split(/\s+/).length,
+                lines: text === '' ? 0 : text.split(/\n/).length
+            };
+
+            const StatBox = ({ label, value, color }) => (
+                <div className={`p-4 rounded-2xl bg-${color}-50 border border-${color}-100 flex flex-col items-center justify-center transition-transform hover:scale-105`}>
+                    <span className={`text-${color}-600 font-bold text-2xl`}>{value.toLocaleString()}</span>
+                    <span className={`text-${color}-400 text-xs font-medium mt-1`}>{label}</span>
+                </div>
+            );
+
             return (
-                <div className="tool-card">
-                    <div className="flex items-center gap-4 mb-10">
-                        <div className="w-14 h-14 bg-pink-100 rounded-2xl flex items-center justify-center text-pink-500"><i data-lucide="percent" className="w-8 h-8"></i></div>
-                        <h2 className="text-3xl font-black tracking-tight">{t.title}</h2>
+                <div className="space-y-6">
+                    <textarea
+                        className="w-full h-64 p-6 rounded-3xl bg-slate-50 border-2 border-transparent focus:bg-white focus:border-blue-500 outline-none resize-none text-lg leading-relaxed shadow-inner transition-all placeholder:text-slate-300"
+                        placeholder={t.wordCounter.placeholder}
+                        value={text}
+                        onChange={(e) => setText(e.target.value)}
+                    ></textarea>
+                    
+                    <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+                        <StatBox label={t.wordCounter.withSpace} value={stats.charWithSpace} color="blue" />
+                        <StatBox label={t.wordCounter.noSpace} value={stats.charNoSpace} color="indigo" />
+                        <StatBox label={t.wordCounter.words} value={stats.words} color="emerald" />
+                        <StatBox label={t.wordCounter.lines} value={stats.lines} color="amber" />
                     </div>
-                    <div className="grid md:grid-cols-2 gap-12">
-                        <div className="space-y-6">
-                            <div><label className="text-xs font-black text-slate-400 uppercase tracking-widest mb-2 block">{t.price}</label><input type="number" className="admin-input text-2xl" value={price} onChange={e=>setPrice(Number(e.target.value))} placeholder="0" /></div>
-                            <div><label className="text-xs font-black text-slate-400 uppercase tracking-widest mb-2 block">{t.rate}</label><input type="number" className="admin-input text-2xl" value={rate} onChange={e=>setRate(Number(e.target.value))} placeholder="0" /></div>
-                        </div>
-                        <div className="bg-gradient-to-br from-pink-500 to-rose-600 rounded-[40px] p-10 flex flex-col justify-center text-center shadow-xl shadow-pink-200">
-                            <div className="text-pink-100 text-sm font-bold mb-2 uppercase tracking-widest">{t.final}</div>
-                            <div className="text-6xl font-black text-white tracking-tighter mb-4">{final.toLocaleString()}<span className="text-2xl ml-1">{t.won}</span></div>
-                            <div className="text-pink-200 text-sm font-bold">{t.saved}: {saved.toLocaleString()}{t.won}</div>
+                </div>
+            );
+        };
+
+        const DiscountCalculator = ({ t }) => {
+            const [price, setPrice] = useState('');
+            const [discount, setDiscount] = useState('');
+            const final = price && discount ? price - (price * (discount / 100)) : 0;
+            const saved = price && discount ? price * (discount / 100) : 0;
+
+            return (
+                <div className="grid md:grid-cols-2 gap-8 items-start">
+                    <div className="space-y-6">
+                        <InputGroup label={t.discount.price}>
+                            <div className="relative">
+                                <span className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400">₩</span>
+                                <input type="number" value={price} onChange={e => setPrice(Number(e.target.value))}
+                                    className="w-full pl-10 pr-4 py-4 rounded-xl bg-slate-50 border-2 border-transparent focus:bg-white focus:border-pink-500 outline-none text-xl font-bold text-slate-700 transition-all" placeholder="0" />
+                            </div>
+                        </InputGroup>
+
+                        <InputGroup label={t.discount.rate}>
+                            <div className="space-y-3">
+                                <div className="flex gap-2">
+                                    {[10, 20, 30, 50].map(p => (
+                                        <button key={p} onClick={() => setDiscount(p)}
+                                            className={`flex-1 py-2 rounded-lg text-sm font-bold transition-all ${discount === p ? 'bg-pink-500 text-white shadow-md' : 'bg-slate-100 text-slate-500 hover:bg-slate-200'}`}>
+                                            {p}%
+                                        </button>
+                                    ))}
+                                </div>
+                                <div className="relative">
+                                    <input type="number" value={discount} onChange={e => setDiscount(Number(e.target.value))}
+                                        className="w-full pl-4 pr-10 py-4 rounded-xl bg-slate-50 border-2 border-transparent focus:bg-white focus:border-pink-500 outline-none text-xl font-bold text-slate-700 transition-all" placeholder="0" />
+                                    <span className="absolute right-4 top-1/2 -translate-y-1/2 text-slate-400">%</span>
+                                </div>
+                            </div>
+                        </InputGroup>
+                    </div>
+
+                    <div className="bg-gradient-to-br from-slate-800 to-slate-900 p-8 rounded-3xl text-white shadow-xl relative overflow-hidden">
+                        <div className="absolute top-0 right-0 w-32 h-32 bg-pink-500 rounded-full blur-[60px] opacity-20"></div>
+                        <div className="space-y-6 relative z-10">
+                            <div className="flex justify-between items-center text-slate-400">
+                                <span>{t.discount.saved}</span>
+                                <span className="font-mono text-lg text-pink-400">-{saved.toLocaleString()}</span>
+                            </div>
+                            <div className="h-px bg-slate-700"></div>
+                            <div>
+                                <div className="text-slate-400 text-sm mb-1">{t.discount.final}</div>
+                                <div className="text-4xl font-bold font-mono tracking-tight text-white">{final.toLocaleString()}</div>
+                            </div>
                         </div>
                     </div>
                 </div>
             );
         };
 
-        // (3) 단위 변환기 (풀 로직)
-        const UnitConverter = ({ lang }) => {
-            const [type, setType] = useState('length');
+        const UnitConverter = ({ t }) => {
+            const [category, setCategory] = useState('length');
             const [val, setVal] = useState('');
             const [from, setFrom] = useState('cm');
             const [to, setTo] = useState('inch');
-            const t = translations[lang].unit;
 
+            // Simplified conversion logic for brevity
             const units = {
                 length: ['cm', 'm', 'km', 'inch', 'ft', 'yard'],
                 weight: ['kg', 'g', 'lb', 'oz'],
-                temp: ['Celsius', 'Fahrenheit', 'Kelvin', 'Rankine', 'Delisle', 'Newton', 'Reaumur', 'Romer']
+                temp: ['Celsius', 'Fahrenheit', 'Kelvin']
             };
-
-            const solve = () => {
-                if (!val) return '0';
+            
+            // Re-using logic from original but simplified structure
+            const convert = () => {
+                if(!val) return '';
                 const v = parseFloat(val);
-                if (type === 'temp') {
-                    if (from === to) return v;
-                    let c;
-                    switch(from) {
-                        case 'Celsius': c = v; break;
-                        case 'Fahrenheit': c = (v-32)*5/9; break;
-                        case 'Kelvin': c = v-273.15; break;
-                        case 'Rankine': c = (v-491.67)*5/9; break;
-                        case 'Delisle': c = 100 - v*2/3; break;
-                        case 'Newton': c = v*100/33; break;
-                        case 'Reaumur': c = v*5/4; break;
-                        case 'Romer': c = (v-7.5)*40/21; break;
-                    }
-                    let r;
-                    switch(to) {
-                        case 'Celsius': r = c; break;
-                        case 'Fahrenheit': r = c*9/5+32; break;
-                        case 'Kelvin': r = c+273.15; break;
-                        case 'Rankine': r = (c+273.15)*9/5; break;
-                        case 'Delisle': r = (100-c)*3/2; break;
-                        case 'Newton': r = c*33/100; break;
-                        case 'Reaumur': r = c*4/5; break;
-                        case 'Romer': r = c*21/40+7.5; break;
-                    }
-                    return Number.isInteger(r) ? r : r.toFixed(4);
+                if(category === 'temp') {
+                     if (from === to) return v;
+                     let c = from === 'Celsius' ? v : from === 'Fahrenheit' ? (v - 32) * 5/9 : v - 273.15;
+                     let r = to === 'Celsius' ? c : to === 'Fahrenheit' ? (c * 9/5) + 32 : c + 273.15;
+                     return r.toFixed(2);
                 }
-                const map = {
+                const rates = {
                     cm: 1, m: 100, km: 100000, inch: 2.54, ft: 30.48, yard: 91.44,
                     g: 1, kg: 1000, lb: 453.592, oz: 28.3495
                 };
-                const res = (v * map[from]) / map[to];
-                return Number.isInteger(res) ? res : res.toFixed(4);
+                return ((v * rates[from]) / rates[to]).toFixed(4);
             };
-
+            
             useEffect(() => {
-                if(type === 'length') { setFrom('cm'); setTo('m'); }
-                else if(type === 'weight') { setFrom('kg'); setTo('g'); }
-                else { setFrom('Celsius'); setTo('Fahrenheit'); }
+                const defs = { length: ['cm', 'inch'], weight: ['kg', 'lb'], temp: ['Celsius', 'Fahrenheit'] };
+                setFrom(defs[category][0]);
+                setTo(defs[category][1]);
                 setVal('');
-            }, [type]);
+            }, [category]);
 
             return (
-                <div className="tool-card">
-                    <div className="flex items-center gap-4 mb-8">
-                        <div className="w-14 h-14 bg-orange-100 rounded-2xl flex items-center justify-center text-orange-500"><i data-lucide="arrow-left-right" className="w-8 h-8"></i></div>
-                        <h2 className="text-3xl font-black tracking-tight">{t.title}</h2>
-                    </div>
-                    <div className="flex gap-2 mb-10 p-2 bg-slate-100 rounded-[28px]">
-                        {['length', 'weight', 'temp'].map(k => (
-                            <button key={k} onClick={()=>setType(k)} className={`flex-1 py-4 rounded-[22px] font-black text-sm uppercase tracking-widest transition-all ${type === k ? 'bg-white text-orange-600 shadow-md' : 'text-slate-400'}`}>
-                                {t[k]}
+                <div className="space-y-8">
+                    <div className="flex p-1 bg-slate-100 rounded-xl">
+                        {Object.keys(units).map(c => (
+                            <button key={c} onClick={() => setCategory(c)}
+                                className={`flex-1 py-2.5 text-sm font-semibold rounded-lg capitalize transition-all ${category === c ? 'bg-white text-orange-600 shadow-sm' : 'text-slate-400 hover:text-slate-600'}`}>
+                                {t.unit.types[c]}
                             </button>
                         ))}
                     </div>
-                    <div className="grid md:grid-cols-2 gap-8 items-center">
-                        <div className="space-y-3">
-                            <label className="text-[10px] font-black text-slate-400 uppercase ml-2 tracking-widest">{t.input}</label>
+
+                    <div className="flex flex-col md:flex-row gap-4 items-center">
+                        <div className="flex-1 w-full space-y-2">
+                            <label className="text-xs font-bold text-slate-400 uppercase ml-1">{t.unit.input}</label>
                             <div className="flex gap-2">
-                                <input type="number" className="flex-1 admin-input" value={val} onChange={e=>setVal(e.target.value)} placeholder="0" />
-                                <select className="p-4 bg-white border border-slate-200 rounded-3xl font-bold outline-none" value={from} onChange={e=>setFrom(e.target.value)}>
-                                    {units[type].map(u => <option key={u} value={u}>{t.labels[u]}</option>)}
+                                <input type="number" value={val} onChange={e => setVal(e.target.value)} className="w-full p-4 rounded-xl bg-slate-50 border-2 border-transparent focus:bg-white focus:border-orange-500 outline-none text-lg font-mono font-bold" placeholder="0" />
+                                <select value={from} onChange={e => setFrom(e.target.value)} className="p-4 rounded-xl bg-slate-100 font-bold text-slate-600 outline-none cursor-pointer hover:bg-slate-200">
+                                    {units[category].map(u => <option key={u} value={u}>{u}</option>)}
                                 </select>
                             </div>
                         </div>
-                        <div className="space-y-3">
-                            <label className="text-[10px] font-black text-slate-400 uppercase ml-2 tracking-widest">{t.result}</label>
+
+                        <div className="p-2 bg-slate-100 rounded-full text-slate-400 rotate-90 md:rotate-0">
+                            <Icon name="arrow-right" />
+                        </div>
+
+                        <div className="flex-1 w-full space-y-2">
+                            <label className="text-xs font-bold text-slate-400 uppercase ml-1">{t.unit.result}</label>
                             <div className="flex gap-2">
-                                <input type="text" readOnly className="flex-1 admin-input bg-orange-50 text-orange-600 border-orange-100" value={solve()} />
-                                <select className="p-4 bg-white border border-slate-200 rounded-3xl font-bold outline-none" value={to} onChange={e=>setTo(e.target.value)}>
-                                    {units[type].map(u => <option key={u} value={u}>{t.labels[u]}</option>)}
+                                <div className="w-full p-4 rounded-xl bg-orange-50 border-2 border-orange-100 text-lg font-mono font-bold text-orange-600 flex items-center">
+                                    {val ? Number(convert()).toLocaleString() : '0'}
+                                </div>
+                                <select value={to} onChange={e => setTo(e.target.value)} className="p-4 rounded-xl bg-slate-100 font-bold text-slate-600 outline-none cursor-pointer hover:bg-slate-200">
+                                    {units[category].map(u => <option key={u} value={u}>{u}</option>)}
                                 </select>
                             </div>
                         </div>
@@ -289,307 +451,379 @@
             );
         };
 
-        // (4) 뽀모도로 타이머 (소리 포함)
-        const PomodoroTimer = ({ lang }) => {
-            const [timeLeft, setTimeLeft] = useState(25 * 60);
-            const [isActive, setIsActive] = useState(false);
-            const [isWork, setIsWork] = useState(true);
-            const t = translations[lang].pomodoro;
-            const playSound = () => { try { const ctx = new (window.AudioContext || window.webkitAudioContext)(); const osc = ctx.createOscillator(); const gain = ctx.createGain(); osc.connect(gain); gain.connect(ctx.destination); osc.type='sine'; osc.frequency.value=523.25; gain.gain.value=0.1; osc.start(); osc.stop(ctx.currentTime+0.5); } catch(e){} };
+        const Stopwatch = ({ t }) => {
+            const [time, setTime] = useState(0);
+            const [run, setRun] = useState(false);
+            
             useEffect(() => {
-                let interval = null;
-                if (isActive && timeLeft > 0) interval = setInterval(() => setTimeLeft(t => t - 1), 1000);
-                else if (timeLeft === 0) { setIsActive(false); playSound(); }
+                let interval;
+                if(run) interval = setInterval(() => setTime(prev => prev + 10), 10);
+                else clearInterval(interval);
                 return () => clearInterval(interval);
-            }, [isActive, timeLeft]);
-            return (
-                <div className="tool-card text-center py-12">
-                    <h2 className="text-3xl font-black mb-6 flex items-center justify-center gap-3 text-orange-500"><i data-lucide="clock"></i> {t.title}</h2>
-                    <div className={`inline-block px-6 py-2 rounded-full text-xs font-black uppercase tracking-[0.2em] mb-12 ${isWork ? 'bg-orange-100 text-orange-600' : 'bg-green-100 text-green-600'}`}>{isWork ? t.statusWork : t.statusBreak}</div>
-                    <div className="text-[140px] font-mono font-black text-slate-800 leading-none mb-12 tracking-tighter drop-shadow-sm">{`${Math.floor(timeLeft/60).toString().padStart(2,'0')}:${(timeLeft%60).toString().padStart(2,'0')}`}</div>
-                    <div className="flex justify-center gap-5 mb-10">
-                        <button onClick={() => setIsActive(!isActive)} className="px-14 py-5 bg-orange-500 text-white rounded-[32px] font-black text-xl shadow-2xl shadow-orange-200 active:scale-95 transition-all">{isActive ? t.pause : t.start}</button>
-                        <button onClick={() => { setIsActive(false); setTimeLeft(isWork ? 25*60 : 5*60); }} className="px-14 py-5 bg-slate-100 text-slate-400 rounded-[32px] font-black text-xl active:scale-95 transition-all">{t.reset}</button>
-                    </div>
-                    <button onClick={()=>{setIsWork(!isWork); setIsActive(false); setTimeLeft(!isWork?25*60:5*60)}} className="text-sm font-bold text-slate-300 hover:text-orange-500 underline transition-colors">{isWork ? t.switchToBreak : t.switchToWork}</button>
-                </div>
-            );
-        };
+            }, [run]);
 
-        // (5) 비밀번호 생성기
-        const PasswordGenerator = ({ lang }) => {
-            const [pass, setPass] = useState('');
-            const [len, setLen] = useState(16);
-            const [copied, setCopied] = useState(false);
-            const t = translations[lang].password;
-            const gen = () => {
-                const c = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789!@#$%^&*()_+~`|}{[]:;?><,./-=";
-                let r = ""; for(let i=0; i<len; i++) r += c[Math.floor(Math.random()*c.length)];
-                setPass(r); setCopied(false);
+            const fmt = (ms) => {
+                const m = Math.floor(ms / 60000).toString().padStart(2,'0');
+                const s = Math.floor((ms % 60000) / 1000).toString().padStart(2,'0');
+                const cs = Math.floor((ms % 1000) / 10).toString().padStart(2,'0');
+                return { m, s, cs };
             };
-            useEffect(gen, [len]);
+            const { m, s, cs } = fmt(time);
+
             return (
-                <div className="tool-card">
-                    <h2 className="text-2xl font-black mb-8 flex items-center gap-3 text-indigo-600"><i data-lucide="lock"></i> {t.title}</h2>
-                    <div className="p-8 bg-slate-50 border border-slate-100 rounded-[36px] mb-8 font-mono text-3xl flex justify-between items-center break-all text-slate-700 shadow-inner">
-                        {pass}
-                        <button onClick={()=>{navigator.clipboard.writeText(pass); setCopied(true); setTimeout(()=>setCopied(false),2000)}} className="ml-6 p-4 bg-white rounded-3xl shadow-sm hover:shadow-xl transition-all"><i data-lucide={copied?"check":"copy"} className={copied?"text-green-500":"text-indigo-400"}></i></button>
+                <div className="flex flex-col items-center py-10">
+                    <div className="relative mb-12">
+                        <div className="absolute inset-0 bg-red-500 blur-[40px] opacity-10 rounded-full"></div>
+                        <div className="text-7xl md:text-9xl font-mono font-bold text-slate-800 tracking-tighter flex items-end leading-none relative z-10">
+                            <span>{m}</span><span className="text-slate-300 mx-1">:</span>
+                            <span>{s}</span><span className="text-3xl md:text-5xl text-red-500 mb-2 md:mb-4 ml-1">.{cs}</span>
+                        </div>
                     </div>
-                    <div className="space-y-6">
-                        <div className="flex justify-between text-xs font-black text-slate-300 uppercase tracking-widest px-2"><span>{t.length}</span><span className="text-indigo-500">{len}</span></div>
-                        <input type="range" min="8" max="48" value={len} onChange={e=>setLen(e.target.value)} className="w-full h-3 bg-slate-200 rounded-full appearance-none cursor-pointer accent-indigo-600 mb-6" />
-                        <button onClick={gen} className="w-full py-5 bg-indigo-600 text-white rounded-[32px] font-black text-xl shadow-xl shadow-indigo-100 hover:bg-indigo-700 active:scale-95 transition-all">{t.generate}</button>
+                    <div className="flex gap-6">
+                        <button onClick={() => setRun(!run)} 
+                            className={`w-20 h-20 rounded-full flex items-center justify-center shadow-lg transition-transform active:scale-90 ${run ? 'bg-red-500 text-white shadow-red-200' : 'bg-blue-600 text-white shadow-blue-200'}`}>
+                            <Icon name={run ? "pause" : "play"} size={32} fill="currentColor" />
+                        </button>
+                        <button onClick={() => { setRun(false); setTime(0); }} 
+                            className="w-20 h-20 rounded-full bg-slate-100 text-slate-500 flex items-center justify-center hover:bg-slate-200 transition-colors">
+                            <Icon name="rotate-ccw" size={28} />
+                        </button>
                     </div>
                 </div>
             );
         };
 
-        // (6) D-Day 계산기
-        const DDayCalculator = ({ lang }) => {
-            const [date, setDate] = useState('');
-            const [res, setRes] = useState(null);
-            const t = translations[lang].dday;
+        const Pomodoro = ({ t }) => {
+            const [left, setLeft] = useState(25 * 60);
+            const [active, setActive] = useState(false);
+            const [isWork, setIsWork] = useState(true);
+
             useEffect(() => {
-                if (date) {
-                    const today = new Date(); today.setHours(0,0,0,0);
-                    const target = new Date(date); target.setHours(0,0,0,0);
-                    setRes(Math.ceil((target - today) / (1000 * 60 * 60 * 24)));
-                } else setRes(null);
-            }, [date]);
+                let interval;
+                if(active && left > 0) interval = setInterval(() => setLeft(l => l - 1), 1000);
+                else if(left === 0) setActive(false);
+                return () => clearInterval(interval);
+            }, [active, left]);
+
+            const toggleMode = () => {
+                const next = !isWork;
+                setIsWork(next);
+                setActive(false);
+                setLeft(next ? 25*60 : 5*60);
+            };
+
+            const format = (s) => `${Math.floor(s/60).toString().padStart(2,'0')}:${(s%60).toString().padStart(2,'0')}`;
+
             return (
-                <div className="tool-card">
-                    <h2 className="text-2xl font-black mb-8 flex items-center gap-3 text-purple-600"><i data-lucide="calendar"></i> {t.title}</h2>
-                    <div className="grid md:grid-cols-2 gap-10 items-center">
-                        <div className="space-y-6">
-                            <label className="text-sm font-black text-slate-400 uppercase tracking-widest block ml-2">{t.label}</label>
-                            <input type="date" lang={lang} value={date} onChange={e=>setDate(e.target.value)} className="w-full p-5 bg-slate-50 border border-slate-100 rounded-[32px] outline-none focus:ring-8 focus:ring-purple-500/5 focus:border-purple-500 font-bold" />
-                            <p className="text-[10px] text-slate-300 font-bold ml-2 leading-relaxed">{t.guide}</p>
+                <div className="flex flex-col items-center py-6">
+                    <div className={`px-4 py-1.5 rounded-full text-sm font-bold mb-8 transition-colors ${isWork ? 'bg-orange-100 text-orange-600' : 'bg-teal-100 text-teal-600'}`}>
+                        {isWork ? t.pomodoro.statusWork : t.pomodoro.statusBreak}
+                    </div>
+
+                    <div className="relative w-64 h-64 md:w-80 md:h-80 rounded-full border-8 border-slate-100 flex items-center justify-center mb-10 shadow-inner bg-white">
+                         {/* SVG Circle Progress could go here */}
+                        <div className={`text-6xl md:text-7xl font-mono font-bold tracking-tighter ${isWork ? 'text-orange-500' : 'text-teal-500'}`}>
+                            {format(left)}
                         </div>
-                        <div className="bg-gradient-to-br from-purple-600 to-indigo-700 rounded-[44px] p-12 text-center shadow-2xl shadow-purple-200 border-4 border-white/20">
-                            <div className="text-purple-200 text-[10px] font-black mb-3 uppercase tracking-[0.3em]">{t.result}</div>
-                            <div className="text-6xl font-black text-white tracking-tighter">
-                                {res === null ? "-" : res === 0 ? t.isToday : res > 0 ? `D-${res}` : `D+${Math.abs(res)}`}
-                            </div>
+                    </div>
+
+                    <div className="flex gap-4">
+                        <Button onClick={() => setActive(!active)} variant={isWork ? "primary" : "success"} className={!isWork ? "bg-teal-500 hover:bg-teal-600" : "bg-orange-500 hover:bg-orange-600"}>
+                            {active ? t.pomodoro.pause : t.pomodoro.start}
+                        </Button>
+                        <Button onClick={() => { setActive(false); setLeft(isWork ? 25*60 : 5*60); }} variant="secondary">
+                            {t.pomodoro.reset}
+                        </Button>
+                    </div>
+                    
+                    <button onClick={toggleMode} className="mt-8 text-sm text-slate-400 hover:text-slate-600 underline decoration-slate-300 underline-offset-4">
+                        {isWork ? t.pomodoro.switchBreak : t.pomodoro.switchWork}
+                    </button>
+                </div>
+            );
+        };
+
+        const PasswordGenerator = ({ t }) => {
+            const [len, setLen] = useState(12);
+            const [opt, setOpt] = useState({ num: true, sym: true });
+            const [pw, setPw] = useState('');
+            const [copied, setCopied] = useState(false);
+
+            const gen = () => {
+                let c = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ";
+                if(opt.num) c += "0123456789";
+                if(opt.sym) c += "!@#$%^&*()_+";
+                let res = "";
+                for(let i=0; i<len; i++) res += c[Math.floor(Math.random()*c.length)];
+                setPw(res);
+                setCopied(false);
+            };
+            
+            useEffect(gen, []);
+
+            const copy = () => {
+                navigator.clipboard.writeText(pw);
+                setCopied(true);
+                setTimeout(() => setCopied(false), 2000);
+            };
+
+            return (
+                <div className="space-y-8">
+                    <div onClick={copy} className="group relative bg-slate-800 hover:bg-slate-700 cursor-pointer rounded-2xl p-8 text-center transition-all shadow-lg active:scale-[0.99]">
+                        <div className="font-mono text-3xl md:text-4xl text-white break-all tracking-wider">{pw}</div>
+                        <div className="absolute top-4 right-4 text-slate-400 opacity-0 group-hover:opacity-100 transition-opacity">
+                            <Icon name={copied ? "check" : "copy"} size={20} className={copied ? "text-green-400" : ""} />
                         </div>
+                        {copied && <div className="absolute bottom-2 left-1/2 -translate-x-1/2 text-xs text-green-400 font-bold">{t.password.copied}</div>}
+                    </div>
+
+                    <div className="space-y-6 bg-slate-50 p-6 rounded-2xl">
+                        <InputGroup label={`${t.password.length}: ${len}`}>
+                            <input type="range" min="6" max="32" value={len} onChange={e => setLen(e.target.value)}
+                                className="w-full h-2 bg-slate-200 rounded-lg appearance-none cursor-pointer accent-indigo-600" />
+                        </InputGroup>
+                        
+                        <div className="flex gap-4">
+                            {['num', 'sym'].map(k => (
+                                <label key={k} className="flex-1 flex items-center justify-center gap-3 p-3 rounded-xl bg-white border border-slate-200 cursor-pointer hover:border-indigo-300 transition-colors select-none">
+                                    <input type="checkbox" checked={opt[k]} onChange={() => setOpt({...opt, [k]: !opt[k]})} className="w-5 h-5 accent-indigo-600 rounded" />
+                                    <span className="text-sm font-medium text-slate-600">{k === 'num' ? t.password.numbers : t.password.symbols}</span>
+                                </label>
+                            ))}
+                        </div>
+                        
+                        <Button onClick={gen} className="w-full bg-indigo-600 hover:bg-indigo-700 text-white shadow-indigo-200">
+                            <Icon name="refresh-cw" size={18} /> {t.password.generate}
+                        </Button>
                     </div>
                 </div>
             );
         };
 
-        // (7) 로또 번호 생성기
-        const LottoGenerator = ({ lang }) => {
+        const Lotto = ({ t }) => {
             const [nums, setNums] = useState([]);
-            const t = translations[lang].lotto;
-            const draw = () => {
+            const gen = () => {
                 const s = new Set();
                 while(s.size < 6) s.add(Math.floor(Math.random()*45)+1);
                 setNums([...s].sort((a,b)=>a-b));
             };
-            const getColor = (n) => {
-                if(n<=10) return 'bg-amber-400'; if(n<=20) return 'bg-blue-400';
-                if(n<=30) return 'bg-red-400'; if(n<=40) return 'bg-slate-400';
-                return 'bg-emerald-400';
+
+            const colors = (n) => {
+                if(n<=10) return ['#facc15', '#ca8a04']; // Yellow
+                if(n<=20) return ['#60a5fa', '#2563eb']; // Blue
+                if(n<=30) return ['#f87171', '#dc2626']; // Red
+                if(n<=40) return ['#94a3b8', '#475569']; // Gray
+                return ['#4ade80', '#16a34a']; // Green
             };
+
             return (
-                <div className="tool-card text-center">
-                    <h2 className="text-2xl font-black mb-4 flex items-center justify-center gap-3 text-emerald-600"><i data-lucide="clover"></i> {t.title}</h2>
-                    <p className="text-slate-400 text-sm mb-12 font-medium">{t.guide}</p>
+                <div className="flex flex-col items-center py-8">
                     <div className="flex flex-wrap justify-center gap-4 mb-12 min-h-[80px]">
-                        {nums.map((n, i) => (
-                            <div key={i} className={`${getColor(n)} w-16 h-16 rounded-full flex items-center justify-center text-white text-2xl font-black shadow-lg ball-bounce border-4 border-white/30`}>{n}</div>
-                        ))}
-                    </div>
-                    <button onClick={draw} className="px-12 py-5 bg-emerald-600 text-white rounded-[32px] font-black text-xl shadow-xl shadow-emerald-100 hover:bg-emerald-700 active:scale-95 transition-all flex items-center gap-3 mx-auto">
-                        <i data-lucide="sparkles"></i> {t.btn}
-                    </button>
-                </div>
-            );
-        };
-
-        // --- 4. 관리자 대시보드 (CMS) ---
-        const AdminPanel = ({ config, onUpdate }) => {
-            const [user, setUser] = useState(null);
-            const [local, setLocal] = useState(config);
-            const [status, setStatus] = useState('');
-            useEffect(() => { const unsub = auth.onAuthStateChanged(u => setUser(u)); return () => unsub(); }, []);
-            const login = async () => { const p = new firebase.auth.GoogleAuthProvider(); try { await auth.signInWithPopup(p); } catch(e) { setStatus("Error: " + e.message); } };
-            const save = async () => {
-                setStatus('저장 중...');
-                try {
-                    await db.collection('artifacts').doc(appId).collection('public').doc('data').collection('settings').doc('global').set(local);
-                    onUpdate(local); setStatus(translations[config.lang].admin.success);
-                    setTimeout(() => setStatus(''), 3000);
-                } catch(e) { setStatus('저장 실패: 권한 부족'); }
-            };
-
-            if (!user) return (
-                <div className="bg-white p-14 rounded-[50px] border shadow-2xl text-center max-w-lg mx-auto mt-10">
-                    <div className="w-24 h-24 bg-blue-50 rounded-[36px] flex items-center justify-center mx-auto mb-10 text-blue-600 shadow-inner"><i data-lucide="shield-check" className="w-12 h-12"></i></div>
-                    <h2 className="text-4xl font-black mb-4 tracking-tighter">Admin Access</h2>
-                    <p className="text-slate-400 mb-12 text-base font-medium">Please login with your Google account to modify the site configuration.</p>
-                    <button onClick={login} className="w-full py-5 bg-white border-2 border-slate-100 rounded-[32px] font-black flex items-center justify-center gap-4 hover:bg-slate-50 transition-all shadow-sm">
-                        <img src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg" className="w-6 h-6" />
-                        Continue with Google
-                    </button>
-                    {status && <p className="mt-8 text-red-500 text-xs font-bold uppercase tracking-widest">{status}</p>}
-                </div>
-            );
-
-            return (
-                <div className="bg-white p-12 rounded-[50px] border-2 border-blue-50 shadow-sm max-w-3xl mx-auto">
-                    <div className="flex justify-between items-start mb-14 pb-10 border-b border-slate-50">
-                        <div>
-                            <h2 className="text-3xl font-black text-slate-800 tracking-tighter leading-none mb-3">{translations[local.lang].admin.title}</h2>
-                            <p className="text-[10px] text-blue-500 font-black uppercase tracking-[0.2em]">{user.email} Verified</p>
-                        </div>
-                        <div className="flex gap-3">
-                            <button onClick={()=>auth.signOut()} className="px-6 py-3 text-[10px] font-black text-slate-300 hover:text-red-400 transition-colors uppercase tracking-widest">Logout</button>
-                            <button onClick={save} className="btn-primary px-10">{translations[local.lang].admin.save}</button>
-                        </div>
-                    </div>
-                    {status && <div className="mb-10 p-5 bg-blue-600 text-white rounded-[24px] text-center font-black shadow-lg shadow-blue-200 animate-pulse">{status}</div>}
-                    <div className="space-y-12">
-                        <div className="grid md:grid-cols-2 gap-8">
-                            <section>
-                                <label className="text-[10px] font-black uppercase text-slate-300 tracking-[0.3em] mb-4 block pl-1">{translations[local.lang].admin.labelTitle}</label>
-                                <input className="admin-input text-2xl font-black tracking-tight" value={local.siteTitle} onChange={e=>setLocal({...local, siteTitle:e.target.value})} />
-                            </section>
-                            <section>
-                                <label className="text-[10px] font-black uppercase text-slate-300 tracking-[0.3em] mb-4 block pl-1">{translations[local.lang].admin.labelSubtitle}</label>
-                                <input className="admin-input text-sm font-bold" value={local.siteSubtitle} onChange={e=>setLocal({...local, siteSubtitle:e.target.value})} />
-                            </section>
-                        </div>
-                        <section>
-                            <label className="text-[10px] font-black uppercase text-slate-300 tracking-[0.3em] mb-6 block pl-1">{translations[local.lang].admin.labelTools}</label>
-                            <div className="grid grid-cols-2 sm:grid-cols-3 gap-4">
-                                {Object.keys(translations.ko.tools).map(tool => (
-                                    <label key={tool} className={`flex items-center gap-4 p-6 rounded-[32px] border-2 cursor-pointer transition-all ${local.activeTools.includes(tool) ? 'bg-blue-50 border-blue-200' : 'bg-slate-50 border-transparent opacity-40 grayscale'}`}>
-                                        <input type="checkbox" className="w-6 h-6 rounded-lg border-slate-300 text-blue-600 focus:ring-0" checked={local.activeTools.includes(tool)} onChange={e => {
-                                            const next = e.target.checked ? [...local.activeTools, tool] : local.activeTools.filter(t => t !== tool);
-                                            setLocal({...local, activeTools: next});
-                                        }} /> 
-                                        <span className="text-sm font-black capitalize text-slate-700">{tool}</span>
-                                    </label>
-                                ))}
+                        {nums.length > 0 ? nums.map(n => (
+                            <div key={n} className="lotto-ball w-14 h-14 md:w-16 md:h-16 rounded-full flex items-center justify-center text-white font-bold text-xl md:text-2xl animate-bounce-short shadow-lg"
+                                style={{'--bg-color-from': colors(n)[0], '--bg-color-to': colors(n)[1]}}>
+                                {n}
                             </div>
-                        </section>
+                        )) : <div className="text-slate-300 font-bold text-xl flex items-center h-16">{t.lotto.guide}</div>}
                     </div>
+                    <Button onClick={gen} className="bg-emerald-500 hover:bg-emerald-600 text-white px-10 py-4 rounded-full text-lg shadow-emerald-200">
+                        <Icon name="clover" className="mr-2" /> {t.lotto.btn}
+                    </Button>
                 </div>
             );
         };
-
-        // --- 5. 메인 앱 프레임워크 ---
-        const App = () => {
-            const [config, setConfig] = useState(null);
-            const [current, setCurrent] = useState('text');
-            const [lang, setLang] = useState('ko');
-            const [isSidebarOpen, setIsSidebarOpen] = useState(false);
+        
+        const DDay = ({ t }) => {
+            const [date, setDate] = useState('');
+            const [res, setRes] = useState(null);
 
             useEffect(() => {
-                const init = async () => {
-                    try {
-                        const doc = await db.collection('artifacts').doc(appId).collection('public').doc('data').collection('settings').doc('global').get();
-                        setConfig(doc.exists ? doc.data() : DEFAULT_CONFIG);
-                    } catch(e) { setConfig(DEFAULT_CONFIG); }
-                };
-                init();
-                const handleHash = () => {
-                    const hash = window.location.hash.replace('#/', '') || 'text';
-                    setCurrent(hash);
-                    setIsSidebarOpen(false);
-                };
-                window.addEventListener('hashchange', handleHash); handleHash();
-                return () => window.removeEventListener('hashchange', handleHash);
-            }, []);
-
-            useEffect(() => { if (window.lucide) window.lucide.createIcons(); if (config) document.title = config.siteTitle; }, [current, config, lang]);
-
-            if (!config) return (
-                <div className="min-h-screen flex flex-col items-center justify-center bg-white">
-                    <div className="w-16 h-16 border-8 border-blue-600 border-t-transparent rounded-full animate-spin mb-6"></div>
-                    <div className="font-black text-slate-200 tracking-[0.5em] uppercase text-sm animate-pulse font-mono">Connecting Node...</div>
-                </div>
-            );
-
-            const t = translations[lang];
-
-            const renderTool = () => {
-                const p = { lang };
-                switch(current) {
-                    case 'admin': return <AdminPanel config={config} onUpdate={setConfig} />;
-                    case 'text': return <WordCounter {...p} />;
-                    case 'discount': return <DiscountCalculator {...p} />;
-                    case 'unit': return <UnitConverter {...p} />;
-                    case 'pomodoro': return <PomodoroTimer {...p} />;
-                    case 'password': return <PasswordGenerator {...p} />;
-                    case 'dday': return <DDayCalculator {...p} />;
-                    case 'lotto': return <LottoGenerator {...p} />;
-                    default: return <div className="tool-card p-24 text-center font-black text-slate-100 italic text-6xl uppercase tracking-tighter">Syncing {current}...</div>;
+                if (date) {
+                    const today = new Date();
+                    today.setHours(0,0,0,0);
+                    const target = new Date(date);
+                    const diff = Math.ceil((target - today) / (1000 * 60 * 60 * 24));
+                    setRes(diff);
                 }
-            };
+            }, [date]);
 
             return (
-                <div className="min-h-screen flex flex-col md:flex-row bg-[#F8FAFC]">
-                    {/* 모바일 최상단 바 */}
-                    <header className="md:hidden glass-panel p-5 flex justify-between items-center sticky top-0 z-50 rounded-b-[30px]">
-                        <div className="font-black text-blue-600 text-2xl tracking-tighter uppercase">{config.siteTitle}</div>
-                        <button onClick={()=>setIsSidebarOpen(!isSidebarOpen)} className="p-3 bg-slate-50 rounded-2xl"><i data-lucide="menu"></i></button>
-                    </header>
-
-                    {/* 데스크탑 프리미엄 사이드바 */}
-                    <aside className={`fixed inset-y-0 left-0 z-40 w-80 bg-white border-r border-slate-100 transform transition-transform duration-700 ease-in-out md:translate-x-0 ${isSidebarOpen ? 'translate-x-0' : '-translate-x-full shadow-none'} flex flex-col`}>
-                        <div className="p-12 pb-8">
-                            <div className="flex items-center gap-4 mb-3">
-                                <div className="w-14 h-14 bg-blue-600 rounded-[24px] flex items-center justify-center text-white shadow-2xl shadow-blue-200"><i data-lucide="box" className="w-8 h-8"></i></div>
-                                <h1 className="text-3xl font-black text-slate-900 tracking-tighter leading-none">{config.siteTitle}</h1>
-                            </div>
-                            <p className="text-[10px] text-slate-300 font-black uppercase tracking-[0.4em] pl-1">{config.siteSubtitle}</p>
+                <div className="grid md:grid-cols-2 gap-6">
+                    <div className="bg-slate-50 p-6 rounded-3xl space-y-4">
+                         <InputGroup label={t.dday.label}>
+                            <input type="date" value={date} onChange={e => setDate(e.target.value)}
+                                className="w-full p-4 rounded-xl bg-white border border-slate-200 focus:border-purple-500 outline-none" />
+                        </InputGroup>
+                        <p className="text-sm text-slate-400">{t.dday.guide}</p>
+                    </div>
+                    
+                    <div className="bg-purple-600 text-white p-8 rounded-3xl flex flex-col items-center justify-center text-center shadow-lg shadow-purple-200 relative overflow-hidden">
+                        <div className="absolute top-0 left-0 w-full h-full bg-[url('https://www.transparenttextures.com/patterns/cubes.png')] opacity-10"></div>
+                        <div className="relative z-10">
+                            {res !== null ? (
+                                <>
+                                    <div className="text-6xl font-bold mb-2">
+                                        {res === 0 ? "D-Day" : res > 0 ? `D-${res}` : `D+${Math.abs(res)}`}
+                                    </div>
+                                    <div className="text-purple-200 font-medium">
+                                        {res === 0 ? t.dday.isToday : res > 0 ? t.dday.daysLeft : t.dday.daysPast}
+                                    </div>
+                                </>
+                            ) : <div className="text-purple-200">Select Date</div>}
                         </div>
-                        
-                        <nav className="px-8 flex-1 space-y-2 overflow-y-auto hide-scrollbar py-4">
-                            {config.activeTools.map(tool => (
-                                <a key={tool} href={`#/${tool}`} className={`flex items-center gap-5 px-7 py-5 rounded-[28px] text-[15px] font-black transition-all ${current === tool ? 'bg-blue-600 text-white shadow-2xl shadow-blue-200 -translate-y-1' : 'text-slate-400 hover:bg-slate-50 hover:text-slate-900'}`}>
-                                    <i data-lucide={tool === 'text' ? 'type' : tool === 'pomodoro' ? 'clock' : tool === 'password' ? 'lock' : tool === 'dday' ? 'calendar' : tool === 'unit' ? 'arrow-left-right' : tool === 'discount' ? 'percent' : 'tool'} className="w-5 h-5"></i>
-                                    <span className="capitalize">{t.tools[tool] || tool}</span>
-                                </a>
+                    </div>
+                </div>
+            );
+        };
+
+
+        // --- Layout ---
+        const App = () => {
+            const [tool, setTool] = useState('text');
+            const [lang, setLang] = useState('ko');
+            const [menuOpen, setMenuOpen] = useState(false);
+            
+            const t = translations[lang];
+
+            const tools = [
+                { id: 'text', icon: 'type', cat: 'text', color: 'text-blue-500', bg: 'bg-blue-50' },
+                { id: 'discount', icon: 'percent', cat: 'calc', color: 'text-pink-500', bg: 'bg-pink-50' },
+                { id: 'unit', icon: 'arrow-left-right', cat: 'calc', color: 'text-orange-500', bg: 'bg-orange-50' },
+                { id: 'dday', icon: 'calendar', cat: 'calc', color: 'text-purple-500', bg: 'bg-purple-50' },
+                { id: 'stopwatch', icon: 'timer', cat: 'time', color: 'text-red-500', bg: 'bg-red-50' },
+                { id: 'pomodoro', icon: 'clock', cat: 'time', color: 'text-teal-500', bg: 'bg-teal-50' },
+                { id: 'password', icon: 'lock', cat: 'security', color: 'text-indigo-500', bg: 'bg-indigo-50' },
+                { id: 'lotto', icon: 'clover', cat: 'fun', color: 'text-emerald-500', bg: 'bg-emerald-50' },
+            ];
+            
+            const activeTool = tools.find(x => x.id === tool);
+
+            return (
+                <div className="flex h-screen bg-slate-50">
+                    {/* Desktop Sidebar */}
+                    <aside className="hidden md:flex flex-col w-72 bg-white border-r border-slate-200 h-full z-20 shadow-sm">
+                        <div className="p-8 pb-4">
+                            <h1 className="text-2xl font-bold flex items-center gap-3 text-slate-800">
+                                <div className="w-10 h-10 bg-gradient-to-tr from-blue-600 to-indigo-600 rounded-xl flex items-center justify-center text-white shadow-lg shadow-blue-200">
+                                    <Icon name="box" />
+                                </div>
+                                UtilityBox
+                            </h1>
+                            <p className="text-xs text-slate-400 mt-2 ml-1">{t.subtitle}</p>
+                        </div>
+
+                        <nav className="flex-1 overflow-y-auto px-6 py-4 space-y-8 custom-scrollbar">
+                            {['text', 'calc', 'time', 'security', 'fun'].map(cat => (
+                                <div key={cat}>
+                                    <h3 className="text-xs font-bold text-slate-400 uppercase tracking-wider mb-3 px-3">{t.categories[cat]}</h3>
+                                    <div className="space-y-1">
+                                        {tools.filter(x => x.cat === cat).map(item => (
+                                            <button key={item.id} onClick={() => setTool(item.id)}
+                                                className={`w-full flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-medium transition-all duration-200 ${tool === item.id ? 'bg-slate-800 text-white shadow-md transform scale-[1.02]' : 'text-slate-500 hover:bg-slate-100'}`}>
+                                                <Icon name={item.icon} size={18} className={tool === item.id ? 'text-blue-300' : ''} />
+                                                {t.tools[item.id]}
+                                            </button>
+                                        ))}
+                                    </div>
+                                </div>
                             ))}
                         </nav>
-
-                        <div className="p-8 mt-auto space-y-4">
-                            <div className="flex gap-2 p-2 bg-slate-50 rounded-3xl border border-slate-100">
-                                <button onClick={()=>setLang('ko')} className={`flex-1 py-3 text-[10px] font-black rounded-2xl transition-all ${lang==='ko'?'bg-white text-slate-900 shadow-sm border border-slate-100':'text-slate-300'}`}>KOREA</button>
-                                <button onClick={()=>setLang('en')} className={`flex-1 py-3 text-[10px] font-black rounded-2xl transition-all ${lang==='en'?'bg-white text-slate-900 shadow-sm border border-slate-100':'text-slate-300'}`}>GLOBAL</button>
-                            </div>
-                            <a href="#/admin" className={`group flex items-center justify-center gap-3 py-5 rounded-[28px] text-[11px] font-black transition-all border-2 ${current === 'admin' ? 'bg-slate-900 text-white border-slate-900 shadow-2xl' : 'bg-transparent text-slate-300 border-slate-100 hover:text-slate-900 hover:border-slate-300'}`}>
-                                <i data-lucide="shield-check" className="w-4 h-4 group-hover:animate-pulse"></i> {t.admin.title.toUpperCase()}
-                            </a>
-                        </div>
+                        
+                         <div className="p-6 border-t border-slate-100">
+                             <button onClick={() => setLang(l => l==='ko'?'en':'ko')} className="w-full py-2 border border-slate-200 rounded-lg text-xs font-bold text-slate-500 hover:bg-slate-50">
+                                 {lang === 'ko' ? 'Language: 한국어' : 'Language: English'}
+                             </button>
+                         </div>
                     </aside>
 
-                    {/* 메인 뷰포트 (우측 영역) */}
-                    <main className="flex-1 p-6 md:p-16 lg:p-24 overflow-y-auto h-screen relative scroll-smooth">
-                        <div className="max-w-4xl mx-auto space-y-16 pb-20">
+                    {/* Mobile Header & Content */}
+                    <div className="flex-1 flex flex-col h-full relative overflow-hidden">
+                        
+                        {/* Mobile Header */}
+                        <header className="md:hidden bg-white/80 backdrop-blur-md border-b border-slate-200 p-4 flex justify-between items-center sticky top-0 z-30">
+                            <div className="font-bold text-lg flex items-center gap-2 text-slate-800">
+                                <div className="w-8 h-8 bg-blue-600 rounded-lg flex items-center justify-center text-white">
+                                    <Icon name="box" size={18} />
+                                </div>
+                                {t.title}
+                            </div>
+                            <button onClick={() => setMenuOpen(true)} className="p-2 text-slate-600 bg-slate-100 rounded-full">
+                                <Icon name="menu" />
+                            </button>
+                        </header>
+
+                        {/* Mobile Drawer */}
+                        {menuOpen && (
+                            <div className="fixed inset-0 z-50 md:hidden">
+                                <div className="absolute inset-0 bg-black/20 backdrop-blur-sm" onClick={() => setMenuOpen(false)}></div>
+                                <div className="absolute right-0 top-0 bottom-0 w-3/4 bg-white shadow-2xl p-6 overflow-y-auto animate-fade-in">
+                                    <div className="flex justify-between items-center mb-8">
+                                        <h2 className="font-bold text-xl">{t.title}</h2>
+                                        <button onClick={() => setMenuOpen(false)}><Icon name="x" /></button>
+                                    </div>
+                                    <div className="space-y-6">
+                                        {tools.map(item => (
+                                            <button key={item.id} onClick={() => { setTool(item.id); setMenuOpen(false); }}
+                                                className={`w-full flex items-center gap-4 p-4 rounded-xl text-left transition-all ${tool === item.id ? 'bg-slate-800 text-white shadow-lg' : 'bg-slate-50 text-slate-600'}`}>
+                                                <div className={`p-2 rounded-lg bg-white/20`}>
+                                                    <Icon name={item.icon} size={20} />
+                                                </div>
+                                                <span className="font-medium">{t.tools[item.id]}</span>
+                                            </button>
+                                        ))}
+                                    </div>
+                                     <div className="mt-8 pt-8 border-t border-slate-100">
+                                         <button onClick={() => setLang(l => l==='ko'?'en':'ko')} className="flex items-center gap-2 text-sm font-bold text-slate-500">
+                                             <Icon name="globe" size={16} /> {lang.toUpperCase()}
+                                         </button>
+                                     </div>
+                                </div>
+                            </div>
+                        )}
+
+                        {/* Main Content Area */}
+                        <main className="flex-1 overflow-y-auto p-4 md:p-12 relative">
+                             {/* Background Decoration */}
+                            <div className="absolute top-0 left-0 w-full h-64 bg-gradient-to-b from-blue-50/50 to-transparent -z-10"></div>
                             
-                            {/* 상단 광고 슬롯 디자인 */}
-                            <div className="h-32 bg-white rounded-[44px] border-4 border-dashed border-slate-100 flex flex-col items-center justify-center text-slate-200 text-xs font-black tracking-[0.3em] shadow-inner relative overflow-hidden group">
-                                <div className="absolute inset-0 bg-blue-500/0 group-hover:bg-blue-500/5 transition-all"></div>
-                                <i data-lucide="layout" className="mb-3 w-8 h-8 opacity-20"></i>
-                                <span className="relative z-10 font-mono">GOOGLE ADSENSE PLACEMENT (728x90)</span>
-                            </div>
+                            <div className="max-w-3xl mx-auto pb-20 md:pb-0">
+                                
+                                {/* Header Section */}
+                                <div className="mb-8 md:mb-12 animate-fade-in">
+                                    <div className="flex items-center gap-3 mb-2">
+                                        <div className={`p-2 rounded-lg ${activeTool.bg} ${activeTool.color}`}>
+                                            <Icon name={activeTool.icon} />
+                                        </div>
+                                        <span className="text-sm font-bold text-slate-400 uppercase tracking-wide">{t.categories[activeTool.cat]}</span>
+                                    </div>
+                                    <h2 className="text-3xl md:text-4xl font-bold text-slate-900">{t.tools[tool]}</h2>
+                                </div>
 
-                            {/* 도구 실제 내용 출력 */}
-                            <div className="animate-in fade-in slide-in-from-bottom-8 duration-700">
-                                {renderTool()}
-                            </div>
+                                {/* Tool Container */}
+                                <Card className="min-h-[400px]">
+                                    {tool === 'text' && <WordCounter lang={lang} t={t} />}
+                                    {tool === 'discount' && <DiscountCalculator t={t} />}
+                                    {tool === 'unit' && <UnitConverter t={t} />}
+                                    {tool === 'stopwatch' && <Stopwatch t={t} />}
+                                    {tool === 'pomodoro' && <Pomodoro t={t} />}
+                                    {tool === 'password' && <PasswordGenerator t={t} />}
+                                    {tool === 'dday' && <DDay t={t} />}
+                                    {tool === 'lotto' && <Lotto t={t} />}
+                                </Card>
 
-                            {/* 하단 정보 카드 */}
-                            <div className="p-12 bg-white rounded-[50px] border border-slate-100 shadow-sm relative overflow-hidden">
-                                <div className="absolute top-0 right-0 w-32 h-32 bg-blue-500/5 rounded-full -mr-16 -mt-16 blur-3xl"></div>
-                                <h4 className="font-black text-slate-900 mb-4 flex items-center gap-3 text-xl"><i data-lucide="sparkles" className="w-6 h-6 text-blue-500"></i> {t.tip.title}</h4>
-                                <p className="text-slate-400 text-sm leading-[1.8] font-medium max-w-2xl">{t.tip.desc}</p>
+                                <div className="mt-8 text-center">
+                                    <p className="text-xs text-slate-400 flex items-center justify-center gap-2">
+                                        <Icon name="shield-check" size={14} /> {t.tip.desc}
+                                    </p>
+                                </div>
+                                
+                                {/* Ad Placeholder (Styled) */}
+                                <div className="mt-12 border-2 border-dashed border-slate-200 rounded-2xl h-24 flex flex-col items-center justify-center text-slate-300 text-xs">
+                                    <span className="font-bold">AD SPACE</span>
+                                </div>
                             </div>
-                        </div>
-                    </main>
+                        </main>
+                    </div>
                 </div>
             );
         };
