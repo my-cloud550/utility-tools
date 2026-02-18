@@ -3,367 +3,200 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Utility Box - Smart Tools</title>
-    <!-- 파비콘 추가 (박스 이모지) -->
+    <title>Utility Box Pro - Essential Smart Tools</title>
+    <!-- 파비콘 설정 -->
     <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>📦</text></svg>">
     
-    <!-- Tailwind CSS -->
+    <!-- 최신 라이브러리 로드 -->
     <script src="https://cdn.tailwindcss.com"></script>
-    <!-- React & ReactDOM -->
     <script crossorigin src="https://unpkg.com/react@18/umd/react.development.js"></script>
     <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.development.js"></script>
-    <!-- Babel for JSX -->
     <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
-    
-    <!-- 아이콘 (Lucide) -->
     <script src="https://unpkg.com/lucide@latest"></script>
 
+    <!-- Firebase SDK (호환 모드) -->
+    <script src="https://www.gstatic.com/firebasejs/11.0.1/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/11.0.1/firebase-auth-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/11.0.1/firebase-firestore-compat.js"></script>
+
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;700&display=swap');
-        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;700&display=swap');
+        @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;700;900&display=swap');
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;700;900&display=swap');
         
         body { font-family: 'Inter', 'Noto Sans KR', sans-serif; }
-        .ad-placeholder {
-            background-image: repeating-linear-gradient(45deg, #f3f4f6 25%, transparent 25%, transparent 75%, #f3f4f6 75%, #f3f4f6), repeating-linear-gradient(45deg, #f3f4f6 25%, #fff 25%, #fff 75%, #f3f4f6 75%, #f3f4f6);
-            background-position: 0 0, 10px 10px;
-            background-size: 20px 20px;
-        }
-        /* 스크롤바 숨기기 (모바일 깔끔하게) */
-        .hide-scrollbar::-webkit-scrollbar {
-            display: none;
-        }
-        .hide-scrollbar {
-            -ms-overflow-style: none;
-            scrollbar-width: none;
+        .hide-scrollbar::-webkit-scrollbar { display: none; }
+        .hide-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+        
+        /* 프리미엄 디자인 토큰 */
+        .glass-panel { @apply bg-white/80 backdrop-blur-md border border-slate-200/50 shadow-xl shadow-slate-200/50; }
+        .tool-card { @apply bg-white p-8 rounded-[40px] border border-slate-100 shadow-sm transition-all hover:shadow-xl hover:shadow-slate-200/50; }
+        .admin-input { @apply w-full p-4 bg-slate-50 border border-slate-200 rounded-3xl focus:ring-4 focus:ring-blue-500/10 focus:border-blue-500 outline-none transition-all font-bold; }
+        
+        /* 로또 번호 공 애니메이션 */
+        .ball-bounce { animation: bounce 0.5s ease-out; }
+        @keyframes bounce { 0% { transform: scale(0); } 70% { transform: scale(1.1); } 100% { transform: scale(1); } }
+        
+        /* 커스텀 슬라이더 스타일 */
+        input[type=range]::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            height: 24px; width: 24px;
+            border-radius: 50%;
+            background: #2563eb;
+            cursor: pointer;
+            box-shadow: 0 0 10px rgba(37, 99, 235, 0.3);
         }
     </style>
 </head>
-<body class="bg-slate-50 text-slate-800">
+<body class="bg-[#F8FAFC] text-[#1E293B]">
     <div id="root"></div>
 
     <script type="text/babel">
-        const { useState, useEffect, useRef } = React;
+        const { useState, useEffect, useRef, useMemo } = React;
 
-        // --- Translations ---
+        // --- 1. 파이어베이스 설정 (주인장님 정보) ---
+        const firebaseConfig = {
+            apiKey: "AIzaSyDwYItXXCjm8srVigEHhYXs3pPaeo5Ee2k",
+            authDomain: "my-utility-box-b8fb2.firebaseapp.com",
+            projectId: "my-utility-box-b8fb2",
+            storageBucket: "my-utility-box-b8fb2.firebasestorage.app",
+            messagingSenderId: "939448415088",
+            appId: "1:939448415088:web:afe31f30b71fb554a5d5b5",
+            measurementId: "G-TCGYQ9YDD8"
+        };
+
+        if (!firebase.apps.length) firebase.initializeApp(firebaseConfig);
+        const db = firebase.firestore();
+        const auth = firebase.auth();
+        const appId = "my-utility-box-b8fb2";
+
+        // --- 2. 다국어 사전 (전 기능 포함) ---
         const translations = {
             ko: {
-                title: "유틸리티 박스",
-                subtitle: "생활 필수 도구 모음",
-                categories: { text: "텍스트", calc: "계산 & 변환", time: "시간 & 생산성", security: "보안", fun: "재미" },
+                title: "유틸리티 박스", subtitle: "당신의 모든 요구를 위한 스마트 툴박스",
+                categories: { text: "텍스트 도구", calc: "계산 및 변환", time: "시간 및 생산성", security: "보안", fun: "재미" },
                 tools: {
-                    text: "글자 수 세기",
-                    discount: "할인율 계산기",
-                    unit: "단위 변환기",
-                    stopwatch: "스톱워치",
-                    pomodoro: "뽀모도로 타이머",
-                    password: "비밀번호 생성기",
-                    dday: "D-Day 계산기",
-                    lotto: "로또 번호 생성"
+                    text: "글자 수 세기", discount: "할인율 계산", unit: "단위 변환기",
+                    stopwatch: "스톱워치", pomodoro: "뽀모도로 타이머", password: "비밀번호 생성기",
+                    dday: "D-Day 계산기", lotto: "로또 번호 생성"
                 },
-                wordCounter: {
-                    title: "글자 수 세기 & 검사기",
-                    placeholder: "이곳에 텍스트를 입력하거나 붙여넣으세요...",
-                    withSpace: "공백 포함",
-                    noSpace: "공백 제외",
-                    words: "단어 수",
-                    lines: "줄 수",
-                    unitChar: "자",
-                    unitWord: "개",
-                    unitLine: "줄"
-                },
-                discount: {
-                    title: "할인율 계산기",
-                    price: "원래 가격",
-                    rate: "할인율 (%)",
-                    saved: "할인 금액",
-                    final: "최종 가격"
-                },
-                unit: {
-                    title: "단위 변환기",
-                    input: "입력",
-                    result: "결과",
-                    types: { length: "길이", weight: "무게", temp: "온도" },
+                wordCounter: { title: "글자 수 세기 & 검사기", placeholder: "이곳에 텍스트를 입력하거나 붙여넣으세요...", withSpace: "공백 포함", noSpace: "공백 제외", words: "단어 수", lines: "줄 수" },
+                discount: { title: "할인율 계산기", price: "원래 가격", rate: "할인율(%)", saved: "할인된 금액", final: "최종 구매 가격", currency: "원" },
+                unit: { 
+                    title: "만능 단위 변환기", input: "입력", result: "결과",
+                    length: "길이", weight: "무게", temp: "온도",
                     labels: {
-                        cm: "cm", m: "m", km: "km", inch: "inch", ft: "ft", yard: "yard",
-                        kg: "kg", g: "g", lb: "lb", oz: "oz",
-                        Celsius: "섭씨 (℃)", Fahrenheit: "화씨 (℉)",
-                        Kelvin: "켈빈 (K)", Rankine: "랭킨 (°R)",
-                        Delisle: "덜릴 (°De)", Newton: "뉴턴 (°N)",
-                        Reaumur: "열씨 (°Re)", Romer: "로머 (°Rø)"
+                        cm: "센티미터(cm)", m: "미터(m)", km: "킬로미터(km)", inch: "인치(in)", ft: "피트(ft)", yard: "야드(yd)",
+                        kg: "킬로그램(kg)", g: "그램(g)", lb: "파운드(lb)", oz: "온스(oz)",
+                        Celsius: "섭씨(℃)", Fahrenheit: "화씨(℉)", Kelvin: "켈빈(K)", Rankine: "랭킨(°R)", Delisle: "덜릴(°De)", Newton: "뉴턴(°N)", Reaumur: "열씨(°Re)", Romer: "로머(°Rø)"
                     }
                 },
-                stopwatch: {
-                    title: "스톱워치",
-                    start: "시작",
-                    stop: "정지",
-                    reset: "리셋"
-                },
-                pomodoro: {
-                    title: "뽀모도로 집중 타이머",
-                    work: "집중 시간",
-                    break: "휴식 시간",
-                    start: "집중 시작",
-                    pause: "일시 정지",
-                    reset: "리셋",
-                    statusWork: "🔥 집중하세요!",
-                    statusBreak: "☕ 잠시 쉬세요",
-                    switchToWork: "집중 모드로 전환 (25분)",
-                    switchToBreak: "휴식 모드로 전환 (5분)"
-                },
-                password: {
-                    title: "안전한 비밀번호 생성기",
-                    length: "비밀번호 길이",
-                    options: "옵션 설정",
-                    numbers: "숫자 포함 (0-9)",
-                    symbols: "특수문자 포함 (!@#$)",
-                    generate: "비밀번호 생성",
-                    copy: "복사하기",
-                    copied: "복사됨!"
-                },
-                dday: {
-                    title: "D-Day 계산기",
-                    label: "기준 날짜 선택",
-                    guide: "* 기념일이나 시험 날짜를 입력하세요.",
-                    resultLabel: "남은 날짜",
-                    isToday: "🎉 D-Day 입니다!",
-                    select: "날짜를 선택해주세요",
-                    daysLeft: "일 남았습니다",
-                    daysPast: "일 지났습니다"
-                },
-                lotto: {
-                    title: "로또 번호 생성기",
-                    btn: "번호 생성하기",
-                    guide: "버튼을 눌러 행운의 번호를 확인하세요!"
-                },
-                ad: "광고 영역",
-                tip: {
-                    title: "💡 활용 꿀팁",
-                    desc: "이 도구들은 서버로 데이터를 전송하지 않으므로 보안 걱정 없이 안전하게 사용할 수 있습니다. 자주 사용하는 기능을 즐겨찾기 해두고, 언제든 빠르게 계산 결과를 확인해보세요."
-                }
+                pomodoro: { title: "뽀모도로 집중 타이머", work: "집중 시간", break: "휴식 시간", start: "시작하기", pause: "일시 정지", reset: "초기화", statusWork: "🔥 지금은 집중할 시간!", statusBreak: "☕ 잠시 쉬어가세요", switchToWork: "집중 모드", switchToBreak: "휴식 모드" },
+                password: { title: "안전한 비밀번호 생성기", length: "비밀번호 길이", generate: "강력한 비밀번호 생성", copied: "클립보드에 복사됨!" },
+                dday: { title: "D-Day 계산기", label: "날짜 선택", result: "남은 날짜", isToday: "🎉 오늘이 바로 그날!", guide: "* 기념일이나 중요한 일정을 선택하세요." },
+                lotto: { title: "로또 행운 번호 생성", btn: "번호 추첨하기", guide: "오늘의 행운을 시험해보세요!" },
+                admin: { title: "개발자 마스터 센터", login: "Google 계정으로 관리자 로그인", save: "설정 저장 및 반영", success: "성공적으로 저장되었습니다!", labelTitle: "사이트 제목", labelSubtitle: "사이트 소제목", labelTools: "활성화된 도구 설정", logout: "로그아웃" },
+                tip: { title: "💡 유틸리티 박스 활용 팁", desc: "이 모든 도구는 서버로 데이터를 전송하지 않고 브라우저 내에서만 안전하게 실행됩니다. 개인정보 걱정 없이 사용하세요!" }
             },
             en: {
-                title: "Utility Box",
-                subtitle: "Everyday Essential Tools",
-                categories: { text: "Text", calc: "Calc & Convert", time: "Time & Focus", security: "Security", fun: "Fun" },
+                title: "Utility Box", subtitle: "Smart Tools for Your Productivity",
+                categories: { text: "Text Tools", calc: "Calc & Convert", time: "Time & Productivity", security: "Security", fun: "Fun" },
                 tools: {
-                    text: "Word Counter",
-                    discount: "Discount Calc",
-                    unit: "Unit Converter",
-                    stopwatch: "Stopwatch",
-                    pomodoro: "Pomodoro Timer",
-                    password: "Password Gen",
-                    dday: "D-Day Counter",
-                    lotto: "Lotto Generator"
+                    text: "Word Counter", discount: "Discount Calc", unit: "Unit Converter",
+                    stopwatch: "Stopwatch", pomodoro: "Pomodoro Timer", password: "Password Generator",
+                    dday: "D-Day Counter", lotto: "Lotto Generator"
                 },
-                wordCounter: {
-                    title: "Word Counter",
-                    placeholder: "Type or paste your text here...",
-                    withSpace: "Chars (w/ space)",
-                    noSpace: "Chars (no space)",
-                    words: "Words",
-                    lines: "Lines",
-                    unitChar: "",
-                    unitWord: "",
-                    unitLine: ""
-                },
-                discount: {
-                    title: "Discount Calculator",
-                    price: "Original Price",
-                    rate: "Discount (%)",
-                    saved: "You Save",
-                    final: "Final Price"
-                },
-                unit: {
-                    title: "Unit Converter",
-                    input: "Input",
-                    result: "Result",
-                    types: { length: "Length", weight: "Weight", temp: "Temp" },
+                wordCounter: { title: "Word Counter & Checker", placeholder: "Type or paste your text here...", withSpace: "With Space", noSpace: "No Space", words: "Words", lines: "Lines" },
+                discount: { title: "Discount Calculator", price: "Original Price", rate: "Discount(%)", saved: "You Save", final: "Final Price", currency: "$" },
+                unit: { 
+                    title: "Universal Unit Converter", input: "Input", result: "Result",
+                    length: "Length", weight: "Weight", temp: "Temp",
                     labels: {
-                        cm: "cm", m: "m", km: "km", inch: "inch", ft: "ft", yard: "yard",
-                        kg: "kg", g: "g", lb: "lb", oz: "oz",
-                        Celsius: "Celsius (℃)", Fahrenheit: "Fahrenheit (℉)",
-                        Kelvin: "Kelvin (K)", Rankine: "Rankine (°R)",
-                        Delisle: "Delisle (°De)", Newton: "Newton (°N)",
-                        Reaumur: "Réaumur (°Re)", Romer: "Rømer (°Rø)"
+                        cm: "Centimeter(cm)", m: "Meter(m)", km: "Kilometer(km)", inch: "Inch(in)", ft: "Foot(ft)", yard: "Yard(yd)",
+                        kg: "Kilogram(kg)", g: "Gram(g)", lb: "Pound(lb)", oz: "Ounce(oz)",
+                        Celsius: "Celsius(℃)", Fahrenheit: "Fahrenheit(℉)", Kelvin: "Kelvin(K)", Rankine: "Rankine(°R)", Delisle: "Delisle(°De)", Newton: "Newton(°N)", Reaumur: "Réaumur(°Re)", Romer: "Rømer(°Rø)"
                     }
                 },
-                stopwatch: {
-                    title: "Stopwatch",
-                    start: "Start",
-                    stop: "Stop",
-                    reset: "Reset"
-                },
-                pomodoro: {
-                    title: "Pomodoro Focus Timer",
-                    work: "Focus",
-                    break: "Break",
-                    start: "Start Focus",
-                    pause: "Pause",
-                    reset: "Reset",
-                    statusWork: "🔥 Stay Focused!",
-                    statusBreak: "☕ Take a Break",
-                    switchToWork: "Switch to Focus Mode (25m)",
-                    switchToBreak: "Switch to Break Mode (5m)"
-                },
-                password: {
-                    title: "Secure Password Generator",
-                    length: "Length",
-                    options: "Options",
-                    numbers: "Include Numbers (0-9)",
-                    symbols: "Include Symbols (!@#$)",
-                    generate: "Generate",
-                    copy: "Copy",
-                    copied: "Copied!"
-                },
-                dday: {
-                    title: "D-Day Counter",
-                    label: "Select Date",
-                    guide: "* Enter an anniversary or exam date.",
-                    resultLabel: "Days Left",
-                    isToday: "🎉 It's D-Day!",
-                    select: "Please select a date",
-                    daysLeft: "days left",
-                    daysPast: "days past"
-                },
-                lotto: {
-                    title: "Lotto Generator",
-                    btn: "Generate Numbers",
-                    guide: "Click the button to get your lucky numbers!"
-                },
-                ad: "Ad Space",
-                tip: {
-                    title: "💡 Pro Tip",
-                    desc: "These tools run entirely in your browser. No data is sent to any server, ensuring your privacy. Bookmark this page for quick access!"
-                }
+                pomodoro: { title: "Pomodoro Focus Timer", work: "Work Time", break: "Break Time", start: "Start", pause: "Pause", reset: "Reset", statusWork: "🔥 Time to Focus!", statusBreak: "☕ Time to Rest", switchToWork: "Work Mode", switchToBreak: "Break Mode" },
+                password: { title: "Secure Password Gen", length: "Password Length", generate: "Generate Strong Password", copied: "Copied to Clipboard!" },
+                dday: { title: "D-Day Counter", label: "Select Date", result: "Result", isToday: "🎉 It's Today!", guide: "* Pick a special date to track." },
+                lotto: { title: "Lotto Number Generator", btn: "Generate Lucky Numbers", guide: "Test your luck today!" },
+                admin: { title: "Developer Admin Center", login: "Login with Google", save: "Save Configuration", success: "Settings updated successfully!", labelTitle: "Site Title", labelSubtitle: "Site Subtitle", labelTools: "Active Tools Mgmt", logout: "Logout" },
+                tip: { title: "💡 Pro Tip", desc: "All tools run locally in your browser for 100% privacy and security. No data leaves your device." }
             }
         };
 
-        // --- Components ---
+        // --- 3. 개별 도구 로직 컴포넌트들 ---
 
+        // (1) 글자 수 세기
         const WordCounter = ({ lang }) => {
             const [text, setText] = useState('');
             const t = translations[lang].wordCounter;
-            
             const stats = {
-                charWithSpace: text.length,
-                charNoSpace: text.replace(/\s/g, '').length,
-                words: text.trim() === '' ? 0 : text.trim().split(/\s+/).length,
-                lines: text === '' ? 0 : text.split(/\n/).length
+                withSpace: text.length,
+                noSpace: text.replace(/\s/g, '').length,
+                words: text.trim() ? text.trim().split(/\s+/).length : 0,
+                lines: text ? text.split('\n').length : 0
             };
-
             return (
-                <div className="space-y-6">
-                    <div className="bg-white p-6 rounded-2xl shadow-sm border border-slate-100">
-                        <h2 className="text-xl font-bold mb-4 flex items-center gap-2">
-                            <i data-lucide="type" className="w-6 h-6 text-blue-500"></i>
-                            {t.title}
-                        </h2>
-                        <textarea
-                            className="w-full h-64 p-4 rounded-xl border border-slate-200 focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none resize-none text-lg leading-relaxed"
-                            placeholder={t.placeholder}
-                            value={text}
-                            onChange={(e) => setText(e.target.value)}
-                        ></textarea>
-                        
-                        <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mt-6">
-                            <StatCard label={t.withSpace} value={stats.charWithSpace} unit={t.unitChar} color="blue" />
-                            <StatCard label={t.noSpace} value={stats.charNoSpace} unit={t.unitChar} color="indigo" />
-                            <StatCard label={t.words} value={stats.words} unit={t.unitWord} color="emerald" />
-                            <StatCard label={t.lines} value={stats.lines} unit={t.unitLine} color="amber" />
-                        </div>
+                <div className="tool-card">
+                    <div className="flex items-center gap-4 mb-8">
+                        <div className="w-14 h-14 bg-blue-100 rounded-2xl flex items-center justify-center text-blue-600"><i data-lucide="type" className="w-8 h-8"></i></div>
+                        <h2 className="text-3xl font-black tracking-tight">{t.title}</h2>
+                    </div>
+                    <textarea 
+                        className="w-full h-80 p-6 bg-slate-50 border border-slate-100 rounded-[32px] focus:ring-8 focus:ring-blue-500/5 focus:border-blue-500 outline-none resize-none mb-8 text-xl leading-relaxed" 
+                        placeholder={t.placeholder} 
+                        value={text} 
+                        onChange={e=>setText(e.target.value)} 
+                    />
+                    <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+                        {[
+                            { label: t.withSpace, value: stats.withSpace, color: "text-blue-600", bg: "bg-blue-50" },
+                            { label: t.noSpace, value: stats.noSpace, color: "text-indigo-600", bg: "bg-indigo-50" },
+                            { label: t.words, value: stats.words, color: "text-emerald-600", bg: "bg-emerald-50" },
+                            { label: t.lines, value: stats.lines, color: "text-amber-600", bg: "bg-amber-50" }
+                        ].map((s, i) => (
+                            <div key={i} className={`p-6 ${s.bg} rounded-[28px] text-center`}>
+                                <div className="text-[10px] text-slate-400 font-black uppercase tracking-widest mb-2">{s.label}</div>
+                                <div className={`text-3xl font-black ${s.color}`}>{s.value.toLocaleString()}</div>
+                            </div>
+                        ))}
                     </div>
                 </div>
             );
         };
 
-        const StatCard = ({ label, value, unit, color }) => {
-            const colors = {
-                blue: "bg-blue-50 text-blue-700",
-                indigo: "bg-indigo-50 text-indigo-700",
-                emerald: "bg-emerald-50 text-emerald-700",
-                amber: "bg-amber-50 text-amber-700"
-            };
-            
-            return (
-                <div className={`p-4 rounded-xl text-center ${colors[color] || colors.blue}`}>
-                    <div className="text-xs font-medium opacity-80 mb-1">{label}</div>
-                    <div className="text-2xl font-bold">
-                        {value.toLocaleString()} <span className="text-sm font-normal">{unit}</span>
-                    </div>
-                </div>
-            );
-        };
-
+        // (2) 할인율 계산기
         const DiscountCalculator = ({ lang }) => {
             const [price, setPrice] = useState('');
-            const [discount, setDiscount] = useState('');
+            const [rate, setRate] = useState('');
             const t = translations[lang].discount;
-            
-            const finalPrice = price && discount ? price - (price * (discount / 100)) : 0;
-            const savedAmount = price && discount ? price * (discount / 100) : 0;
-
+            const saved = price && rate ? (price * (rate / 100)) : 0;
+            const final = price && rate ? price - saved : 0;
             return (
-                <div className="space-y-6">
-                    <div className="bg-white p-6 rounded-2xl shadow-sm border border-slate-100">
-                        <h2 className="text-xl font-bold mb-6 flex items-center gap-2">
-                            <i data-lucide="percent" className="w-6 h-6 text-pink-500"></i>
-                            {t.title}
-                        </h2>
-                        
-                        <div className="grid md:grid-cols-2 gap-8">
-                            <div className="space-y-4">
-                                <div>
-                                    <label className="block text-sm font-medium text-slate-600 mb-1">{t.price}</label>
-                                    <input 
-                                        type="number" 
-                                        value={price}
-                                        onChange={(e) => setPrice(Number(e.target.value))}
-                                        className="w-full p-3 rounded-lg border border-slate-200 focus:ring-2 focus:ring-pink-500 outline-none text-right font-mono text-lg"
-                                        placeholder="0"
-                                    />
-                                </div>
-                                <div>
-                                    <label className="block text-sm font-medium text-slate-600 mb-1">{t.rate}</label>
-                                    <div className="flex gap-2">
-                                        {[10, 20, 30, 50].map(p => (
-                                            <button 
-                                                key={p}
-                                                onClick={() => setDiscount(p)}
-                                                className={`flex-1 py-1 rounded-md text-sm font-medium transition-colors ${discount === p ? 'bg-pink-100 text-pink-700 border border-pink-200' : 'bg-slate-100 text-slate-600 hover:bg-slate-200'}`}
-                                            >
-                                                {p}%
-                                            </button>
-                                        ))}
-                                    </div>
-                                    <input 
-                                        type="number" 
-                                        value={discount}
-                                        onChange={(e) => setDiscount(Number(e.target.value))}
-                                        className="w-full mt-2 p-3 rounded-lg border border-slate-200 focus:ring-2 focus:ring-pink-500 outline-none text-right font-mono text-lg"
-                                        placeholder="0"
-                                    />
-                                </div>
-                            </div>
-                            
-                            <div className="bg-slate-50 p-6 rounded-xl flex flex-col justify-center space-y-4">
-                                <div className="flex justify-between items-center text-slate-500">
-                                    <span>{t.saved}</span>
-                                    <span className="font-mono">{savedAmount.toLocaleString()}원</span>
-                                </div>
-                                <div className="w-full h-px bg-slate-200"></div>
-                                <div className="flex justify-between items-center text-xl font-bold text-slate-800">
-                                    <span>{t.final}</span>
-                                    <span className="text-pink-600 font-mono text-2xl">{finalPrice.toLocaleString()}원</span>
-                                </div>
-                            </div>
+                <div className="tool-card">
+                    <div className="flex items-center gap-4 mb-10">
+                        <div className="w-14 h-14 bg-pink-100 rounded-2xl flex items-center justify-center text-pink-500"><i data-lucide="percent" className="w-8 h-8"></i></div>
+                        <h2 className="text-3xl font-black tracking-tight">{t.title}</h2>
+                    </div>
+                    <div className="grid md:grid-cols-2 gap-12">
+                        <div className="space-y-6">
+                            <div><label className="text-xs font-black text-slate-400 uppercase tracking-widest mb-2 block">{t.price}</label><input type="number" className="admin-input text-2xl" value={price} onChange={e=>setPrice(Number(e.target.value))} placeholder="0" /></div>
+                            <div><label className="text-xs font-black text-slate-400 uppercase tracking-widest mb-2 block">{t.rate}</label><input type="number" className="admin-input text-2xl" value={rate} onChange={e=>setRate(Number(e.target.value))} placeholder="0" /></div>
+                        </div>
+                        <div className="bg-gradient-to-br from-pink-500 to-rose-600 rounded-[40px] p-10 flex flex-col justify-center text-center shadow-xl shadow-pink-200">
+                            <div className="text-pink-100 text-sm font-bold mb-2 uppercase tracking-widest">{t.final}</div>
+                            <div className="text-6xl font-black text-white tracking-tighter mb-4">{final.toLocaleString()}<span className="text-2xl ml-1">{t.won}</span></div>
+                            <div className="text-pink-200 text-sm font-bold">{t.saved}: {saved.toLocaleString()}{t.won}</div>
                         </div>
                     </div>
                 </div>
             );
         };
 
+        // (3) 단위 변환기 (풀 로직)
         const UnitConverter = ({ lang }) => {
-            const [category, setCategory] = useState('length');
+            const [type, setType] = useState('length');
             const [val, setVal] = useState('');
             const [from, setFrom] = useState('cm');
             const [to, setTo] = useState('inch');
@@ -375,106 +208,80 @@
                 temp: ['Celsius', 'Fahrenheit', 'Kelvin', 'Rankine', 'Delisle', 'Newton', 'Reaumur', 'Romer']
             };
 
-            const convert = (value, fromUnit, toUnit, type) => {
-                if (!value) return '';
-                const v = parseFloat(value);
-                
+            const solve = () => {
+                if (!val) return '0';
+                const v = parseFloat(val);
                 if (type === 'temp') {
-                    if (fromUnit === toUnit) return v;
-                    let celsius;
-                    switch(fromUnit) {
-                        case 'Celsius': celsius = v; break;
-                        case 'Fahrenheit': celsius = (v - 32) * 5/9; break;
-                        case 'Kelvin': celsius = v - 273.15; break;
-                        case 'Rankine': celsius = (v - 491.67) * 5/9; break;
-                        case 'Delisle': celsius = 100 - (v * 2/3); break;
-                        case 'Newton': celsius = v * 100/33; break;
-                        case 'Reaumur': celsius = v * 5/4; break;
-                        case 'Romer': celsius = (v - 7.5) * 40/21; break;
-                        default: celsius = v;
+                    if (from === to) return v;
+                    let c;
+                    switch(from) {
+                        case 'Celsius': c = v; break;
+                        case 'Fahrenheit': c = (v-32)*5/9; break;
+                        case 'Kelvin': c = v-273.15; break;
+                        case 'Rankine': c = (v-491.67)*5/9; break;
+                        case 'Delisle': c = 100 - v*2/3; break;
+                        case 'Newton': c = v*100/33; break;
+                        case 'Reaumur': c = v*5/4; break;
+                        case 'Romer': c = (v-7.5)*40/21; break;
                     }
-                    let result;
-                    switch(toUnit) {
-                        case 'Celsius': result = celsius; break;
-                        case 'Fahrenheit': result = (celsius * 9/5) + 32; break;
-                        case 'Kelvin': result = celsius + 273.15; break;
-                        case 'Rankine': result = (celsius + 273.15) * 9/5; break;
-                        case 'Delisle': result = (100 - celsius) * 3/2; break;
-                        case 'Newton': result = celsius * 33/100; break;
-                        case 'Reaumur': result = celsius * 4/5; break;
-                        case 'Romer': result = (celsius * 21/40) + 7.5; break;
-                        default: result = celsius;
+                    let r;
+                    switch(to) {
+                        case 'Celsius': r = c; break;
+                        case 'Fahrenheit': r = c*9/5+32; break;
+                        case 'Kelvin': r = c+273.15; break;
+                        case 'Rankine': r = (c+273.15)*9/5; break;
+                        case 'Delisle': r = (100-c)*3/2; break;
+                        case 'Newton': r = c*33/100; break;
+                        case 'Reaumur': r = c*4/5; break;
+                        case 'Romer': r = c*21/40+7.5; break;
                     }
-                    return Number.isInteger(result) ? result : parseFloat(result.toFixed(4));
+                    return Number.isInteger(r) ? r : r.toFixed(4);
                 }
-
-                const toBase = {
+                const map = {
                     cm: 1, m: 100, km: 100000, inch: 2.54, ft: 30.48, yard: 91.44,
                     g: 1, kg: 1000, lb: 453.592, oz: 28.3495
                 };
-
-                const baseVal = v * toBase[fromUnit];
-                const finalVal = baseVal / toBase[toUnit];
-                
-                return Number.isInteger(finalVal) ? finalVal : finalVal.toFixed(4);
+                const res = (v * map[from]) / map[to];
+                return Number.isInteger(res) ? res : res.toFixed(4);
             };
 
-            const result = convert(val, from, to, category);
-
             useEffect(() => {
-                if(category === 'length') { setFrom('cm'); setTo('inch'); }
-                if(category === 'weight') { setFrom('kg'); setTo('lb'); }
-                if(category === 'temp') { setFrom('Celsius'); setTo('Fahrenheit'); }
+                if(type === 'length') { setFrom('cm'); setTo('m'); }
+                else if(type === 'weight') { setFrom('kg'); setTo('g'); }
+                else { setFrom('Celsius'); setTo('Fahrenheit'); }
                 setVal('');
-            }, [category]);
+            }, [type]);
 
             return (
-                <div className="space-y-6">
-                    <div className="bg-white p-6 rounded-2xl shadow-sm border border-slate-100">
-                        <h2 className="text-xl font-bold mb-6 flex items-center gap-2">
-                            <i data-lucide="arrow-left-right" className="w-6 h-6 text-orange-500"></i>
-                            {t.title}
-                        </h2>
-                        
-                        <div className="flex gap-2 mb-6 p-1 bg-slate-100 rounded-lg">
-                            {['length', 'weight', 'temp'].map(c => (
-                                <button 
-                                    key={c}
-                                    onClick={() => setCategory(c)}
-                                    className={`flex-1 py-2 text-sm font-medium rounded-md capitalize transition-all ${category === c ? 'bg-white text-orange-600 shadow-sm' : 'text-slate-500'}`}
-                                >
-                                    {t.types[c]}
-                                </button>
-                            ))}
+                <div className="tool-card">
+                    <div className="flex items-center gap-4 mb-8">
+                        <div className="w-14 h-14 bg-orange-100 rounded-2xl flex items-center justify-center text-orange-500"><i data-lucide="arrow-left-right" className="w-8 h-8"></i></div>
+                        <h2 className="text-3xl font-black tracking-tight">{t.title}</h2>
+                    </div>
+                    <div className="flex gap-2 mb-10 p-2 bg-slate-100 rounded-[28px]">
+                        {['length', 'weight', 'temp'].map(k => (
+                            <button key={k} onClick={()=>setType(k)} className={`flex-1 py-4 rounded-[22px] font-black text-sm uppercase tracking-widest transition-all ${type === k ? 'bg-white text-orange-600 shadow-md' : 'text-slate-400'}`}>
+                                {t[k]}
+                            </button>
+                        ))}
+                    </div>
+                    <div className="grid md:grid-cols-2 gap-8 items-center">
+                        <div className="space-y-3">
+                            <label className="text-[10px] font-black text-slate-400 uppercase ml-2 tracking-widest">{t.input}</label>
+                            <div className="flex gap-2">
+                                <input type="number" className="flex-1 admin-input" value={val} onChange={e=>setVal(e.target.value)} placeholder="0" />
+                                <select className="p-4 bg-white border border-slate-200 rounded-3xl font-bold outline-none" value={from} onChange={e=>setFrom(e.target.value)}>
+                                    {units[type].map(u => <option key={u} value={u}>{t.labels[u]}</option>)}
+                                </select>
+                            </div>
                         </div>
-
-                        <div className="grid md:grid-cols-2 gap-4 items-center">
-                            <div className="space-y-2">
-                                <label className="text-sm text-slate-500">{t.input}</label>
-                                <div className="flex gap-2">
-                                    <input type="number" value={val} onChange={e => setVal(e.target.value)} className="flex-1 p-3 border rounded-lg outline-none focus:ring-2 focus:ring-orange-500" placeholder="0" />
-                                    <select value={from} onChange={e => setFrom(e.target.value)} className="p-3 border rounded-lg outline-none bg-white">
-                                        {units[category].map(u => (
-                                            <option key={u} value={u}>{t.labels[u] || u}</option>
-                                        ))}
-                                    </select>
-                                </div>
-                            </div>
-                            
-                            <div className="hidden md:flex justify-center text-slate-300">
-                                <i data-lucide="arrow-right" className="w-6 h-6"></i>
-                            </div>
-
-                            <div className="space-y-2">
-                                <label className="text-sm text-slate-500">{t.result}</label>
-                                <div className="flex gap-2">
-                                    <input type="text" readOnly value={result} className="flex-1 p-3 bg-slate-50 border rounded-lg outline-none text-orange-600 font-bold" placeholder="0" />
-                                    <select value={to} onChange={e => setTo(e.target.value)} className="p-3 border rounded-lg outline-none bg-white">
-                                        {units[category].map(u => (
-                                            <option key={u} value={u}>{t.labels[u] || u}</option>
-                                        ))}
-                                    </select>
-                                </div>
+                        <div className="space-y-3">
+                            <label className="text-[10px] font-black text-slate-400 uppercase ml-2 tracking-widest">{t.result}</label>
+                            <div className="flex gap-2">
+                                <input type="text" readOnly className="flex-1 admin-input bg-orange-50 text-orange-600 border-orange-100" value={solve()} />
+                                <select className="p-4 bg-white border border-slate-200 rounded-3xl font-bold outline-none" value={to} onChange={e=>setTo(e.target.value)}>
+                                    {units[type].map(u => <option key={u} value={u}>{t.labels[u]}</option>)}
+                                </select>
                             </div>
                         </div>
                     </div>
@@ -482,304 +289,86 @@
             );
         };
 
-        const Stopwatch = ({ lang }) => {
-            const [time, setTime] = useState(0);
-            const [isRunning, setIsRunning] = useState(false);
-            const intervalRef = useRef(null);
-            const t = translations[lang].stopwatch;
-
-            useEffect(() => {
-                if(isRunning) {
-                    intervalRef.current = setInterval(() => {
-                        setTime(t => t + 10);
-                    }, 10);
-                } else {
-                    clearInterval(intervalRef.current);
-                }
-                return () => clearInterval(intervalRef.current);
-            }, [isRunning]);
-
-            const formatTime = (ms) => {
-                const minutes = Math.floor(ms / 60000);
-                const seconds = Math.floor((ms % 60000) / 1000);
-                const centiseconds = Math.floor((ms % 1000) / 10);
-                return `${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}.${centiseconds.toString().padStart(2, '0')}`;
-            };
-
-            return (
-                 <div className="space-y-6">
-                    <div className="bg-white p-6 rounded-2xl shadow-sm border border-slate-100">
-                        <h2 className="text-xl font-bold mb-6 flex items-center gap-2">
-                            <i data-lucide="timer" className="w-6 h-6 text-red-500"></i>
-                            {t.title}
-                        </h2>
-                        
-                        <div className="flex flex-col items-center py-8">
-                            <div className="text-6xl md:text-8xl font-mono font-bold text-slate-800 mb-10 tracking-wider">
-                                {formatTime(time)}
-                            </div>
-                            
-                            <div className="flex gap-4">
-                                <button 
-                                    onClick={() => setIsRunning(!isRunning)}
-                                    className={`px-8 py-3 rounded-full font-bold text-lg shadow-lg transform active:scale-95 transition-all w-32 ${isRunning ? 'bg-red-500 hover:bg-red-600 text-white' : 'bg-blue-500 hover:bg-blue-600 text-white'}`}
-                                >
-                                    {isRunning ? t.stop : t.start}
-                                </button>
-                                <button 
-                                    onClick={() => { setIsRunning(false); setTime(0); }}
-                                    className="px-8 py-3 rounded-full font-bold text-lg bg-slate-200 hover:bg-slate-300 text-slate-600 shadow-lg transform active:scale-95 transition-all w-32"
-                                >
-                                    {t.reset}
-                                </button>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            );
-        };
-
+        // (4) 뽀모도로 타이머 (소리 포함)
         const PomodoroTimer = ({ lang }) => {
             const [timeLeft, setTimeLeft] = useState(25 * 60);
             const [isActive, setIsActive] = useState(false);
-            const [isWork, setIsWork] = useState(true); 
+            const [isWork, setIsWork] = useState(true);
             const t = translations[lang].pomodoro;
-
-            const playNotificationSound = () => {
-                try {
-                    const AudioContext = window.AudioContext || window.webkitAudioContext;
-                    if (!AudioContext) return;
-                    const ctx = new AudioContext();
-                    const osc = ctx.createOscillator();
-                    const gain = ctx.createGain();
-                    osc.connect(gain);
-                    gain.connect(ctx.destination);
-                    osc.type = 'sine';
-                    osc.frequency.setValueAtTime(523.25, ctx.currentTime);
-                    osc.frequency.exponentialRampToValueAtTime(1046.5, ctx.currentTime + 0.1);
-                    gain.gain.setValueAtTime(0.1, ctx.currentTime);
-                    gain.gain.exponentialRampToValueAtTime(0.01, ctx.currentTime + 0.5);
-                    osc.start();
-                    osc.stop(ctx.currentTime + 0.5);
-                } catch (e) {}
-            };
-
+            const playSound = () => { try { const ctx = new (window.AudioContext || window.webkitAudioContext)(); const osc = ctx.createOscillator(); const gain = ctx.createGain(); osc.connect(gain); gain.connect(ctx.destination); osc.type='sine'; osc.frequency.value=523.25; gain.gain.value=0.1; osc.start(); osc.stop(ctx.currentTime+0.5); } catch(e){} };
             useEffect(() => {
                 let interval = null;
-                if (isActive && timeLeft > 0) {
-                    interval = setInterval(() => {
-                        setTimeLeft(timeLeft => timeLeft - 1);
-                    }, 1000);
-                } else if (timeLeft === 0) {
-                    setIsActive(false);
-                    playNotificationSound();
-                }
+                if (isActive && timeLeft > 0) interval = setInterval(() => setTimeLeft(t => t - 1), 1000);
+                else if (timeLeft === 0) { setIsActive(false); playSound(); }
                 return () => clearInterval(interval);
             }, [isActive, timeLeft]);
-
-            const toggleTimer = () => setIsActive(!isActive);
-            const resetTimer = () => {
-                setIsActive(false);
-                setTimeLeft(isWork ? 25 * 60 : 5 * 60);
-            };
-            const toggleMode = () => {
-                const nextMode = !isWork;
-                setIsWork(nextMode);
-                setIsActive(false);
-                setTimeLeft(nextMode ? 25 * 60 : 5 * 60);
-            };
-
-            const formatTime = (seconds) => {
-                const mins = Math.floor(seconds / 60);
-                const secs = seconds % 60;
-                return `${mins.toString().padStart(2, '0')}:${secs.toString().padStart(2, '0')}`;
-            };
-
             return (
-                <div className="space-y-6">
-                    <div className="bg-white p-6 rounded-2xl shadow-sm border border-slate-100">
-                        <h2 className="text-xl font-bold mb-6 flex items-center gap-2">
-                            <i data-lucide="clock" className="w-6 h-6 text-orange-500"></i>
-                            {t.title}
-                        </h2>
-                        
-                        <div className="flex flex-col items-center py-6">
-                            <div className={`text-sm font-bold px-4 py-1 rounded-full mb-4 ${isWork ? 'bg-orange-100 text-orange-600' : 'bg-green-100 text-green-600'}`}>
-                                {isWork ? t.statusWork : t.statusBreak}
-                            </div>
-
-                            <div className="text-7xl md:text-8xl font-mono font-bold text-slate-800 mb-8">
-                                {formatTime(timeLeft)}
-                            </div>
-                            
-                            <div className="flex gap-3 mb-6">
-                                <button onClick={toggleTimer} className={`px-8 py-3 rounded-full font-bold text-white shadow-lg transform active:scale-95 transition-all ${isActive ? 'bg-orange-400 hover:bg-orange-500' : 'bg-orange-500 hover:bg-orange-600'}`}>
-                                    {isActive ? t.pause : t.start}
-                                </button>
-                                <button onClick={resetTimer} className="px-6 py-3 rounded-full font-bold bg-slate-100 text-slate-600 hover:bg-slate-200 transition-all">
-                                    {t.reset}
-                                </button>
-                            </div>
-
-                            <button onClick={toggleMode} className="text-sm text-slate-400 hover:text-slate-600 underline">
-                                {isWork ? t.switchToBreak : t.switchToWork}
-                            </button>
-                        </div>
+                <div className="tool-card text-center py-12">
+                    <h2 className="text-3xl font-black mb-6 flex items-center justify-center gap-3 text-orange-500"><i data-lucide="clock"></i> {t.title}</h2>
+                    <div className={`inline-block px-6 py-2 rounded-full text-xs font-black uppercase tracking-[0.2em] mb-12 ${isWork ? 'bg-orange-100 text-orange-600' : 'bg-green-100 text-green-600'}`}>{isWork ? t.statusWork : t.statusBreak}</div>
+                    <div className="text-[140px] font-mono font-black text-slate-800 leading-none mb-12 tracking-tighter drop-shadow-sm">{`${Math.floor(timeLeft/60).toString().padStart(2,'0')}:${(timeLeft%60).toString().padStart(2,'0')}`}</div>
+                    <div className="flex justify-center gap-5 mb-10">
+                        <button onClick={() => setIsActive(!isActive)} className="px-14 py-5 bg-orange-500 text-white rounded-[32px] font-black text-xl shadow-2xl shadow-orange-200 active:scale-95 transition-all">{isActive ? t.pause : t.start}</button>
+                        <button onClick={() => { setIsActive(false); setTimeLeft(isWork ? 25*60 : 5*60); }} className="px-14 py-5 bg-slate-100 text-slate-400 rounded-[32px] font-black text-xl active:scale-95 transition-all">{t.reset}</button>
                     </div>
+                    <button onClick={()=>{setIsWork(!isWork); setIsActive(false); setTimeLeft(!isWork?25*60:5*60)}} className="text-sm font-bold text-slate-300 hover:text-orange-500 underline transition-colors">{isWork ? t.switchToBreak : t.switchToWork}</button>
                 </div>
             );
         };
 
+        // (5) 비밀번호 생성기
         const PasswordGenerator = ({ lang }) => {
-            const [length, setLength] = useState(12);
-            const [includeNumbers, setIncludeNumbers] = useState(true);
-            const [includeSymbols, setIncludeSymbols] = useState(true);
-            const [password, setPassword] = useState('');
+            const [pass, setPass] = useState('');
+            const [len, setLen] = useState(16);
             const [copied, setCopied] = useState(false);
             const t = translations[lang].password;
-
-            const generatePassword = () => {
-                const chars = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ";
-                const numbers = "0123456789";
-                const symbols = "!@#$%^&*()_+~`|}{[]:;?><,./-=";
-                
-                let validChars = chars;
-                if (includeNumbers) validChars += numbers;
-                if (includeSymbols) validChars += symbols;
-
-                let generatedPassword = "";
-                for (let i = 0; i < length; i++) {
-                    const randomIndex = Math.floor(Math.random() * validChars.length);
-                    generatedPassword += validChars[randomIndex];
-                }
-                setPassword(generatedPassword);
-                setCopied(false);
+            const gen = () => {
+                const c = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789!@#$%^&*()_+~`|}{[]:;?><,./-=";
+                let r = ""; for(let i=0; i<len; i++) r += c[Math.floor(Math.random()*c.length)];
+                setPass(r); setCopied(false);
             };
-
-            const copyToClipboard = () => {
-                if (!password) return;
-                navigator.clipboard.writeText(password);
-                setCopied(true);
-                setTimeout(() => setCopied(false), 2000);
-            };
-
-            useEffect(() => {
-                generatePassword();
-            }, []);
-
+            useEffect(gen, [len]);
             return (
-                <div className="space-y-6">
-                    <div className="bg-white p-6 rounded-2xl shadow-sm border border-slate-100">
-                        <h2 className="text-xl font-bold mb-6 flex items-center gap-2">
-                            <i data-lucide="lock" className="w-6 h-6 text-indigo-500"></i>
-                            {t.title}
-                        </h2>
-                        
-                        <div className="space-y-6">
-                            <div className="bg-slate-100 p-4 rounded-xl flex items-center justify-between">
-                                <div className="font-mono text-xl text-slate-800 break-all mr-4">
-                                    {password}
-                                </div>
-                                <button onClick={copyToClipboard} className="p-2 bg-white rounded-lg shadow-sm hover:bg-slate-50 text-slate-600 transition-colors" title={t.copy}>
-                                    <i data-lucide={copied ? "check" : "copy"} className={`w-5 h-5 ${copied ? "text-green-500" : ""}`}></i>
-                                </button>
-                            </div>
-
-                            <div className="space-y-4">
-                                <div>
-                                    <div className="flex justify-between text-sm text-slate-600 mb-2">
-                                        <span>{t.length}</span>
-                                        <span className="font-bold">{length}</span>
-                                    </div>
-                                    <input 
-                                        type="range" min="6" max="32" value={length} 
-                                        onChange={(e) => setLength(e.target.value)}
-                                        className="w-full h-2 bg-slate-200 rounded-lg appearance-none cursor-pointer accent-indigo-500"
-                                    />
-                                </div>
-
-                                <div className="flex flex-col gap-2">
-                                    <label className="flex items-center gap-2 cursor-pointer">
-                                        <input type="checkbox" checked={includeNumbers} onChange={(e) => setIncludeNumbers(e.target.checked)} className="w-4 h-4 text-indigo-600 rounded focus:ring-indigo-500" />
-                                        <span className="text-sm text-slate-700">{t.numbers}</span>
-                                    </label>
-                                    <label className="flex items-center gap-2 cursor-pointer">
-                                        <input type="checkbox" checked={includeSymbols} onChange={(e) => setIncludeSymbols(e.target.checked)} className="w-4 h-4 text-indigo-600 rounded focus:ring-indigo-500" />
-                                        <span className="text-sm text-slate-700">{t.symbols}</span>
-                                    </label>
-                                </div>
-
-                                <button onClick={generatePassword} className="w-full bg-indigo-500 hover:bg-indigo-600 text-white font-bold py-3 rounded-lg transition-colors flex items-center justify-center gap-2">
-                                    <i data-lucide="refresh-cw" className="w-4 h-4"></i>
-                                    {t.generate}
-                                </button>
-                            </div>
-                        </div>
+                <div className="tool-card">
+                    <h2 className="text-2xl font-black mb-8 flex items-center gap-3 text-indigo-600"><i data-lucide="lock"></i> {t.title}</h2>
+                    <div className="p-8 bg-slate-50 border border-slate-100 rounded-[36px] mb-8 font-mono text-3xl flex justify-between items-center break-all text-slate-700 shadow-inner">
+                        {pass}
+                        <button onClick={()=>{navigator.clipboard.writeText(pass); setCopied(true); setTimeout(()=>setCopied(false),2000)}} className="ml-6 p-4 bg-white rounded-3xl shadow-sm hover:shadow-xl transition-all"><i data-lucide={copied?"check":"copy"} className={copied?"text-green-500":"text-indigo-400"}></i></button>
+                    </div>
+                    <div className="space-y-6">
+                        <div className="flex justify-between text-xs font-black text-slate-300 uppercase tracking-widest px-2"><span>{t.length}</span><span className="text-indigo-500">{len}</span></div>
+                        <input type="range" min="8" max="48" value={len} onChange={e=>setLen(e.target.value)} className="w-full h-3 bg-slate-200 rounded-full appearance-none cursor-pointer accent-indigo-600 mb-6" />
+                        <button onClick={gen} className="w-full py-5 bg-indigo-600 text-white rounded-[32px] font-black text-xl shadow-xl shadow-indigo-100 hover:bg-indigo-700 active:scale-95 transition-all">{t.generate}</button>
                     </div>
                 </div>
             );
         };
 
+        // (6) D-Day 계산기
         const DDayCalculator = ({ lang }) => {
             const [date, setDate] = useState('');
-            const [result, setResult] = useState(null);
+            const [res, setRes] = useState(null);
             const t = translations[lang].dday;
-
             useEffect(() => {
                 if (date) {
-                    const today = new Date();
-                    today.setHours(0, 0, 0, 0);
-                    const target = new Date(date);
-                    target.setHours(0, 0, 0, 0);
-
-                    const diffTime = target - today;
-                    const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
-                    setResult(diffDays);
-                } else {
-                    setResult(null);
-                }
+                    const today = new Date(); today.setHours(0,0,0,0);
+                    const target = new Date(date); target.setHours(0,0,0,0);
+                    setRes(Math.ceil((target - today) / (1000 * 60 * 60 * 24)));
+                } else setRes(null);
             }, [date]);
-
-            const getMessage = () => {
-                if (result === null) return t.select;
-                if (result === 0) return t.isToday;
-                if (result > 0) return `D-${result}`;
-                return `D+${Math.abs(result)}`;
-            };
-
             return (
-                <div className="space-y-6">
-                    <div className="bg-white p-6 rounded-2xl shadow-sm border border-slate-100">
-                        <h2 className="text-xl font-bold mb-6 flex items-center gap-2">
-                            <i data-lucide="calendar" className="w-6 h-6 text-purple-500"></i>
-                            {t.title}
-                        </h2>
-                        
-                        <div className="grid md:grid-cols-2 gap-8 items-center">
-                            <div className="space-y-4">
-                                <label className="block text-sm font-medium text-slate-600 mb-1">{t.label}</label>
-                                <input 
-                                    type="date" 
-                                    lang={lang} // lang 속성을 동적으로 할당하여 브라우저의 날짜 형식을 변경
-                                    value={date}
-                                    onChange={(e) => setDate(e.target.value)}
-                                    className="w-full p-3 rounded-lg border border-slate-200 focus:ring-2 focus:ring-purple-500 outline-none text-lg"
-                                />
-                                <div className="text-sm text-slate-400">
-                                    {t.guide}
-                                </div>
-                            </div>
-                            
-                            <div className="bg-purple-50 p-8 rounded-xl flex flex-col items-center justify-center text-center h-48">
-                                <div className="text-sm text-purple-600 font-medium mb-2">{t.resultLabel}</div>
-                                <div className="text-4xl font-bold text-purple-800">
-                                    {getMessage()}
-                                </div>
-                                {result !== null && result !== 0 && (
-                                    <div className="mt-2 text-purple-400 text-sm">
-                                        {result > 0 ? `${result}${t.daysLeft}` : `${Math.abs(result)}${t.daysPast}`}
-                                    </div>
-                                )}
+                <div className="tool-card">
+                    <h2 className="text-2xl font-black mb-8 flex items-center gap-3 text-purple-600"><i data-lucide="calendar"></i> {t.title}</h2>
+                    <div className="grid md:grid-cols-2 gap-10 items-center">
+                        <div className="space-y-6">
+                            <label className="text-sm font-black text-slate-400 uppercase tracking-widest block ml-2">{t.label}</label>
+                            <input type="date" lang={lang} value={date} onChange={e=>setDate(e.target.value)} className="w-full p-5 bg-slate-50 border border-slate-100 rounded-[32px] outline-none focus:ring-8 focus:ring-purple-500/5 focus:border-purple-500 font-bold" />
+                            <p className="text-[10px] text-slate-300 font-bold ml-2 leading-relaxed">{t.guide}</p>
+                        </div>
+                        <div className="bg-gradient-to-br from-purple-600 to-indigo-700 rounded-[44px] p-12 text-center shadow-2xl shadow-purple-200 border-4 border-white/20">
+                            <div className="text-purple-200 text-[10px] font-black mb-3 uppercase tracking-[0.3em]">{t.result}</div>
+                            <div className="text-6xl font-black text-white tracking-tighter">
+                                {res === null ? "-" : res === 0 ? t.isToday : res > 0 ? `D-${res}` : `D+${Math.abs(res)}`}
                             </div>
                         </div>
                     </div>
@@ -787,222 +376,218 @@
             );
         };
 
+        // (7) 로또 번호 생성기
         const LottoGenerator = ({ lang }) => {
-            const [numbers, setNumbers] = useState([]);
+            const [nums, setNums] = useState([]);
             const t = translations[lang].lotto;
+            const draw = () => {
+                const s = new Set();
+                while(s.size < 6) s.add(Math.floor(Math.random()*45)+1);
+                setNums([...s].sort((a,b)=>a-b));
+            };
+            const getColor = (n) => {
+                if(n<=10) return 'bg-amber-400'; if(n<=20) return 'bg-blue-400';
+                if(n<=30) return 'bg-red-400'; if(n<=40) return 'bg-slate-400';
+                return 'bg-emerald-400';
+            };
+            return (
+                <div className="tool-card text-center">
+                    <h2 className="text-2xl font-black mb-4 flex items-center justify-center gap-3 text-emerald-600"><i data-lucide="clover"></i> {t.title}</h2>
+                    <p className="text-slate-400 text-sm mb-12 font-medium">{t.guide}</p>
+                    <div className="flex flex-wrap justify-center gap-4 mb-12 min-h-[80px]">
+                        {nums.map((n, i) => (
+                            <div key={i} className={`${getColor(n)} w-16 h-16 rounded-full flex items-center justify-center text-white text-2xl font-black shadow-lg ball-bounce border-4 border-white/30`}>{n}</div>
+                        ))}
+                    </div>
+                    <button onClick={draw} className="px-12 py-5 bg-emerald-600 text-white rounded-[32px] font-black text-xl shadow-xl shadow-emerald-100 hover:bg-emerald-700 active:scale-95 transition-all flex items-center gap-3 mx-auto">
+                        <i data-lucide="sparkles"></i> {t.btn}
+                    </button>
+                </div>
+            );
+        };
 
-            const generateLotto = () => {
-                const numSet = new Set();
-                while(numSet.size < 6) {
-                    numSet.add(Math.floor(Math.random() * 45) + 1);
-                }
-                const sortedNums = [...numSet].sort((a, b) => a - b);
-                setNumbers(sortedNums);
+        // --- 4. 관리자 대시보드 (CMS) ---
+        const AdminPanel = ({ config, onUpdate }) => {
+            const [user, setUser] = useState(null);
+            const [local, setLocal] = useState(config);
+            const [status, setStatus] = useState('');
+            useEffect(() => { const unsub = auth.onAuthStateChanged(u => setUser(u)); return () => unsub(); }, []);
+            const login = async () => { const p = new firebase.auth.GoogleAuthProvider(); try { await auth.signInWithPopup(p); } catch(e) { setStatus("Error: " + e.message); } };
+            const save = async () => {
+                setStatus('저장 중...');
+                try {
+                    await db.collection('artifacts').doc(appId).collection('public').doc('data').collection('settings').doc('global').set(local);
+                    onUpdate(local); setStatus(translations[config.lang].admin.success);
+                    setTimeout(() => setStatus(''), 3000);
+                } catch(e) { setStatus('저장 실패: 권한 부족'); }
             };
 
-            const getBallColor = (num) => {
-                if (num <= 10) return "bg-yellow-400";
-                if (num <= 20) return "bg-blue-400";
-                if (num <= 30) return "bg-red-400";
-                if (num <= 40) return "bg-slate-400";
-                return "bg-green-400";
-            };
+            if (!user) return (
+                <div className="bg-white p-14 rounded-[50px] border shadow-2xl text-center max-w-lg mx-auto mt-10">
+                    <div className="w-24 h-24 bg-blue-50 rounded-[36px] flex items-center justify-center mx-auto mb-10 text-blue-600 shadow-inner"><i data-lucide="shield-check" className="w-12 h-12"></i></div>
+                    <h2 className="text-4xl font-black mb-4 tracking-tighter">Admin Access</h2>
+                    <p className="text-slate-400 mb-12 text-base font-medium">Please login with your Google account to modify the site configuration.</p>
+                    <button onClick={login} className="w-full py-5 bg-white border-2 border-slate-100 rounded-[32px] font-black flex items-center justify-center gap-4 hover:bg-slate-50 transition-all shadow-sm">
+                        <img src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg" className="w-6 h-6" />
+                        Continue with Google
+                    </button>
+                    {status && <p className="mt-8 text-red-500 text-xs font-bold uppercase tracking-widest">{status}</p>}
+                </div>
+            );
 
             return (
-                 <div className="space-y-6">
-                    <div className="bg-white p-6 rounded-2xl shadow-sm border border-slate-100">
-                        <h2 className="text-xl font-bold mb-6 flex items-center gap-2">
-                            <i data-lucide="clover" className="w-6 h-6 text-green-500"></i>
-                            {t.title}
-                        </h2>
-                        
-                        <div className="flex flex-col items-center justify-center py-8 space-y-8">
-                            <div className="flex flex-wrap justify-center gap-3">
-                                {numbers.length > 0 ? numbers.map((num) => (
-                                    <div key={num} className={`w-12 h-12 rounded-full flex items-center justify-center text-white font-bold text-xl shadow-md ${getBallColor(num)} animate-bounce-short`}>
-                                        {num}
-                                    </div>
-                                )) : (
-                                    <div className="text-slate-400 py-2">{t.guide}</div>
-                                )}
-                            </div>
-
-                            <button 
-                                onClick={generateLotto}
-                                className="bg-green-500 hover:bg-green-600 text-white font-bold py-3 px-8 rounded-full shadow-lg transform active:scale-95 transition-all flex items-center gap-2"
-                            >
-                                <i data-lucide="refresh-cw" className="w-5 h-5"></i>
-                                {t.btn}
-                            </button>
+                <div className="bg-white p-12 rounded-[50px] border-2 border-blue-50 shadow-sm max-w-3xl mx-auto">
+                    <div className="flex justify-between items-start mb-14 pb-10 border-b border-slate-50">
+                        <div>
+                            <h2 className="text-3xl font-black text-slate-800 tracking-tighter leading-none mb-3">{translations[local.lang].admin.title}</h2>
+                            <p className="text-[10px] text-blue-500 font-black uppercase tracking-[0.2em]">{user.email} Verified</p>
                         </div>
+                        <div className="flex gap-3">
+                            <button onClick={()=>auth.signOut()} className="px-6 py-3 text-[10px] font-black text-slate-300 hover:text-red-400 transition-colors uppercase tracking-widest">Logout</button>
+                            <button onClick={save} className="btn-primary px-10">{translations[local.lang].admin.save}</button>
+                        </div>
+                    </div>
+                    {status && <div className="mb-10 p-5 bg-blue-600 text-white rounded-[24px] text-center font-black shadow-lg shadow-blue-200 animate-pulse">{status}</div>}
+                    <div className="space-y-12">
+                        <div className="grid md:grid-cols-2 gap-8">
+                            <section>
+                                <label className="text-[10px] font-black uppercase text-slate-300 tracking-[0.3em] mb-4 block pl-1">{translations[local.lang].admin.labelTitle}</label>
+                                <input className="admin-input text-2xl font-black tracking-tight" value={local.siteTitle} onChange={e=>setLocal({...local, siteTitle:e.target.value})} />
+                            </section>
+                            <section>
+                                <label className="text-[10px] font-black uppercase text-slate-300 tracking-[0.3em] mb-4 block pl-1">{translations[local.lang].admin.labelSubtitle}</label>
+                                <input className="admin-input text-sm font-bold" value={local.siteSubtitle} onChange={e=>setLocal({...local, siteSubtitle:e.target.value})} />
+                            </section>
+                        </div>
+                        <section>
+                            <label className="text-[10px] font-black uppercase text-slate-300 tracking-[0.3em] mb-6 block pl-1">{translations[local.lang].admin.labelTools}</label>
+                            <div className="grid grid-cols-2 sm:grid-cols-3 gap-4">
+                                {Object.keys(translations.ko.tools).map(tool => (
+                                    <label key={tool} className={`flex items-center gap-4 p-6 rounded-[32px] border-2 cursor-pointer transition-all ${local.activeTools.includes(tool) ? 'bg-blue-50 border-blue-200' : 'bg-slate-50 border-transparent opacity-40 grayscale'}`}>
+                                        <input type="checkbox" className="w-6 h-6 rounded-lg border-slate-300 text-blue-600 focus:ring-0" checked={local.activeTools.includes(tool)} onChange={e => {
+                                            const next = e.target.checked ? [...local.activeTools, tool] : local.activeTools.filter(t => t !== tool);
+                                            setLocal({...local, activeTools: next});
+                                        }} /> 
+                                        <span className="text-sm font-black capitalize text-slate-700">{tool}</span>
+                                    </label>
+                                ))}
+                            </div>
+                        </section>
                     </div>
                 </div>
             );
         };
 
-
-        // --- Main Layout ---
+        // --- 5. 메인 앱 프레임워크 ---
         const App = () => {
-            const [currentTool, setCurrentTool] = useState('text'); 
+            const [config, setConfig] = useState(null);
+            const [current, setCurrent] = useState('text');
+            const [lang, setLang] = useState('ko');
             const [isSidebarOpen, setIsSidebarOpen] = useState(false);
-            const [lang, setLang] = useState('ko'); 
-            
-            // --- URL Routing Logic ---
-            // 해시 변경을 감지하여 상태 업데이트
+
             useEffect(() => {
-                const handleHashChange = () => {
-                    const hash = window.location.hash.replace('#/', '');
-                    const validTools = ['text', 'discount', 'unit', 'stopwatch', 'pomodoro', 'password', 'dday', 'lotto'];
-                    if (validTools.includes(hash)) {
-                        setCurrentTool(hash);
-                    } else if (!hash) {
-                        // 기본 경로 처리
-                        window.location.hash = '#/text';
-                    }
+                const init = async () => {
+                    try {
+                        const doc = await db.collection('artifacts').doc(appId).collection('public').doc('data').collection('settings').doc('global').get();
+                        setConfig(doc.exists ? doc.data() : DEFAULT_CONFIG);
+                    } catch(e) { setConfig(DEFAULT_CONFIG); }
                 };
-
-                window.addEventListener('hashchange', handleHashChange);
-                // 초기 로드 시에도 체크
-                handleHashChange();
-
-                return () => window.removeEventListener('hashchange', handleHashChange);
+                init();
+                const handleHash = () => {
+                    const hash = window.location.hash.replace('#/', '') || 'text';
+                    setCurrent(hash);
+                    setIsSidebarOpen(false);
+                };
+                window.addEventListener('hashchange', handleHash); handleHash();
+                return () => window.removeEventListener('hashchange', handleHash);
             }, []);
 
-            useEffect(() => {
-                const browserLang = navigator.language || navigator.userLanguage;
-                if (browserLang.toLowerCase().startsWith('ko')) {
-                    setLang('ko');
-                } else {
-                    setLang('en');
-                }
-            }, []);
+            useEffect(() => { if (window.lucide) window.lucide.createIcons(); if (config) document.title = config.siteTitle; }, [current, config, lang]);
 
-            useEffect(() => {
-                if (window.lucide) {
-                    window.lucide.createIcons();
-                }
-                const t = translations[lang] || translations['en'];
-                document.title = t.title + " - " + t.subtitle;
-            }, [currentTool, isSidebarOpen, lang]);
+            if (!config) return (
+                <div className="min-h-screen flex flex-col items-center justify-center bg-white">
+                    <div className="w-16 h-16 border-8 border-blue-600 border-t-transparent rounded-full animate-spin mb-6"></div>
+                    <div className="font-black text-slate-200 tracking-[0.5em] uppercase text-sm animate-pulse font-mono">Connecting Node...</div>
+                </div>
+            );
 
-            const toggleLang = () => {
-                setLang(prev => prev === 'ko' ? 'en' : 'ko');
-            };
-
-            const t = translations[lang] || translations['en'];
+            const t = translations[lang];
 
             const renderTool = () => {
-                const props = { lang };
-                switch(currentTool) {
-                    case 'text': return <WordCounter {...props} />;
-                    case 'discount': return <DiscountCalculator {...props} />;
-                    case 'unit': return <UnitConverter {...props} />;
-                    case 'stopwatch': return <Stopwatch {...props} />;
-                    case 'pomodoro': return <PomodoroTimer {...props} />;
-                    case 'password': return <PasswordGenerator {...props} />;
-                    case 'dday': return <DDayCalculator {...props} />;
-                    case 'lotto': return <LottoGenerator {...props} />;
-                    default: return <WordCounter {...props} />;
+                const p = { lang };
+                switch(current) {
+                    case 'admin': return <AdminPanel config={config} onUpdate={setConfig} />;
+                    case 'text': return <WordCounter {...p} />;
+                    case 'discount': return <DiscountCalculator {...p} />;
+                    case 'unit': return <UnitConverter {...p} />;
+                    case 'pomodoro': return <PomodoroTimer {...p} />;
+                    case 'password': return <PasswordGenerator {...p} />;
+                    case 'dday': return <DDayCalculator {...p} />;
+                    case 'lotto': return <LottoGenerator {...p} />;
+                    default: return <div className="tool-card p-24 text-center font-black text-slate-100 italic text-6xl uppercase tracking-tighter">Syncing {current}...</div>;
                 }
             };
 
-            const NavLink = ({ id, label, icon, activeClass }) => (
-                <a 
-                    href={`#/${id}`}
-                    onClick={() => setIsSidebarOpen(false)}
-                    className={`w-full flex items-center gap-3 px-4 py-3 rounded-lg text-sm font-medium transition-colors ${currentTool === id ? activeClass : 'text-slate-600 hover:bg-slate-50'}`}
-                >
-                    <i data-lucide={icon} className={`w-5 h-5 ${currentTool === id ? '' : 'text-slate-400'}`}></i>
-                    {label}
-                </a>
-            );
-
             return (
-                <div className="min-h-screen flex flex-col md:flex-row">
-                    {/* Mobile Header */}
-                    <header className="md:hidden bg-white border-b border-slate-200 p-4 flex justify-between items-center sticky top-0 z-50">
-                        <div className="font-bold text-lg flex items-center gap-2">
-                            <div className="w-8 h-8 bg-blue-600 rounded-lg flex items-center justify-center text-white">
-                                <i data-lucide="box" className="w-5 h-5"></i>
-                            </div>
-                            {t.title}
-                        </div>
-                        <div className="flex gap-2">
-                            <button onClick={toggleLang} className="p-2 text-slate-600 hover:bg-slate-100 rounded-lg flex items-center gap-1 font-bold text-sm">
-                                <i data-lucide="globe" className="w-5 h-5"></i>
-                                {lang.toUpperCase()}
-                            </button>
-                            <button onClick={() => setIsSidebarOpen(!isSidebarOpen)} className="text-slate-600">
-                                <i data-lucide={isSidebarOpen ? "x" : "menu"} className="w-6 h-6"></i>
-                            </button>
-                        </div>
+                <div className="min-h-screen flex flex-col md:flex-row bg-[#F8FAFC]">
+                    {/* 모바일 최상단 바 */}
+                    <header className="md:hidden glass-panel p-5 flex justify-between items-center sticky top-0 z-50 rounded-b-[30px]">
+                        <div className="font-black text-blue-600 text-2xl tracking-tighter uppercase">{config.siteTitle}</div>
+                        <button onClick={()=>setIsSidebarOpen(!isSidebarOpen)} className="p-3 bg-slate-50 rounded-2xl"><i data-lucide="menu"></i></button>
                     </header>
 
-                    {/* Sidebar Navigation */}
-                    <aside className={`fixed inset-y-0 left-0 z-40 w-64 bg-white border-r border-slate-200 transform transition-transform duration-200 ease-in-out md:translate-x-0 md:static md:block ${isSidebarOpen ? 'translate-x-0' : '-translate-x-full'}`}>
-                        <div className="p-6 hidden md:block">
-                            <div className="flex justify-between items-start">
-                                <div className="font-bold text-xl flex items-center gap-2 text-slate-800">
-                                    <div className="w-8 h-8 bg-blue-600 rounded-lg flex items-center justify-center text-white">
-                                        <i data-lucide="box" className="w-5 h-5"></i>
-                                    </div>
-                                    {t.title}
-                                </div>
-                                <button onClick={toggleLang} className="text-slate-400 hover:text-blue-600 font-bold text-xs border px-2 py-1 rounded transition-colors">
-                                    {lang === 'ko' ? 'EN' : 'KO'}
-                                </button>
+                    {/* 데스크탑 프리미엄 사이드바 */}
+                    <aside className={`fixed inset-y-0 left-0 z-40 w-80 bg-white border-r border-slate-100 transform transition-transform duration-700 ease-in-out md:translate-x-0 ${isSidebarOpen ? 'translate-x-0' : '-translate-x-full shadow-none'} flex flex-col`}>
+                        <div className="p-12 pb-8">
+                            <div className="flex items-center gap-4 mb-3">
+                                <div className="w-14 h-14 bg-blue-600 rounded-[24px] flex items-center justify-center text-white shadow-2xl shadow-blue-200"><i data-lucide="box" className="w-8 h-8"></i></div>
+                                <h1 className="text-3xl font-black text-slate-900 tracking-tighter leading-none">{config.siteTitle}</h1>
                             </div>
-                            <p className="text-xs text-slate-500 mt-2">{t.subtitle}</p>
+                            <p className="text-[10px] text-slate-300 font-black uppercase tracking-[0.4em] pl-1">{config.siteSubtitle}</p>
                         </div>
                         
-                        <nav className="p-4 space-y-1 h-[calc(100vh-180px)] overflow-y-auto hide-scrollbar">
-                            <div className="px-4 pb-2 text-xs font-semibold text-slate-400 uppercase tracking-wider">{t.categories.text}</div>
-                            <NavLink id="text" label={t.tools.text} icon="type" activeClass="bg-blue-50 text-blue-700" />
-                            
-                            <div className="px-4 pb-2 pt-4 text-xs font-semibold text-slate-400 uppercase tracking-wider">{t.categories.calc}</div>
-                            <NavLink id="discount" label={t.tools.discount} icon="percent" activeClass="bg-pink-50 text-pink-700" />
-                            <NavLink id="unit" label={t.tools.unit} icon="arrow-left-right" activeClass="bg-orange-50 text-orange-700" />
-                            <NavLink id="dday" label={t.tools.dday} icon="calendar" activeClass="bg-purple-50 text-purple-700" />
-
-                            <div className="px-4 pb-2 pt-4 text-xs font-semibold text-slate-400 uppercase tracking-wider">{t.categories.time}</div>
-                            <NavLink id="stopwatch" label={t.tools.stopwatch} icon="timer" activeClass="bg-red-50 text-red-700" />
-                            <NavLink id="pomodoro" label={t.tools.pomodoro} icon="clock" activeClass="bg-orange-50 text-orange-700" />
-
-                            <div className="px-4 pb-2 pt-4 text-xs font-semibold text-slate-400 uppercase tracking-wider">{t.categories.security}</div>
-                            <NavLink id="password" label={t.tools.password} icon="lock" activeClass="bg-indigo-50 text-indigo-700" />
-
-                            <div className="px-4 pb-2 pt-4 text-xs font-semibold text-slate-400 uppercase tracking-wider">{t.categories.fun}</div>
-                            <NavLink id="lotto" label={t.tools.lotto} icon="clover" activeClass="bg-green-50 text-green-700" />
+                        <nav className="px-8 flex-1 space-y-2 overflow-y-auto hide-scrollbar py-4">
+                            {config.activeTools.map(tool => (
+                                <a key={tool} href={`#/${tool}`} className={`flex items-center gap-5 px-7 py-5 rounded-[28px] text-[15px] font-black transition-all ${current === tool ? 'bg-blue-600 text-white shadow-2xl shadow-blue-200 -translate-y-1' : 'text-slate-400 hover:bg-slate-50 hover:text-slate-900'}`}>
+                                    <i data-lucide={tool === 'text' ? 'type' : tool === 'pomodoro' ? 'clock' : tool === 'password' ? 'lock' : tool === 'dday' ? 'calendar' : tool === 'unit' ? 'arrow-left-right' : tool === 'discount' ? 'percent' : 'tool'} className="w-5 h-5"></i>
+                                    <span className="capitalize">{t.tools[tool] || tool}</span>
+                                </a>
+                            ))}
                         </nav>
-                        
-                        {/* Sidebar Ad Placeholder */}
-                        <div className="absolute bottom-6 left-4 right-4 hidden md:block">
-                            <div className="ad-placeholder h-40 rounded-lg border-2 border-dashed border-slate-300 flex flex-col items-center justify-center text-slate-400 text-sm">
-                                <span className="font-semibold mb-1">{t.ad}</span>
-                                <span className="text-xs">160x600</span>
+
+                        <div className="p-8 mt-auto space-y-4">
+                            <div className="flex gap-2 p-2 bg-slate-50 rounded-3xl border border-slate-100">
+                                <button onClick={()=>setLang('ko')} className={`flex-1 py-3 text-[10px] font-black rounded-2xl transition-all ${lang==='ko'?'bg-white text-slate-900 shadow-sm border border-slate-100':'text-slate-300'}`}>KOREA</button>
+                                <button onClick={()=>setLang('en')} className={`flex-1 py-3 text-[10px] font-black rounded-2xl transition-all ${lang==='en'?'bg-white text-slate-900 shadow-sm border border-slate-100':'text-slate-300'}`}>GLOBAL</button>
                             </div>
+                            <a href="#/admin" className={`group flex items-center justify-center gap-3 py-5 rounded-[28px] text-[11px] font-black transition-all border-2 ${current === 'admin' ? 'bg-slate-900 text-white border-slate-900 shadow-2xl' : 'bg-transparent text-slate-300 border-slate-100 hover:text-slate-900 hover:border-slate-300'}`}>
+                                <i data-lucide="shield-check" className="w-4 h-4 group-hover:animate-pulse"></i> {t.admin.title.toUpperCase()}
+                            </a>
                         </div>
                     </aside>
 
-                    {/* Main Content */}
-                    <main className="flex-1 p-4 md:p-8 overflow-y-auto h-screen">
-                        <div className="max-w-4xl mx-auto space-y-6 pb-20 md:pb-0">
+                    {/* 메인 뷰포트 (우측 영역) */}
+                    <main className="flex-1 p-6 md:p-16 lg:p-24 overflow-y-auto h-screen relative scroll-smooth">
+                        <div className="max-w-4xl mx-auto space-y-16 pb-20">
                             
-                            {/* Top Ad Placeholder */}
-                            <div className="ad-placeholder h-24 rounded-lg border-2 border-dashed border-slate-300 flex flex-col items-center justify-center text-slate-400 text-sm w-full">
-                                <span className="font-semibold mb-1">{t.ad}</span>
-                                <span className="text-xs">728x90</span>
+                            {/* 상단 광고 슬롯 디자인 */}
+                            <div className="h-32 bg-white rounded-[44px] border-4 border-dashed border-slate-100 flex flex-col items-center justify-center text-slate-200 text-xs font-black tracking-[0.3em] shadow-inner relative overflow-hidden group">
+                                <div className="absolute inset-0 bg-blue-500/0 group-hover:bg-blue-500/5 transition-all"></div>
+                                <i data-lucide="layout" className="mb-3 w-8 h-8 opacity-20"></i>
+                                <span className="relative z-10 font-mono">GOOGLE ADSENSE PLACEMENT (728x90)</span>
                             </div>
 
-                            {/* Tool Content */}
-                            {renderTool()}
-
-                            {/* Tip Content */}
-                            <div className="mt-12 prose prose-slate max-w-none text-slate-500 text-sm bg-white p-6 rounded-xl border border-slate-100">
-                                <h3 className="text-slate-700 font-bold mb-2">{t.tip.title}</h3>
-                                <p>{t.tip.desc}</p>
+                            {/* 도구 실제 내용 출력 */}
+                            <div className="animate-in fade-in slide-in-from-bottom-8 duration-700">
+                                {renderTool()}
                             </div>
 
+                            {/* 하단 정보 카드 */}
+                            <div className="p-12 bg-white rounded-[50px] border border-slate-100 shadow-sm relative overflow-hidden">
+                                <div className="absolute top-0 right-0 w-32 h-32 bg-blue-500/5 rounded-full -mr-16 -mt-16 blur-3xl"></div>
+                                <h4 className="font-black text-slate-900 mb-4 flex items-center gap-3 text-xl"><i data-lucide="sparkles" className="w-6 h-6 text-blue-500"></i> {t.tip.title}</h4>
+                                <p className="text-slate-400 text-sm leading-[1.8] font-medium max-w-2xl">{t.tip.desc}</p>
+                            </div>
                         </div>
                     </main>
                 </div>
