@@ -4,6 +4,9 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>유틸리티 박스 - 생활 필수 도구 모음</title>
+    <!-- 파비콘 추가 (박스 이모지) -->
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>📦</text></svg>">
+    
     <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
     <!-- React & ReactDOM -->
@@ -23,13 +26,21 @@
             background-position: 0 0, 10px 10px;
             background-size: 20px 20px;
         }
+        /* 스크롤바 숨기기 (모바일 깔끔하게) */
+        .hide-scrollbar::-webkit-scrollbar {
+            display: none;
+        }
+        .hide-scrollbar {
+            -ms-overflow-style: none;
+            scrollbar-width: none;
+        }
     </style>
 </head>
 <body class="bg-slate-50 text-slate-800">
     <div id="root"></div>
 
     <script type="text/babel">
-        const { useState, useEffect } = React;
+        const { useState, useEffect, useRef } = React;
 
         // --- Components ---
 
@@ -155,7 +166,225 @@
             );
         };
 
-        // 3. D-Day 계산기 도구
+        // 3. 단위 변환기 (New)
+        const UnitConverter = () => {
+            const [category, setCategory] = useState('length');
+            const [val, setVal] = useState('');
+            const [from, setFrom] = useState('cm');
+            const [to, setTo] = useState('inch');
+
+            const units = {
+                length: ['cm', 'm', 'km', 'inch', 'ft', 'yard'],
+                weight: ['kg', 'g', 'lb', 'oz'],
+                temp: ['Celsius', 'Fahrenheit']
+            };
+
+            const convert = (value, fromUnit, toUnit, type) => {
+                if (!value) return '';
+                const v = parseFloat(value);
+                
+                if (type === 'temp') {
+                    if (fromUnit === toUnit) return v;
+                    if (fromUnit === 'Celsius') return (v * 9/5) + 32;
+                    if (fromUnit === 'Fahrenheit') return (v - 32) * 5/9;
+                }
+
+                // Simple conversion factors to base (cm for length, g for weight)
+                const toBase = {
+                    cm: 1, m: 100, km: 100000, inch: 2.54, ft: 30.48, yard: 91.44,
+                    g: 1, kg: 1000, lb: 453.592, oz: 28.3495
+                };
+
+                const baseVal = v * toBase[fromUnit];
+                const finalVal = baseVal / toBase[toUnit];
+                
+                return Number.isInteger(finalVal) ? finalVal : finalVal.toFixed(4);
+            };
+
+            const result = convert(val, from, to, category);
+
+            // Reset units when category changes
+            useEffect(() => {
+                if(category === 'length') { setFrom('cm'); setTo('inch'); }
+                if(category === 'weight') { setFrom('kg'); setTo('lb'); }
+                if(category === 'temp') { setFrom('Celsius'); setTo('Fahrenheit'); }
+                setVal('');
+            }, [category]);
+
+            return (
+                <div class="space-y-6">
+                    <div class="bg-white p-6 rounded-2xl shadow-sm border border-slate-100">
+                        <h2 class="text-xl font-bold mb-6 flex items-center gap-2">
+                            <i data-lucide="arrow-left-right" class="w-6 h-6 text-orange-500"></i>
+                            단위 변환기
+                        </h2>
+                        
+                        <div class="flex gap-2 mb-6 p-1 bg-slate-100 rounded-lg">
+                            {['length', 'weight', 'temp'].map(c => (
+                                <button 
+                                    key={c}
+                                    onClick={() => setCategory(c)}
+                                    class={`flex-1 py-2 text-sm font-medium rounded-md capitalize transition-all ${category === c ? 'bg-white text-orange-600 shadow-sm' : 'text-slate-500'}`}
+                                >
+                                    {c === 'length' ? '길이' : c === 'weight' ? '무게' : '온도'}
+                                </button>
+                            ))}
+                        </div>
+
+                        <div class="grid md:grid-cols-2 gap-4 items-center">
+                            <div class="space-y-2">
+                                <label class="text-sm text-slate-500">입력</label>
+                                <div class="flex gap-2">
+                                    <input type="number" value={val} onChange={e => setVal(e.target.value)} class="flex-1 p-3 border rounded-lg outline-none focus:ring-2 focus:ring-orange-500" placeholder="0" />
+                                    <select value={from} onChange={e => setFrom(e.target.value)} class="p-3 border rounded-lg outline-none bg-white">
+                                        {units[category].map(u => <option key={u} value={u}>{u}</option>)}
+                                    </select>
+                                </div>
+                            </div>
+                            
+                            <div class="hidden md:flex justify-center text-slate-300">
+                                <i data-lucide="arrow-right" class="w-6 h-6"></i>
+                            </div>
+
+                            <div class="space-y-2">
+                                <label class="text-sm text-slate-500">결과</label>
+                                <div class="flex gap-2">
+                                    <input type="text" readOnly value={result} class="flex-1 p-3 bg-slate-50 border rounded-lg outline-none text-orange-600 font-bold" placeholder="0" />
+                                    <select value={to} onChange={e => setTo(e.target.value)} class="p-3 border rounded-lg outline-none bg-white">
+                                        {units[category].map(u => <option key={u} value={u}>{u}</option>)}
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            );
+        };
+
+        // 4. BMI 계산기 (New)
+        const BMICalculator = () => {
+            const [height, setHeight] = useState('');
+            const [weight, setWeight] = useState('');
+            const [bmi, setBmi] = useState(null);
+
+            const calculate = () => {
+                if(height && weight) {
+                    const h = height / 100;
+                    const result = weight / (h * h);
+                    setBmi(result.toFixed(1));
+                }
+            };
+
+            const getStatus = (b) => {
+                if(b < 18.5) return { text: '저체중', color: 'text-blue-500', bg: 'bg-blue-100' };
+                if(b < 23) return { text: '정상', color: 'text-green-500', bg: 'bg-green-100' };
+                if(b < 25) return { text: '과체중', color: 'text-yellow-500', bg: 'bg-yellow-100' };
+                return { text: '비만', color: 'text-red-500', bg: 'bg-red-100' };
+            };
+
+            const status = bmi ? getStatus(bmi) : null;
+
+            return (
+                <div class="space-y-6">
+                    <div class="bg-white p-6 rounded-2xl shadow-sm border border-slate-100">
+                        <h2 class="text-xl font-bold mb-6 flex items-center gap-2">
+                            <i data-lucide="activity" class="w-6 h-6 text-cyan-500"></i>
+                            BMI 비만도 계산기
+                        </h2>
+                        
+                        <div class="grid md:grid-cols-2 gap-8 items-center">
+                            <div class="space-y-4">
+                                <div>
+                                    <label class="block text-sm font-medium text-slate-600 mb-1">신장 (cm)</label>
+                                    <input type="number" value={height} onChange={e => setHeight(e.target.value)} class="w-full p-3 rounded-lg border focus:ring-2 focus:ring-cyan-500 outline-none" placeholder="170" />
+                                </div>
+                                <div>
+                                    <label class="block text-sm font-medium text-slate-600 mb-1">체중 (kg)</label>
+                                    <input type="number" value={weight} onChange={e => setWeight(e.target.value)} class="w-full p-3 rounded-lg border focus:ring-2 focus:ring-cyan-500 outline-none" placeholder="60" />
+                                </div>
+                                <button onClick={calculate} class="w-full bg-cyan-500 hover:bg-cyan-600 text-white font-bold py-3 rounded-lg transition-colors">
+                                    계산하기
+                                </button>
+                            </div>
+
+                            <div class="flex items-center justify-center">
+                                {bmi ? (
+                                    <div class={`text-center p-8 rounded-full h-48 w-48 flex flex-col items-center justify-center border-4 ${status.color.replace('text', 'border')} ${status.bg} bg-opacity-20`}>
+                                        <div class="text-sm text-slate-500 mb-1">나의 BMI</div>
+                                        <div class={`text-4xl font-bold ${status.color} mb-1`}>{bmi}</div>
+                                        <div class={`text-lg font-medium px-3 py-1 rounded-full ${status.bg} ${status.color}`}>{status.text}</div>
+                                    </div>
+                                ) : (
+                                    <div class="text-slate-300 text-center">
+                                        <i data-lucide="user" class="w-24 h-24 mx-auto mb-2 opacity-20"></i>
+                                        <p>키와 몸무게를 입력하세요</p>
+                                    </div>
+                                )}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            );
+        };
+
+        // 5. 스톱워치 (New)
+        const Stopwatch = () => {
+            const [time, setTime] = useState(0);
+            const [isRunning, setIsRunning] = useState(false);
+            const intervalRef = useRef(null);
+
+            useEffect(() => {
+                if(isRunning) {
+                    intervalRef.current = setInterval(() => {
+                        setTime(t => t + 10);
+                    }, 10);
+                } else {
+                    clearInterval(intervalRef.current);
+                }
+                return () => clearInterval(intervalRef.current);
+            }, [isRunning]);
+
+            const formatTime = (ms) => {
+                const minutes = Math.floor(ms / 60000);
+                const seconds = Math.floor((ms % 60000) / 1000);
+                const centiseconds = Math.floor((ms % 1000) / 10);
+                return `${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}.${centiseconds.toString().padStart(2, '0')}`;
+            };
+
+            return (
+                 <div class="space-y-6">
+                    <div class="bg-white p-6 rounded-2xl shadow-sm border border-slate-100">
+                        <h2 class="text-xl font-bold mb-6 flex items-center gap-2">
+                            <i data-lucide="timer" class="w-6 h-6 text-red-500"></i>
+                            스톱워치
+                        </h2>
+                        
+                        <div class="flex flex-col items-center py-8">
+                            <div class="text-6xl md:text-8xl font-mono font-bold text-slate-800 mb-10 tracking-wider">
+                                {formatTime(time)}
+                            </div>
+                            
+                            <div class="flex gap-4">
+                                <button 
+                                    onClick={() => setIsRunning(!isRunning)}
+                                    class={`px-8 py-3 rounded-full font-bold text-lg shadow-lg transform active:scale-95 transition-all w-32 ${isRunning ? 'bg-red-500 hover:bg-red-600 text-white' : 'bg-blue-500 hover:bg-blue-600 text-white'}`}
+                                >
+                                    {isRunning ? '정지' : '시작'}
+                                </button>
+                                <button 
+                                    onClick={() => { setIsRunning(false); setTime(0); }}
+                                    class="px-8 py-3 rounded-full font-bold text-lg bg-slate-200 hover:bg-slate-300 text-slate-600 shadow-lg transform active:scale-95 transition-all w-32"
+                                >
+                                    리셋
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            );
+        };
+
+        // 6. D-Day 계산기 도구
         const DDayCalculator = () => {
             const [date, setDate] = useState('');
             const [result, setResult] = useState(null);
@@ -221,7 +450,7 @@
             );
         };
 
-        // 4. 로또 번호 생성기
+        // 7. 로또 번호 생성기
         const LottoGenerator = () => {
             const [numbers, setNumbers] = useState([]);
 
@@ -290,6 +519,9 @@
                 switch(currentTool) {
                     case 'text': return <WordCounter />;
                     case 'discount': return <DiscountCalculator />;
+                    case 'unit': return <UnitConverter />;
+                    case 'bmi': return <BMICalculator />;
+                    case 'stopwatch': return <Stopwatch />;
                     case 'dday': return <DDayCalculator />;
                     case 'lotto': return <LottoGenerator />;
                     default: return <WordCounter />;
@@ -333,15 +565,20 @@
                             <p class="text-xs text-slate-500 mt-2">일상을 편리하게, 모든 도구 모음</p>
                         </div>
                         
-                        <nav class="p-4 space-y-1">
-                            <div class="px-4 pb-2 text-xs font-semibold text-slate-400 uppercase tracking-wider">텍스트 도구</div>
+                        <nav class="p-4 space-y-1 h-[calc(100vh-180px)] overflow-y-auto hide-scrollbar">
+                            <div class="px-4 pb-2 text-xs font-semibold text-slate-400 uppercase tracking-wider">텍스트</div>
                             <NavButton id="text" label="글자 수 세기" icon="type" activeClass="bg-blue-50 text-blue-700" />
                             
-                            <div class="px-4 pb-2 pt-4 text-xs font-semibold text-slate-400 uppercase tracking-wider">계산 도구</div>
+                            <div class="px-4 pb-2 pt-4 text-xs font-semibold text-slate-400 uppercase tracking-wider">계산 & 변환</div>
                             <NavButton id="discount" label="할인율 계산기" icon="percent" activeClass="bg-pink-50 text-pink-700" />
+                            <NavButton id="unit" label="단위 변환기" icon="arrow-left-right" activeClass="bg-orange-50 text-orange-700" />
                             <NavButton id="dday" label="D-Day 계산기" icon="calendar" activeClass="bg-purple-50 text-purple-700" />
 
-                            <div class="px-4 pb-2 pt-4 text-xs font-semibold text-slate-400 uppercase tracking-wider">재미 & 기타</div>
+                            <div class="px-4 pb-2 pt-4 text-xs font-semibold text-slate-400 uppercase tracking-wider">건강 & 시간</div>
+                            <NavButton id="bmi" label="비만도(BMI) 측정" icon="activity" activeClass="bg-cyan-50 text-cyan-700" />
+                            <NavButton id="stopwatch" label="스톱워치" icon="timer" activeClass="bg-red-50 text-red-700" />
+
+                            <div class="px-4 pb-2 pt-4 text-xs font-semibold text-slate-400 uppercase tracking-wider">재미</div>
                             <NavButton id="lotto" label="로또 번호 생성" icon="clover" activeClass="bg-green-50 text-green-700" />
                         </nav>
                         
@@ -355,8 +592,8 @@
                     </aside>
 
                     {/* Main Content */}
-                    <main class="flex-1 p-4 md:p-8 overflow-y-auto">
-                        <div class="max-w-4xl mx-auto space-y-6">
+                    <main class="flex-1 p-4 md:p-8 overflow-y-auto h-screen">
+                        <div class="max-w-4xl mx-auto space-y-6 pb-20 md:pb-0">
                             
                             {/* Top Ad Placeholder */}
                             <div class="ad-placeholder h-24 rounded-lg border-2 border-dashed border-slate-300 flex flex-col items-center justify-center text-slate-400 text-sm w-full">
