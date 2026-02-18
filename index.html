@@ -41,7 +41,7 @@
     <script crossorigin src="https://unpkg.com/react@18/umd/react.development.js"></script>
     <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.development.js"></script>
     <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
-    <!-- Icons -->
+    <!-- Icons (Lucide) -->
     <script src="https://unpkg.com/lucide@latest"></script>
 
     <style>
@@ -205,12 +205,32 @@
         };
 
         // --- Common Components ---
+        // 🚀 안정적인 아이콘 렌더링 컴포넌트 (빈 페이지 오류 해결)
+        // 직접 SVG 코드를 조작하지 않고, 안전한 i 태그 + createIcons 방식 사용
         const Icon = React.memo(({ name, size = 20, className = "" }) => {
             const iconRef = useRef(null);
+
             useEffect(() => {
-                if (window.lucide) window.lucide.createIcons({ nameAttr: 'data-lucide', attrs: { class: className, width: size, height: size } });
+                if (window.lucide && window.lucide.createIcons) {
+                    window.lucide.createIcons({
+                        root: iconRef.current ? iconRef.current.parentNode : document.body,
+                        nameAttr: 'data-lucide',
+                        attrs: {
+                            class: className,
+                            width: size,
+                            height: size,
+                            'stroke-width': 2
+                        }
+                    });
+                }
             }, [name, size, className]);
-            return <i data-lucide={name} className={className} ref={iconRef}></i>;
+
+            // 레이아웃 시프트 방지를 위해 display: inline-block 및 크기 지정
+            return (
+                <span ref={iconRef} className="inline-flex items-center justify-center align-middle" style={{ width: size, height: size }}>
+                    <i data-lucide={name} style={{ width: size, height: size, display: 'block' }}></i>
+                </span>
+            );
         });
 
         const Card = ({ children, className = "" }) => (
@@ -776,8 +796,9 @@
             const [hash, setHash] = useState(window.location.hash.slice(1) || 'text');
             const [lang, setLang] = useState('ko');
             const [menuOpen, setMenuOpen] = useState(false);
+            const [isIconReady, setIsIconReady] = useState(false); // 아이콘 로딩 상태
             const t = translations[lang];
-            const currentYear = new Date().getFullYear(); // Dynamic Year
+            const currentYear = 2026;
 
             useEffect(() => {
                 const handleHash = () => {
@@ -787,10 +808,21 @@
                     setMenuOpen(false);
                 };
                 window.addEventListener('hashchange', handleHash);
-                return () => window.removeEventListener('hashchange', handleHash);
+                
+                // Lucide 로딩 확인 폴링 (안정성 확보)
+                const checkLucide = setInterval(() => {
+                    if (window.lucide && window.lucide.createIcons) {
+                        setIsIconReady(true);
+                        clearInterval(checkLucide);
+                    }
+                }, 100);
+
+                return () => {
+                    window.removeEventListener('hashchange', handleHash);
+                    clearInterval(checkLucide);
+                };
             }, []);
 
-            // Dynamically set html lang attribute for browser native input formatting (e.g. Date)
             useEffect(() => {
                 document.documentElement.lang = lang;
             }, [lang]);
@@ -800,7 +832,7 @@
                 { id: 'percent', icon: 'calculator', cat: 'math', comp: PercentCalculator },
                 { id: 'discount', icon: 'percent', cat: 'math', comp: DiscountCalculator },
                 { id: 'unit', icon: 'arrow-left-right', cat: 'math', comp: UnitConverter },
-                { id: 'image', icon: 'image', cat: 'media', comp: ImageTools },
+                { id: 'image', icon: 'image-plus', cat: 'media', comp: ImageTools },
                 { id: 'stopwatch', icon: 'timer', cat: 'time', comp: Stopwatch },
                 { id: 'pomodoro', icon: 'clock', cat: 'time', comp: Pomodoro },
                 { id: 'dday', icon: 'calendar', cat: 'time', comp: DDay },
@@ -819,7 +851,7 @@
                         <div className="p-6">
                             <h1 className="text-2xl font-bold flex items-center gap-3 text-slate-800">
                                 <div className="w-10 h-10 bg-blue-600 rounded-xl flex items-center justify-center text-white shadow-lg shadow-blue-200">
-                                    <Icon name="box" />
+                                    <Icon name="box" size={24} />
                                 </div>
                                 UtilityBox
                             </h1>
@@ -867,7 +899,7 @@
 
                         <div className="flex-1 overflow-y-auto p-4 md:p-8">
                             <div className="max-w-2xl mx-auto pb-20">
-                                {/* Ad Space Top */}
+                                {/* Ad Space */}
                                 <div className="mb-6 bg-slate-100 border-2 border-dashed border-slate-200 rounded-lg h-20 flex flex-col items-center justify-center text-slate-400 text-xs">
                                     <span className="font-bold">Google AdSense</span>
                                     <span>Display Ad (Responsive)</span>
@@ -884,13 +916,7 @@
                                     <ActiveComponent t={t} />
                                 </Card>
 
-                                {/* Ad Space Bottom */}
-                                <div className="mb-8 bg-slate-100 border-2 border-dashed border-slate-200 rounded-lg h-20 flex flex-col items-center justify-center text-slate-400 text-xs">
-                                    <span className="font-bold">Google AdSense</span>
-                                    <span>In-Article Ad</span>
-                                </div>
-
-                                {/* Dynamic SEO Content */}
+                                {/* SEO Content */}
                                 <div className="bg-white border-l-4 border-blue-500 p-6 rounded-r-xl shadow-sm prose prose-slate max-w-none prose-sm">
                                     <h3 className="text-lg font-bold text-slate-800 mb-2 flex items-center gap-2">
                                         <Icon name="lightbulb" size={18} className="text-blue-500" />
