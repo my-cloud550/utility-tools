@@ -83,7 +83,7 @@
     <div id="root"></div>
 
     <script type="text/babel">
-        const { useState, useEffect, useRef } = React;
+        const { useState, useEffect, useRef, useCallback } = React;
 
         // --- Translations (유지) ---
         const translations = {
@@ -245,12 +245,24 @@
 
         // --- Helper Components ---
         
-        const Icon = ({ name, size = 20, className = "" }) => {
+        // Icon 컴포넌트 최적화: React.memo와 useEffect 의존성 배열 추가
+        // 이를 통해 스톱워치같이 잦은 리렌더링이 발생하는 곳에서도 DOM 스캔을 최소화합니다.
+        const Icon = React.memo(({ name, size = 20, className = "" }) => {
+            const iconRef = useRef(null);
+            
             useEffect(() => {
-                if (window.lucide) window.lucide.createIcons();
-            });
-            return <i data-lucide={name} width={size} height={size} className={className}></i>;
-        };
+                if (window.lucide) {
+                    // createIcons가 문서 전체가 아닌 해당 요소만 타겟팅하도록 유도할 수는 없으나
+                    // 최소한 name, size, className이 바뀔 때만 실행되도록 제한합니다.
+                    window.lucide.createIcons({
+                        nameAttr: 'data-lucide',
+                        attrs: { class: className, width: size, height: size }
+                    });
+                }
+            }, [name, size, className]); // 의존성 배열 추가로 불필요한 실행 방지
+
+            return <i data-lucide={name} width={size} height={size} className={className} ref={iconRef}></i>;
+        });
 
         const Card = ({ children, className = "" }) => (
             <div className={`bg-white rounded-3xl shadow-soft p-6 border border-slate-100 animate-fade-in ${className}`}>
@@ -455,11 +467,29 @@
             const [time, setTime] = useState(0);
             const [run, setRun] = useState(false);
             
+            // 성능 및 정확도 개선: requestAnimationFrame 및 Date.now() 사용
             useEffect(() => {
-                let interval;
-                if(run) interval = setInterval(() => setTime(prev => prev + 10), 10);
-                else clearInterval(interval);
-                return () => clearInterval(interval);
+                let animationFrameId;
+                let lastTime = Date.now();
+                
+                const animate = () => {
+                    if (run) {
+                        const now = Date.now();
+                        const delta = now - lastTime;
+                        lastTime = now;
+                        setTime(prev => prev + delta);
+                        animationFrameId = requestAnimationFrame(animate);
+                    }
+                };
+
+                if (run) {
+                    lastTime = Date.now();
+                    animationFrameId = requestAnimationFrame(animate);
+                } else {
+                    cancelAnimationFrame(animationFrameId);
+                }
+
+                return () => cancelAnimationFrame(animationFrameId);
             }, [run]);
 
             const fmt = (ms) => {
@@ -482,10 +512,10 @@
                     <div className="flex gap-6">
                         <button onClick={() => setRun(!run)} 
                             className={`w-20 h-20 rounded-full flex items-center justify-center shadow-lg transition-transform active:scale-90 ${run ? 'bg-red-500 text-white shadow-red-200' : 'bg-blue-600 text-white shadow-blue-200'}`}>
-                            <Icon name={run ? "pause" : "play"} size={32} fill="currentColor" />
+                            <Icon name={run ? "pause" : "play"} size={32} className="text-white" />
                         </button>
                         <button onClick={() => { setRun(false); setTime(0); }} 
-                            className="w-20 h-20 rounded-full bg-slate-100 text-slate-500 flex items-center justify-center hover:bg-slate-200 transition-colors">
+                            className="w-20 h-20 rounded-full bg-slate-100 text-slate-500 flex items-center justify-center hover:bg-slate-200 transition-colors active:scale-95">
                             <Icon name="rotate-ccw" size={28} />
                         </button>
                     </div>
