@@ -314,7 +314,7 @@
                                     <Button onClick={convertToWebP} className="flex-1">{loading ? t.image.converting : "WebP 변환하기"}</Button>
                                     {converted && (
                                         <a href={converted} download={`converted_${Date.now()}.webp`} className="flex-1">
-                                            <Button variant="success" className="w-full"><Icon name="download" size={18} /> {t.image.download}</Button>
+                                            <Button variant="success" className="w-full"><Icon name="download" size={18} className="mr-2 text-white" /> {t.image.download}</Button>
                                         </a>
                                     )}
                                     <Button variant="secondary" onClick={() => {setFile(null); setConverted(null);}}><Icon name="x" size={18} /></Button>
@@ -557,7 +557,7 @@
                     </div>
                     <div className="flex gap-4">
                         <Button onClick={() => setRun(!run)} variant={run ? "danger" : "primary"} className="w-32 py-4 text-lg">
-                            <Icon name={run ? "pause" : "play"} size={24} /> {run ? t.stopwatch.stop : t.stopwatch.start}
+                            <Icon name={run ? "pause" : "play"} size={24} className="text-white" /> {run ? t.stopwatch.stop : t.stopwatch.start}
                         </Button>
                         <Button onClick={() => { setRun(false); setTime(0); }} variant="secondary" className="w-32 py-4 text-lg">
                             <Icon name="rotate-ccw" size={24} /> {t.stopwatch.reset}
@@ -734,7 +734,7 @@
                                 </label>
                             ))}
                         </div>
-                        <Button onClick={gen} className="w-full py-4"><Icon name="refresh-cw" size={18} /> {t.password.generate}</Button>
+                        <Button onClick={gen} className="w-full py-4"><Icon name="refresh-cw" size={18} className="mr-2 text-white" /> {t.password.generate}</Button>
                     </div>
                 </div>
             );
@@ -765,7 +765,7 @@
                         )) : <div className="text-slate-300 font-bold text-xl flex items-center h-14">{t.lotto.guide}</div>}
                     </div>
                     <Button onClick={gen} className="bg-emerald-500 hover:bg-emerald-600 shadow-emerald-200 px-10 py-4 rounded-full text-lg">
-                        <Icon name="clover" className="mr-2" /> {t.lotto.btn}
+                        <Icon name="clover" className="mr-2 text-white" /> {t.lotto.btn}
                     </Button>
                 </div>
             );
@@ -777,6 +777,7 @@
             const [lang, setLang] = useState('ko');
             const [menuOpen, setMenuOpen] = useState(false);
             const t = translations[lang];
+            const currentYear = new Date().getFullYear(); // Dynamic Year
 
             useEffect(() => {
                 const handleHash = () => {
@@ -907,7 +908,7 @@
                                 </div>
                                 
                                 <footer className="mt-12 text-center text-xs text-slate-400">
-                                    &copy; 2024 Utility Box. All tools run locally in your browser.
+                                    &copy; {currentYear} Utility Box. All tools run locally in your browser.
                                 </footer>
                             </div>
                         </div>
