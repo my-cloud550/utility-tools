@@ -49,13 +49,14 @@
             ko: {
                 title: "유틸리티 박스",
                 subtitle: "생활 필수 도구 모음",
-                categories: { text: "텍스트", calc: "계산 & 변환", health: "건강 & 시간", fun: "재미" },
+                categories: { text: "텍스트", calc: "계산 & 변환", time: "시간 & 생산성", security: "보안", fun: "재미" },
                 tools: {
                     text: "글자 수 세기",
                     discount: "할인율 계산기",
                     unit: "단위 변환기",
-                    bmi: "비만도(BMI)",
                     stopwatch: "스톱워치",
+                    pomodoro: "뽀모도로 타이머",
+                    password: "비밀번호 생성기",
                     dday: "D-Day 계산기",
                     lotto: "로또 번호 생성"
                 },
@@ -91,21 +92,33 @@
                         Reaumur: "열씨 (°Re)", Romer: "로머 (°Rø)"
                     }
                 },
-                bmi: {
-                    title: "BMI 비만도 계산기",
-                    height: "신장 (cm)",
-                    weight: "체중 (kg)",
-                    calcBtn: "계산하기",
-                    myBmi: "나의 BMI",
-                    inputPrompt: "키와 몸무게를 입력하세요",
-                    error: "정확한 수치를 입력해주세요 (0보다 커야 함)",
-                    status: { under: "저체중", normal: "정상", over: "과체중", obese: "비만" }
-                },
                 stopwatch: {
                     title: "스톱워치",
                     start: "시작",
                     stop: "정지",
                     reset: "리셋"
+                },
+                pomodoro: {
+                    title: "뽀모도로 집중 타이머",
+                    work: "집중 시간",
+                    break: "휴식 시간",
+                    start: "집중 시작",
+                    pause: "일시 정지",
+                    reset: "리셋",
+                    statusWork: "🔥 집중하세요!",
+                    statusBreak: "☕ 잠시 쉬세요",
+                    switchWork: "집중 모드로 전환 (25분)",
+                    switchBreak: "휴식 모드로 전환 (5분)"
+                },
+                password: {
+                    title: "안전한 비밀번호 생성기",
+                    length: "비밀번호 길이",
+                    options: "옵션 설정",
+                    numbers: "숫자 포함 (0-9)",
+                    symbols: "특수문자 포함 (!@#$)",
+                    generate: "비밀번호 생성",
+                    copy: "복사하기",
+                    copied: "복사됨!"
                 },
                 dday: {
                     title: "D-Day 계산기",
@@ -131,13 +144,14 @@
             en: {
                 title: "Utility Box",
                 subtitle: "Everyday Essential Tools",
-                categories: { text: "Text", calc: "Calc & Convert", health: "Health & Time", fun: "Fun" },
+                categories: { text: "Text", calc: "Calc & Convert", time: "Time & Focus", security: "Security", fun: "Fun" },
                 tools: {
                     text: "Word Counter",
                     discount: "Discount Calc",
                     unit: "Unit Converter",
-                    bmi: "BMI Calculator",
                     stopwatch: "Stopwatch",
+                    pomodoro: "Pomodoro Timer",
+                    password: "Password Gen",
                     dday: "D-Day Counter",
                     lotto: "Lotto Generator"
                 },
@@ -173,21 +187,33 @@
                         Reaumur: "Réaumur (°Re)", Romer: "Rømer (°Rø)"
                     }
                 },
-                bmi: {
-                    title: "BMI Calculator",
-                    height: "Height (cm)",
-                    weight: "Weight (kg)",
-                    calcBtn: "Calculate",
-                    myBmi: "My BMI",
-                    inputPrompt: "Enter height and weight",
-                    error: "Please enter valid numbers (> 0)",
-                    status: { under: "Underweight", normal: "Normal", over: "Overweight", obese: "Obese" }
-                },
                 stopwatch: {
                     title: "Stopwatch",
                     start: "Start",
                     stop: "Stop",
                     reset: "Reset"
+                },
+                pomodoro: {
+                    title: "Pomodoro Focus Timer",
+                    work: "Focus",
+                    break: "Break",
+                    start: "Start Focus",
+                    pause: "Pause",
+                    reset: "Reset",
+                    statusWork: "🔥 Stay Focused!",
+                    statusBreak: "☕ Take a Break",
+                    switchWork: "Switch to Focus Mode (25m)",
+                    switchBreak: "Switch to Break Mode (5m)"
+                },
+                password: {
+                    title: "Secure Password Generator",
+                    length: "Length",
+                    options: "Options",
+                    numbers: "Include Numbers (0-9)",
+                    symbols: "Include Symbols (!@#$)",
+                    generate: "Generate",
+                    copy: "Copy",
+                    copied: "Copied!"
                 },
                 dday: {
                     title: "D-Day Counter",
@@ -464,103 +490,7 @@
             );
         };
 
-        // 4. BMI 계산기 (안전장치 강화됨)
-        const BMICalculator = ({ lang }) => {
-            const [height, setHeight] = useState('');
-            const [weight, setWeight] = useState('');
-            const [bmi, setBmi] = useState(null);
-            const [errorMsg, setErrorMsg] = useState(''); 
-            const t = translations[lang]?.bmi;
-
-            const calculate = () => {
-                setErrorMsg(''); 
-                
-                const h = parseFloat(height);
-                const w = parseFloat(weight);
-                
-                if (!h || !w || h <= 0 || w <= 0) {
-                     setBmi(null);
-                     setErrorMsg(t?.error || "Error"); 
-                     return;
-                }
-
-                const h_meters = h / 100;
-                const result = w / (h_meters * h_meters);
-                
-                if (isFinite(result) && !isNaN(result)) {
-                    setBmi(result.toFixed(1));
-                } else {
-                    setBmi(null);
-                    setErrorMsg(t?.error || "Error");
-                }
-            };
-
-            const getStatus = (b) => {
-                const val = parseFloat(b);
-                if (isNaN(val)) return { text: '-', color: 'text-slate-400', bg: 'bg-slate-100' };
-
-                // 안전장치: status 데이터가 없으면 기본값 반환
-                const s = t?.status || {};
-                
-                if(val < 18.5) return { text: s.under || 'Underweight', color: 'text-blue-500', bg: 'bg-blue-100' };
-                if(val < 23) return { text: s.normal || 'Normal', color: 'text-green-500', bg: 'bg-green-100' };
-                if(val < 25) return { text: s.over || 'Overweight', color: 'text-yellow-500', bg: 'bg-yellow-100' };
-                return { text: s.obese || 'Obese', color: 'text-red-500', bg: 'bg-red-100' };
-            };
-
-            // t와 status가 모두 존재할 때만 getStatus 실행
-            const status = (bmi && t?.status) ? getStatus(bmi) : null;
-
-            return (
-                <div class="space-y-6">
-                    <div class="bg-white p-6 rounded-2xl shadow-sm border border-slate-100">
-                        <h2 class="text-xl font-bold mb-6 flex items-center gap-2">
-                            <i data-lucide="activity" class="w-6 h-6 text-cyan-500"></i>
-                            {t?.title || "BMI Calculator"}
-                        </h2>
-                        
-                        <div class="grid md:grid-cols-2 gap-8 items-center">
-                            <div class="space-y-4">
-                                <div>
-                                    <label class="block text-sm font-medium text-slate-600 mb-1">{t?.height || "Height"}</label>
-                                    <input type="number" value={height} onChange={e => setHeight(e.target.value)} class="w-full p-3 rounded-lg border focus:ring-2 focus:ring-cyan-500 outline-none" placeholder="170" />
-                                </div>
-                                <div>
-                                    <label class="block text-sm font-medium text-slate-600 mb-1">{t?.weight || "Weight"}</label>
-                                    <input type="number" value={weight} onChange={e => setWeight(e.target.value)} class="w-full p-3 rounded-lg border focus:ring-2 focus:ring-cyan-500 outline-none" placeholder="60" />
-                                </div>
-                                <button onClick={calculate} class="w-full bg-cyan-500 hover:bg-cyan-600 text-white font-bold py-3 rounded-lg transition-colors">
-                                    {t?.calcBtn || "Calculate"}
-                                </button>
-                                {errorMsg && (
-                                    <div class="text-red-500 text-sm text-center font-medium animate-pulse">
-                                        ⚠️ {errorMsg}
-                                    </div>
-                                )}
-                            </div>
-
-                            <div class="flex items-center justify-center">
-                                {/* 안전장치: status가 유효할 때만 렌더링 */}
-                                {bmi && status ? (
-                                    <div class={`text-center p-8 rounded-full h-48 w-48 flex flex-col items-center justify-center border-4 ${status.color.replace('text', 'border')} ${status.bg} bg-opacity-20`}>
-                                        <div class="text-sm text-slate-500 mb-1">{t?.myBmi}</div>
-                                        <div class={`text-4xl font-bold ${status.color} mb-1`}>{bmi}</div>
-                                        <div class={`text-lg font-medium px-3 py-1 rounded-full ${status.bg} ${status.color}`}>{status.text}</div>
-                                    </div>
-                                ) : (
-                                    <div class="text-slate-300 text-center">
-                                        <i data-lucide="user" class="w-24 h-24 mx-auto mb-2 opacity-20"></i>
-                                        <p>{t?.inputPrompt}</p>
-                                    </div>
-                                )}
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            );
-        };
-
-        // 5. 스톱워치
+        // 4. 스톱워치
         const Stopwatch = ({ lang }) => {
             const [time, setTime] = useState(0);
             const [isRunning, setIsRunning] = useState(false);
@@ -618,7 +548,198 @@
             );
         };
 
-        // 6. D-Day 계산기
+        // 5. 뽀모도로 타이머 (번역 기능 강화됨)
+        const PomodoroTimer = ({ lang }) => {
+            const [timeLeft, setTimeLeft] = useState(25 * 60);
+            const [isActive, setIsActive] = useState(false);
+            const [isWork, setIsWork] = useState(true); // true = work, false = break
+            const t = translations[lang].pomodoro;
+
+            // 브라우저 내장 Web Audio API로 알림음 재생
+            const playNotificationSound = () => {
+                try {
+                    const AudioContext = window.AudioContext || window.webkitAudioContext;
+                    if (!AudioContext) return;
+                    
+                    const ctx = new AudioContext();
+                    const osc = ctx.createOscillator();
+                    const gain = ctx.createGain();
+                    
+                    osc.connect(gain);
+                    gain.connect(ctx.destination);
+                    
+                    osc.type = 'sine'; // 맑은 톤
+                    osc.frequency.setValueAtTime(523.25, ctx.currentTime); // C5 (도)
+                    osc.frequency.exponentialRampToValueAtTime(1046.5, ctx.currentTime + 0.1); // C6 (높은 도)로 상승
+                    
+                    gain.gain.setValueAtTime(0.1, ctx.currentTime);
+                    gain.gain.exponentialRampToValueAtTime(0.01, ctx.currentTime + 0.5); // 0.5초 동안 페이드 아웃
+                    
+                    osc.start();
+                    osc.stop(ctx.currentTime + 0.5);
+                } catch (e) {
+                    console.log("Audio play failed");
+                }
+            };
+
+            useEffect(() => {
+                let interval = null;
+                if (isActive && timeLeft > 0) {
+                    interval = setInterval(() => {
+                        setTimeLeft(timeLeft => timeLeft - 1);
+                    }, 1000);
+                } else if (timeLeft === 0) {
+                    setIsActive(false);
+                    playNotificationSound(); // 타이머 종료 시 소리 재생
+                }
+                return () => clearInterval(interval);
+            }, [isActive, timeLeft]);
+
+            const toggleTimer = () => setIsActive(!isActive);
+            const resetTimer = () => {
+                setIsActive(false);
+                setTimeLeft(isWork ? 25 * 60 : 5 * 60);
+            };
+            const toggleMode = () => {
+                const nextMode = !isWork;
+                setIsWork(nextMode);
+                setIsActive(false);
+                setTimeLeft(nextMode ? 25 * 60 : 5 * 60);
+            };
+
+            const formatTime = (seconds) => {
+                const mins = Math.floor(seconds / 60);
+                const secs = seconds % 60;
+                return `${mins.toString().padStart(2, '0')}:${secs.toString().padStart(2, '0')}`;
+            };
+
+            return (
+                <div class="space-y-6">
+                    <div class="bg-white p-6 rounded-2xl shadow-sm border border-slate-100">
+                        <h2 class="text-xl font-bold mb-6 flex items-center gap-2">
+                            <i data-lucide="clock" class="w-6 h-6 text-orange-500"></i>
+                            {t.title}
+                        </h2>
+                        
+                        <div class="flex flex-col items-center py-6">
+                            <div class={`text-sm font-bold px-4 py-1 rounded-full mb-4 ${isWork ? 'bg-orange-100 text-orange-600' : 'bg-green-100 text-green-600'}`}>
+                                {isWork ? t.statusWork : t.statusBreak}
+                            </div>
+
+                            <div class="text-7xl md:text-8xl font-mono font-bold text-slate-800 mb-8">
+                                {formatTime(timeLeft)}
+                            </div>
+                            
+                            <div class="flex gap-3 mb-6">
+                                <button onClick={toggleTimer} class={`px-8 py-3 rounded-full font-bold text-white shadow-lg transform active:scale-95 transition-all ${isActive ? 'bg-orange-400 hover:bg-orange-500' : 'bg-orange-500 hover:bg-orange-600'}`}>
+                                    {isActive ? t.pause : t.start}
+                                </button>
+                                <button onClick={resetTimer} class="px-6 py-3 rounded-full font-bold bg-slate-100 text-slate-600 hover:bg-slate-200 transition-all">
+                                    {t.reset}
+                                </button>
+                            </div>
+
+                            <button onClick={toggleMode} class="text-sm text-slate-400 hover:text-slate-600 underline">
+                                {isWork ? t.switchBreak : t.switchWork}
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            );
+        };
+
+        // 6. 안전한 비밀번호 생성기
+        const PasswordGenerator = ({ lang }) => {
+            const [length, setLength] = useState(12);
+            const [includeNumbers, setIncludeNumbers] = useState(true);
+            const [includeSymbols, setIncludeSymbols] = useState(true);
+            const [password, setPassword] = useState('');
+            const [copied, setCopied] = useState(false);
+            const t = translations[lang].password;
+
+            const generatePassword = () => {
+                const chars = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ";
+                const numbers = "0123456789";
+                const symbols = "!@#$%^&*()_+~`|}{[]:;?><,./-=";
+                
+                let validChars = chars;
+                if (includeNumbers) validChars += numbers;
+                if (includeSymbols) validChars += symbols;
+
+                let generatedPassword = "";
+                for (let i = 0; i < length; i++) {
+                    const randomIndex = Math.floor(Math.random() * validChars.length);
+                    generatedPassword += validChars[randomIndex];
+                }
+                setPassword(generatedPassword);
+                setCopied(false);
+            };
+
+            const copyToClipboard = () => {
+                if (!password) return;
+                navigator.clipboard.writeText(password);
+                setCopied(true);
+                setTimeout(() => setCopied(false), 2000);
+            };
+
+            useEffect(() => {
+                generatePassword();
+            }, []);
+
+            return (
+                <div class="space-y-6">
+                    <div class="bg-white p-6 rounded-2xl shadow-sm border border-slate-100">
+                        <h2 class="text-xl font-bold mb-6 flex items-center gap-2">
+                            <i data-lucide="lock" class="w-6 h-6 text-indigo-500"></i>
+                            {t.title}
+                        </h2>
+                        
+                        <div class="space-y-6">
+                            <div class="bg-slate-100 p-4 rounded-xl flex items-center justify-between">
+                                <div class="font-mono text-xl text-slate-800 break-all mr-4">
+                                    {password}
+                                </div>
+                                <button onClick={copyToClipboard} class="p-2 bg-white rounded-lg shadow-sm hover:bg-slate-50 text-slate-600 transition-colors" title={t.copy}>
+                                    <i data-lucide={copied ? "check" : "copy"} class={`w-5 h-5 ${copied ? "text-green-500" : ""}`}></i>
+                                </button>
+                            </div>
+
+                            <div class="space-y-4">
+                                <div>
+                                    <div class="flex justify-between text-sm text-slate-600 mb-2">
+                                        <span>{t.length}</span>
+                                        <span class="font-bold">{length}</span>
+                                    </div>
+                                    <input 
+                                        type="range" min="6" max="32" value={length} 
+                                        onChange={(e) => setLength(e.target.value)}
+                                        class="w-full h-2 bg-slate-200 rounded-lg appearance-none cursor-pointer accent-indigo-500"
+                                    />
+                                </div>
+
+                                <div class="flex flex-col gap-2">
+                                    <label class="flex items-center gap-2 cursor-pointer">
+                                        <input type="checkbox" checked={includeNumbers} onChange={(e) => setIncludeNumbers(e.target.checked)} class="w-4 h-4 text-indigo-600 rounded focus:ring-indigo-500" />
+                                        <span class="text-sm text-slate-700">{t.numbers}</span>
+                                    </label>
+                                    <label class="flex items-center gap-2 cursor-pointer">
+                                        <input type="checkbox" checked={includeSymbols} onChange={(e) => setIncludeSymbols(e.target.checked)} class="w-4 h-4 text-indigo-600 rounded focus:ring-indigo-500" />
+                                        <span class="text-sm text-slate-700">{t.symbols}</span>
+                                    </label>
+                                </div>
+
+                                <button onClick={generatePassword} class="w-full bg-indigo-500 hover:bg-indigo-600 text-white font-bold py-3 rounded-lg transition-colors flex items-center justify-center gap-2">
+                                    <i data-lucide="refresh-cw" class="w-4 h-4"></i>
+                                    {t.generate}
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            );
+        };
+
+        // 7. D-Day 계산기 (날짜 포맷 수정됨)
         const DDayCalculator = ({ lang }) => {
             const [date, setDate] = useState('');
             const [result, setResult] = useState(null);
@@ -659,6 +780,7 @@
                                 <label class="block text-sm font-medium text-slate-600 mb-1">{t.label}</label>
                                 <input 
                                     type="date" 
+                                    lang={lang} // 언어 설정에 따라 날짜 포맷 변경 (중요!)
                                     value={date}
                                     onChange={(e) => setDate(e.target.value)}
                                     class="w-full p-3 rounded-lg border border-slate-200 focus:ring-2 focus:ring-purple-500 outline-none text-lg"
@@ -685,7 +807,7 @@
             );
         };
 
-        // 7. 로또 번호 생성기
+        // 8. 로또 번호 생성기
         const LottoGenerator = ({ lang }) => {
             const [numbers, setNumbers] = useState([]);
             const t = translations[lang].lotto;
@@ -760,14 +882,15 @@
                 if (window.lucide) {
                     window.lucide.createIcons();
                 }
-                document.title = translations[lang].title + " - " + translations[lang].subtitle;
+                const t = translations[lang] || translations['en'];
+                document.title = t.title + " - " + t.subtitle;
             }, [currentTool, isSidebarOpen, lang]);
 
             const toggleLang = () => {
                 setLang(prev => prev === 'ko' ? 'en' : 'ko');
             };
 
-            const t = translations[lang];
+            const t = translations[lang] || translations['en'];
 
             const renderTool = () => {
                 const props = { lang };
@@ -775,8 +898,9 @@
                     case 'text': return <WordCounter {...props} />;
                     case 'discount': return <DiscountCalculator {...props} />;
                     case 'unit': return <UnitConverter {...props} />;
-                    case 'bmi': return <BMICalculator {...props} />;
                     case 'stopwatch': return <Stopwatch {...props} />;
+                    case 'pomodoro': return <PomodoroTimer {...props} />; // New
+                    case 'password': return <PasswordGenerator {...props} />; // New
                     case 'dday': return <DDayCalculator {...props} />;
                     case 'lotto': return <LottoGenerator {...props} />;
                     default: return <WordCounter {...props} />;
@@ -840,9 +964,12 @@
                             <NavButton id="unit" label={t.tools.unit} icon="arrow-left-right" activeClass="bg-orange-50 text-orange-700" />
                             <NavButton id="dday" label={t.tools.dday} icon="calendar" activeClass="bg-purple-50 text-purple-700" />
 
-                            <div class="px-4 pb-2 pt-4 text-xs font-semibold text-slate-400 uppercase tracking-wider">{t.categories.health}</div>
-                            <NavButton id="bmi" label={t.tools.bmi} icon="activity" activeClass="bg-cyan-50 text-cyan-700" />
+                            <div class="px-4 pb-2 pt-4 text-xs font-semibold text-slate-400 uppercase tracking-wider">{t.categories.time}</div>
                             <NavButton id="stopwatch" label={t.tools.stopwatch} icon="timer" activeClass="bg-red-50 text-red-700" />
+                            <NavButton id="pomodoro" label={t.tools.pomodoro} icon="clock" activeClass="bg-orange-50 text-orange-700" />
+
+                            <div class="px-4 pb-2 pt-4 text-xs font-semibold text-slate-400 uppercase tracking-wider">{t.categories.security}</div>
+                            <NavButton id="password" label={t.tools.password} icon="lock" activeClass="bg-indigo-50 text-indigo-700" />
 
                             <div class="px-4 pb-2 pt-4 text-xs font-semibold text-slate-400 uppercase tracking-wider">{t.categories.fun}</div>
                             <NavButton id="lotto" label={t.tools.lotto} icon="clover" activeClass="bg-green-50 text-green-700" />
