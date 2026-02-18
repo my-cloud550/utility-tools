@@ -107,8 +107,8 @@
                     reset: "리셋",
                     statusWork: "🔥 집중하세요!",
                     statusBreak: "☕ 잠시 쉬세요",
-                    switchWork: "집중 모드로 전환 (25분)",
-                    switchBreak: "휴식 모드로 전환 (5분)"
+                    switchToWork: "집중 모드로 전환 (25분)",
+                    switchToBreak: "휴식 모드로 전환 (5분)"
                 },
                 password: {
                     title: "안전한 비밀번호 생성기",
@@ -202,8 +202,8 @@
                     reset: "Reset",
                     statusWork: "🔥 Stay Focused!",
                     statusBreak: "☕ Take a Break",
-                    switchWork: "Switch to Focus Mode (25m)",
-                    switchBreak: "Switch to Break Mode (5m)"
+                    switchToWork: "Switch to Focus Mode (25m)",
+                    switchToBreak: "Switch to Break Mode (5m)"
                 },
                 password: {
                     title: "Secure Password Generator",
@@ -240,7 +240,6 @@
 
         // --- Components ---
 
-        // 1. 글자 수 세기 도구
         const WordCounter = ({ lang }) => {
             const [text, setText] = useState('');
             const t = translations[lang].wordCounter;
@@ -253,10 +252,10 @@
             };
 
             return (
-                <div class="space-y-6">
-                    <div class="bg-white p-6 rounded-2xl shadow-sm border border-slate-100">
-                        <h2 class="text-xl font-bold mb-4 flex items-center gap-2">
-                            <i data-lucide="type" class="w-6 h-6 text-blue-500"></i>
+                <div className="space-y-6">
+                    <div className="bg-white p-6 rounded-2xl shadow-sm border border-slate-100">
+                        <h2 className="text-xl font-bold mb-4 flex items-center gap-2">
+                            <i data-lucide="type" className="w-6 h-6 text-blue-500"></i>
                             {t.title}
                         </h2>
                         <textarea
@@ -266,7 +265,7 @@
                             onChange={(e) => setText(e.target.value)}
                         ></textarea>
                         
-                        <div class="grid grid-cols-2 md:grid-cols-4 gap-4 mt-6">
+                        <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mt-6">
                             <StatCard label={t.withSpace} value={stats.charWithSpace} unit={t.unitChar} color="blue" />
                             <StatCard label={t.noSpace} value={stats.charNoSpace} unit={t.unitChar} color="indigo" />
                             <StatCard label={t.words} value={stats.words} unit={t.unitWord} color="emerald" />
@@ -286,16 +285,15 @@
             };
             
             return (
-                <div class={`p-4 rounded-xl text-center ${colors[color] || colors.blue}`}>
-                    <div class="text-xs font-medium opacity-80 mb-1">{label}</div>
-                    <div class="text-2xl font-bold">
-                        {value.toLocaleString()} <span class="text-sm font-normal">{unit}</span>
+                <div className={`p-4 rounded-xl text-center ${colors[color] || colors.blue}`}>
+                    <div className="text-xs font-medium opacity-80 mb-1">{label}</div>
+                    <div className="text-2xl font-bold">
+                        {value.toLocaleString()} <span className="text-sm font-normal">{unit}</span>
                     </div>
                 </div>
             );
         };
 
-        // 2. 할인율 계산기 도구
         const DiscountCalculator = ({ lang }) => {
             const [price, setPrice] = useState('');
             const [discount, setDiscount] = useState('');
@@ -305,33 +303,33 @@
             const savedAmount = price && discount ? price * (discount / 100) : 0;
 
             return (
-                <div class="space-y-6">
-                    <div class="bg-white p-6 rounded-2xl shadow-sm border border-slate-100">
-                        <h2 class="text-xl font-bold mb-6 flex items-center gap-2">
-                            <i data-lucide="percent" class="w-6 h-6 text-pink-500"></i>
+                <div className="space-y-6">
+                    <div className="bg-white p-6 rounded-2xl shadow-sm border border-slate-100">
+                        <h2 className="text-xl font-bold mb-6 flex items-center gap-2">
+                            <i data-lucide="percent" className="w-6 h-6 text-pink-500"></i>
                             {t.title}
                         </h2>
                         
-                        <div class="grid md:grid-cols-2 gap-8">
-                            <div class="space-y-4">
+                        <div className="grid md:grid-cols-2 gap-8">
+                            <div className="space-y-4">
                                 <div>
-                                    <label class="block text-sm font-medium text-slate-600 mb-1">{t.price}</label>
+                                    <label className="block text-sm font-medium text-slate-600 mb-1">{t.price}</label>
                                     <input 
                                         type="number" 
                                         value={price}
                                         onChange={(e) => setPrice(Number(e.target.value))}
-                                        class="w-full p-3 rounded-lg border border-slate-200 focus:ring-2 focus:ring-pink-500 outline-none text-right font-mono text-lg"
+                                        className="w-full p-3 rounded-lg border border-slate-200 focus:ring-2 focus:ring-pink-500 outline-none text-right font-mono text-lg"
                                         placeholder="0"
                                     />
                                 </div>
                                 <div>
-                                    <label class="block text-sm font-medium text-slate-600 mb-1">{t.rate}</label>
-                                    <div class="flex gap-2">
+                                    <label className="block text-sm font-medium text-slate-600 mb-1">{t.rate}</label>
+                                    <div className="flex gap-2">
                                         {[10, 20, 30, 50].map(p => (
                                             <button 
                                                 key={p}
                                                 onClick={() => setDiscount(p)}
-                                                class={`flex-1 py-1 rounded-md text-sm font-medium transition-colors ${discount === p ? 'bg-pink-100 text-pink-700 border border-pink-200' : 'bg-slate-100 text-slate-600 hover:bg-slate-200'}`}
+                                                className={`flex-1 py-1 rounded-md text-sm font-medium transition-colors ${discount === p ? 'bg-pink-100 text-pink-700 border border-pink-200' : 'bg-slate-100 text-slate-600 hover:bg-slate-200'}`}
                                             >
                                                 {p}%
                                             </button>
@@ -341,21 +339,21 @@
                                         type="number" 
                                         value={discount}
                                         onChange={(e) => setDiscount(Number(e.target.value))}
-                                        class="w-full mt-2 p-3 rounded-lg border border-slate-200 focus:ring-2 focus:ring-pink-500 outline-none text-right font-mono text-lg"
+                                        className="w-full mt-2 p-3 rounded-lg border border-slate-200 focus:ring-2 focus:ring-pink-500 outline-none text-right font-mono text-lg"
                                         placeholder="0"
                                     />
                                 </div>
                             </div>
                             
-                            <div class="bg-slate-50 p-6 rounded-xl flex flex-col justify-center space-y-4">
-                                <div class="flex justify-between items-center text-slate-500">
+                            <div className="bg-slate-50 p-6 rounded-xl flex flex-col justify-center space-y-4">
+                                <div className="flex justify-between items-center text-slate-500">
                                     <span>{t.saved}</span>
-                                    <span class="font-mono">{savedAmount.toLocaleString()}</span>
+                                    <span className="font-mono">{savedAmount.toLocaleString()}원</span>
                                 </div>
-                                <div class="w-full h-px bg-slate-200"></div>
-                                <div class="flex justify-between items-center text-xl font-bold text-slate-800">
+                                <div className="w-full h-px bg-slate-200"></div>
+                                <div className="flex justify-between items-center text-xl font-bold text-slate-800">
                                     <span>{t.final}</span>
-                                    <span class="text-pink-600 font-mono text-2xl">{finalPrice.toLocaleString()}</span>
+                                    <span className="text-pink-600 font-mono text-2xl">{finalPrice.toLocaleString()}원</span>
                                 </div>
                             </div>
                         </div>
@@ -364,7 +362,6 @@
             );
         };
 
-        // 3. 단위 변환기
         const UnitConverter = ({ lang }) => {
             const [category, setCategory] = useState('length');
             const [val, setVal] = useState('');
@@ -384,8 +381,6 @@
                 
                 if (type === 'temp') {
                     if (fromUnit === toUnit) return v;
-
-                    // 1. Convert to Celsius (Base)
                     let celsius;
                     switch(fromUnit) {
                         case 'Celsius': celsius = v; break;
@@ -398,8 +393,6 @@
                         case 'Romer': celsius = (v - 7.5) * 40/21; break;
                         default: celsius = v;
                     }
-
-                    // 2. Convert Celsius to Target
                     let result;
                     switch(toUnit) {
                         case 'Celsius': result = celsius; break;
@@ -412,7 +405,6 @@
                         case 'Romer': result = (celsius * 21/40) + 7.5; break;
                         default: result = celsius;
                     }
-                    
                     return Number.isInteger(result) ? result : parseFloat(result.toFixed(4));
                 }
 
@@ -437,31 +429,31 @@
             }, [category]);
 
             return (
-                <div class="space-y-6">
-                    <div class="bg-white p-6 rounded-2xl shadow-sm border border-slate-100">
-                        <h2 class="text-xl font-bold mb-6 flex items-center gap-2">
-                            <i data-lucide="arrow-left-right" class="w-6 h-6 text-orange-500"></i>
+                <div className="space-y-6">
+                    <div className="bg-white p-6 rounded-2xl shadow-sm border border-slate-100">
+                        <h2 className="text-xl font-bold mb-6 flex items-center gap-2">
+                            <i data-lucide="arrow-left-right" className="w-6 h-6 text-orange-500"></i>
                             {t.title}
                         </h2>
                         
-                        <div class="flex gap-2 mb-6 p-1 bg-slate-100 rounded-lg">
+                        <div className="flex gap-2 mb-6 p-1 bg-slate-100 rounded-lg">
                             {['length', 'weight', 'temp'].map(c => (
                                 <button 
                                     key={c}
                                     onClick={() => setCategory(c)}
-                                    class={`flex-1 py-2 text-sm font-medium rounded-md capitalize transition-all ${category === c ? 'bg-white text-orange-600 shadow-sm' : 'text-slate-500'}`}
+                                    className={`flex-1 py-2 text-sm font-medium rounded-md capitalize transition-all ${category === c ? 'bg-white text-orange-600 shadow-sm' : 'text-slate-500'}`}
                                 >
                                     {t.types[c]}
                                 </button>
                             ))}
                         </div>
 
-                        <div class="grid md:grid-cols-2 gap-4 items-center">
-                            <div class="space-y-2">
-                                <label class="text-sm text-slate-500">{t.input}</label>
-                                <div class="flex gap-2">
-                                    <input type="number" value={val} onChange={e => setVal(e.target.value)} class="flex-1 p-3 border rounded-lg outline-none focus:ring-2 focus:ring-orange-500" placeholder="0" />
-                                    <select value={from} onChange={e => setFrom(e.target.value)} class="p-3 border rounded-lg outline-none bg-white">
+                        <div className="grid md:grid-cols-2 gap-4 items-center">
+                            <div className="space-y-2">
+                                <label className="text-sm text-slate-500">{t.input}</label>
+                                <div className="flex gap-2">
+                                    <input type="number" value={val} onChange={e => setVal(e.target.value)} className="flex-1 p-3 border rounded-lg outline-none focus:ring-2 focus:ring-orange-500" placeholder="0" />
+                                    <select value={from} onChange={e => setFrom(e.target.value)} className="p-3 border rounded-lg outline-none bg-white">
                                         {units[category].map(u => (
                                             <option key={u} value={u}>{t.labels[u] || u}</option>
                                         ))}
@@ -469,15 +461,15 @@
                                 </div>
                             </div>
                             
-                            <div class="hidden md:flex justify-center text-slate-300">
-                                <i data-lucide="arrow-right" class="w-6 h-6"></i>
+                            <div className="hidden md:flex justify-center text-slate-300">
+                                <i data-lucide="arrow-right" className="w-6 h-6"></i>
                             </div>
 
-                            <div class="space-y-2">
-                                <label class="text-sm text-slate-500">{t.result}</label>
-                                <div class="flex gap-2">
-                                    <input type="text" readOnly value={result} class="flex-1 p-3 bg-slate-50 border rounded-lg outline-none text-orange-600 font-bold" placeholder="0" />
-                                    <select value={to} onChange={e => setTo(e.target.value)} class="p-3 border rounded-lg outline-none bg-white">
+                            <div className="space-y-2">
+                                <label className="text-sm text-slate-500">{t.result}</label>
+                                <div className="flex gap-2">
+                                    <input type="text" readOnly value={result} className="flex-1 p-3 bg-slate-50 border rounded-lg outline-none text-orange-600 font-bold" placeholder="0" />
+                                    <select value={to} onChange={e => setTo(e.target.value)} className="p-3 border rounded-lg outline-none bg-white">
                                         {units[category].map(u => (
                                             <option key={u} value={u}>{t.labels[u] || u}</option>
                                         ))}
@@ -490,7 +482,6 @@
             );
         };
 
-        // 4. 스톱워치
         const Stopwatch = ({ lang }) => {
             const [time, setTime] = useState(0);
             const [isRunning, setIsRunning] = useState(false);
@@ -516,28 +507,28 @@
             };
 
             return (
-                 <div class="space-y-6">
-                    <div class="bg-white p-6 rounded-2xl shadow-sm border border-slate-100">
-                        <h2 class="text-xl font-bold mb-6 flex items-center gap-2">
-                            <i data-lucide="timer" class="w-6 h-6 text-red-500"></i>
+                 <div className="space-y-6">
+                    <div className="bg-white p-6 rounded-2xl shadow-sm border border-slate-100">
+                        <h2 className="text-xl font-bold mb-6 flex items-center gap-2">
+                            <i data-lucide="timer" className="w-6 h-6 text-red-500"></i>
                             {t.title}
                         </h2>
                         
-                        <div class="flex flex-col items-center py-8">
-                            <div class="text-6xl md:text-8xl font-mono font-bold text-slate-800 mb-10 tracking-wider">
+                        <div className="flex flex-col items-center py-8">
+                            <div className="text-6xl md:text-8xl font-mono font-bold text-slate-800 mb-10 tracking-wider">
                                 {formatTime(time)}
                             </div>
                             
-                            <div class="flex gap-4">
+                            <div className="flex gap-4">
                                 <button 
                                     onClick={() => setIsRunning(!isRunning)}
-                                    class={`px-8 py-3 rounded-full font-bold text-lg shadow-lg transform active:scale-95 transition-all w-32 ${isRunning ? 'bg-red-500 hover:bg-red-600 text-white' : 'bg-blue-500 hover:bg-blue-600 text-white'}`}
+                                    className={`px-8 py-3 rounded-full font-bold text-lg shadow-lg transform active:scale-95 transition-all w-32 ${isRunning ? 'bg-red-500 hover:bg-red-600 text-white' : 'bg-blue-500 hover:bg-blue-600 text-white'}`}
                                 >
                                     {isRunning ? t.stop : t.start}
                                 </button>
                                 <button 
                                     onClick={() => { setIsRunning(false); setTime(0); }}
-                                    class="px-8 py-3 rounded-full font-bold text-lg bg-slate-200 hover:bg-slate-300 text-slate-600 shadow-lg transform active:scale-95 transition-all w-32"
+                                    className="px-8 py-3 rounded-full font-bold text-lg bg-slate-200 hover:bg-slate-300 text-slate-600 shadow-lg transform active:scale-95 transition-all w-32"
                                 >
                                     {t.reset}
                                 </button>
@@ -548,38 +539,29 @@
             );
         };
 
-        // 5. 뽀모도로 타이머 (번역 기능 강화됨)
         const PomodoroTimer = ({ lang }) => {
             const [timeLeft, setTimeLeft] = useState(25 * 60);
             const [isActive, setIsActive] = useState(false);
-            const [isWork, setIsWork] = useState(true); // true = work, false = break
+            const [isWork, setIsWork] = useState(true); 
             const t = translations[lang].pomodoro;
 
-            // 브라우저 내장 Web Audio API로 알림음 재생
             const playNotificationSound = () => {
                 try {
                     const AudioContext = window.AudioContext || window.webkitAudioContext;
                     if (!AudioContext) return;
-                    
                     const ctx = new AudioContext();
                     const osc = ctx.createOscillator();
                     const gain = ctx.createGain();
-                    
                     osc.connect(gain);
                     gain.connect(ctx.destination);
-                    
-                    osc.type = 'sine'; // 맑은 톤
-                    osc.frequency.setValueAtTime(523.25, ctx.currentTime); // C5 (도)
-                    osc.frequency.exponentialRampToValueAtTime(1046.5, ctx.currentTime + 0.1); // C6 (높은 도)로 상승
-                    
+                    osc.type = 'sine';
+                    osc.frequency.setValueAtTime(523.25, ctx.currentTime);
+                    osc.frequency.exponentialRampToValueAtTime(1046.5, ctx.currentTime + 0.1);
                     gain.gain.setValueAtTime(0.1, ctx.currentTime);
-                    gain.gain.exponentialRampToValueAtTime(0.01, ctx.currentTime + 0.5); // 0.5초 동안 페이드 아웃
-                    
+                    gain.gain.exponentialRampToValueAtTime(0.01, ctx.currentTime + 0.5);
                     osc.start();
                     osc.stop(ctx.currentTime + 0.5);
-                } catch (e) {
-                    console.log("Audio play failed");
-                }
+                } catch (e) {}
             };
 
             useEffect(() => {
@@ -590,7 +572,7 @@
                     }, 1000);
                 } else if (timeLeft === 0) {
                     setIsActive(false);
-                    playNotificationSound(); // 타이머 종료 시 소리 재생
+                    playNotificationSound();
                 }
                 return () => clearInterval(interval);
             }, [isActive, timeLeft]);
@@ -614,33 +596,33 @@
             };
 
             return (
-                <div class="space-y-6">
-                    <div class="bg-white p-6 rounded-2xl shadow-sm border border-slate-100">
-                        <h2 class="text-xl font-bold mb-6 flex items-center gap-2">
-                            <i data-lucide="clock" class="w-6 h-6 text-orange-500"></i>
+                <div className="space-y-6">
+                    <div className="bg-white p-6 rounded-2xl shadow-sm border border-slate-100">
+                        <h2 className="text-xl font-bold mb-6 flex items-center gap-2">
+                            <i data-lucide="clock" className="w-6 h-6 text-orange-500"></i>
                             {t.title}
                         </h2>
                         
-                        <div class="flex flex-col items-center py-6">
-                            <div class={`text-sm font-bold px-4 py-1 rounded-full mb-4 ${isWork ? 'bg-orange-100 text-orange-600' : 'bg-green-100 text-green-600'}`}>
+                        <div className="flex flex-col items-center py-6">
+                            <div className={`text-sm font-bold px-4 py-1 rounded-full mb-4 ${isWork ? 'bg-orange-100 text-orange-600' : 'bg-green-100 text-green-600'}`}>
                                 {isWork ? t.statusWork : t.statusBreak}
                             </div>
 
-                            <div class="text-7xl md:text-8xl font-mono font-bold text-slate-800 mb-8">
+                            <div className="text-7xl md:text-8xl font-mono font-bold text-slate-800 mb-8">
                                 {formatTime(timeLeft)}
                             </div>
                             
-                            <div class="flex gap-3 mb-6">
-                                <button onClick={toggleTimer} class={`px-8 py-3 rounded-full font-bold text-white shadow-lg transform active:scale-95 transition-all ${isActive ? 'bg-orange-400 hover:bg-orange-500' : 'bg-orange-500 hover:bg-orange-600'}`}>
+                            <div className="flex gap-3 mb-6">
+                                <button onClick={toggleTimer} className={`px-8 py-3 rounded-full font-bold text-white shadow-lg transform active:scale-95 transition-all ${isActive ? 'bg-orange-400 hover:bg-orange-500' : 'bg-orange-500 hover:bg-orange-600'}`}>
                                     {isActive ? t.pause : t.start}
                                 </button>
-                                <button onClick={resetTimer} class="px-6 py-3 rounded-full font-bold bg-slate-100 text-slate-600 hover:bg-slate-200 transition-all">
+                                <button onClick={resetTimer} className="px-6 py-3 rounded-full font-bold bg-slate-100 text-slate-600 hover:bg-slate-200 transition-all">
                                     {t.reset}
                                 </button>
                             </div>
 
-                            <button onClick={toggleMode} class="text-sm text-slate-400 hover:text-slate-600 underline">
-                                {isWork ? t.switchBreak : t.switchWork}
+                            <button onClick={toggleMode} className="text-sm text-slate-400 hover:text-slate-600 underline">
+                                {isWork ? t.switchToBreak : t.switchToWork}
                             </button>
                         </div>
                     </div>
@@ -648,7 +630,6 @@
             );
         };
 
-        // 6. 안전한 비밀번호 생성기
         const PasswordGenerator = ({ lang }) => {
             const [length, setLength] = useState(12);
             const [includeNumbers, setIncludeNumbers] = useState(true);
@@ -687,49 +668,49 @@
             }, []);
 
             return (
-                <div class="space-y-6">
-                    <div class="bg-white p-6 rounded-2xl shadow-sm border border-slate-100">
-                        <h2 class="text-xl font-bold mb-6 flex items-center gap-2">
-                            <i data-lucide="lock" class="w-6 h-6 text-indigo-500"></i>
+                <div className="space-y-6">
+                    <div className="bg-white p-6 rounded-2xl shadow-sm border border-slate-100">
+                        <h2 className="text-xl font-bold mb-6 flex items-center gap-2">
+                            <i data-lucide="lock" className="w-6 h-6 text-indigo-500"></i>
                             {t.title}
                         </h2>
                         
-                        <div class="space-y-6">
-                            <div class="bg-slate-100 p-4 rounded-xl flex items-center justify-between">
-                                <div class="font-mono text-xl text-slate-800 break-all mr-4">
+                        <div className="space-y-6">
+                            <div className="bg-slate-100 p-4 rounded-xl flex items-center justify-between">
+                                <div className="font-mono text-xl text-slate-800 break-all mr-4">
                                     {password}
                                 </div>
-                                <button onClick={copyToClipboard} class="p-2 bg-white rounded-lg shadow-sm hover:bg-slate-50 text-slate-600 transition-colors" title={t.copy}>
-                                    <i data-lucide={copied ? "check" : "copy"} class={`w-5 h-5 ${copied ? "text-green-500" : ""}`}></i>
+                                <button onClick={copyToClipboard} className="p-2 bg-white rounded-lg shadow-sm hover:bg-slate-50 text-slate-600 transition-colors" title={t.copy}>
+                                    <i data-lucide={copied ? "check" : "copy"} className={`w-5 h-5 ${copied ? "text-green-500" : ""}`}></i>
                                 </button>
                             </div>
 
-                            <div class="space-y-4">
+                            <div className="space-y-4">
                                 <div>
-                                    <div class="flex justify-between text-sm text-slate-600 mb-2">
+                                    <div className="flex justify-between text-sm text-slate-600 mb-2">
                                         <span>{t.length}</span>
-                                        <span class="font-bold">{length}</span>
+                                        <span className="font-bold">{length}</span>
                                     </div>
                                     <input 
                                         type="range" min="6" max="32" value={length} 
                                         onChange={(e) => setLength(e.target.value)}
-                                        class="w-full h-2 bg-slate-200 rounded-lg appearance-none cursor-pointer accent-indigo-500"
+                                        className="w-full h-2 bg-slate-200 rounded-lg appearance-none cursor-pointer accent-indigo-500"
                                     />
                                 </div>
 
-                                <div class="flex flex-col gap-2">
-                                    <label class="flex items-center gap-2 cursor-pointer">
-                                        <input type="checkbox" checked={includeNumbers} onChange={(e) => setIncludeNumbers(e.target.checked)} class="w-4 h-4 text-indigo-600 rounded focus:ring-indigo-500" />
-                                        <span class="text-sm text-slate-700">{t.numbers}</span>
+                                <div className="flex flex-col gap-2">
+                                    <label className="flex items-center gap-2 cursor-pointer">
+                                        <input type="checkbox" checked={includeNumbers} onChange={(e) => setIncludeNumbers(e.target.checked)} className="w-4 h-4 text-indigo-600 rounded focus:ring-indigo-500" />
+                                        <span className="text-sm text-slate-700">{t.numbers}</span>
                                     </label>
-                                    <label class="flex items-center gap-2 cursor-pointer">
-                                        <input type="checkbox" checked={includeSymbols} onChange={(e) => setIncludeSymbols(e.target.checked)} class="w-4 h-4 text-indigo-600 rounded focus:ring-indigo-500" />
-                                        <span class="text-sm text-slate-700">{t.symbols}</span>
+                                    <label className="flex items-center gap-2 cursor-pointer">
+                                        <input type="checkbox" checked={includeSymbols} onChange={(e) => setIncludeSymbols(e.target.checked)} className="w-4 h-4 text-indigo-600 rounded focus:ring-indigo-500" />
+                                        <span className="text-sm text-slate-700">{t.symbols}</span>
                                     </label>
                                 </div>
 
-                                <button onClick={generatePassword} class="w-full bg-indigo-500 hover:bg-indigo-600 text-white font-bold py-3 rounded-lg transition-colors flex items-center justify-center gap-2">
-                                    <i data-lucide="refresh-cw" class="w-4 h-4"></i>
+                                <button onClick={generatePassword} className="w-full bg-indigo-500 hover:bg-indigo-600 text-white font-bold py-3 rounded-lg transition-colors flex items-center justify-center gap-2">
+                                    <i data-lucide="refresh-cw" className="w-4 h-4"></i>
                                     {t.generate}
                                 </button>
                             </div>
@@ -739,7 +720,6 @@
             );
         };
 
-        // 7. D-Day 계산기 (날짜 포맷 수정됨)
         const DDayCalculator = ({ lang }) => {
             const [date, setDate] = useState('');
             const [result, setResult] = useState(null);
@@ -768,35 +748,35 @@
             };
 
             return (
-                <div class="space-y-6">
-                    <div class="bg-white p-6 rounded-2xl shadow-sm border border-slate-100">
-                        <h2 class="text-xl font-bold mb-6 flex items-center gap-2">
-                            <i data-lucide="calendar" class="w-6 h-6 text-purple-500"></i>
+                <div className="space-y-6">
+                    <div className="bg-white p-6 rounded-2xl shadow-sm border border-slate-100">
+                        <h2 className="text-xl font-bold mb-6 flex items-center gap-2">
+                            <i data-lucide="calendar" className="w-6 h-6 text-purple-500"></i>
                             {t.title}
                         </h2>
                         
-                        <div class="grid md:grid-cols-2 gap-8 items-center">
-                            <div class="space-y-4">
-                                <label class="block text-sm font-medium text-slate-600 mb-1">{t.label}</label>
+                        <div className="grid md:grid-cols-2 gap-8 items-center">
+                            <div className="space-y-4">
+                                <label className="block text-sm font-medium text-slate-600 mb-1">{t.label}</label>
                                 <input 
                                     type="date" 
-                                    lang={lang} // 언어 설정에 따라 날짜 포맷 변경 (중요!)
+                                    lang={lang} // lang 속성을 동적으로 할당하여 브라우저의 날짜 형식을 변경
                                     value={date}
                                     onChange={(e) => setDate(e.target.value)}
-                                    class="w-full p-3 rounded-lg border border-slate-200 focus:ring-2 focus:ring-purple-500 outline-none text-lg"
+                                    className="w-full p-3 rounded-lg border border-slate-200 focus:ring-2 focus:ring-purple-500 outline-none text-lg"
                                 />
-                                <div class="text-sm text-slate-400">
+                                <div className="text-sm text-slate-400">
                                     {t.guide}
                                 </div>
                             </div>
                             
-                            <div class="bg-purple-50 p-8 rounded-xl flex flex-col items-center justify-center text-center h-48">
-                                <div class="text-sm text-purple-600 font-medium mb-2">{t.resultLabel}</div>
-                                <div class="text-4xl font-bold text-purple-800">
+                            <div className="bg-purple-50 p-8 rounded-xl flex flex-col items-center justify-center text-center h-48">
+                                <div className="text-sm text-purple-600 font-medium mb-2">{t.resultLabel}</div>
+                                <div className="text-4xl font-bold text-purple-800">
                                     {getMessage()}
                                 </div>
                                 {result !== null && result !== 0 && (
-                                    <div class="mt-2 text-purple-400 text-sm">
+                                    <div className="mt-2 text-purple-400 text-sm">
                                         {result > 0 ? `${result}${t.daysLeft}` : `${Math.abs(result)}${t.daysPast}`}
                                     </div>
                                 )}
@@ -807,7 +787,6 @@
             );
         };
 
-        // 8. 로또 번호 생성기
         const LottoGenerator = ({ lang }) => {
             const [numbers, setNumbers] = useState([]);
             const t = translations[lang].lotto;
@@ -830,29 +809,29 @@
             };
 
             return (
-                 <div class="space-y-6">
-                    <div class="bg-white p-6 rounded-2xl shadow-sm border border-slate-100">
-                        <h2 class="text-xl font-bold mb-6 flex items-center gap-2">
-                            <i data-lucide="clover" class="w-6 h-6 text-green-500"></i>
+                 <div className="space-y-6">
+                    <div className="bg-white p-6 rounded-2xl shadow-sm border border-slate-100">
+                        <h2 className="text-xl font-bold mb-6 flex items-center gap-2">
+                            <i data-lucide="clover" className="w-6 h-6 text-green-500"></i>
                             {t.title}
                         </h2>
                         
-                        <div class="flex flex-col items-center justify-center py-8 space-y-8">
-                            <div class="flex flex-wrap justify-center gap-3">
+                        <div className="flex flex-col items-center justify-center py-8 space-y-8">
+                            <div className="flex flex-wrap justify-center gap-3">
                                 {numbers.length > 0 ? numbers.map((num) => (
                                     <div key={num} className={`w-12 h-12 rounded-full flex items-center justify-center text-white font-bold text-xl shadow-md ${getBallColor(num)} animate-bounce-short`}>
                                         {num}
                                     </div>
                                 )) : (
-                                    <div class="text-slate-400 py-2">{t.guide}</div>
+                                    <div className="text-slate-400 py-2">{t.guide}</div>
                                 )}
                             </div>
 
                             <button 
                                 onClick={generateLotto}
-                                class="bg-green-500 hover:bg-green-600 text-white font-bold py-3 px-8 rounded-full shadow-lg transform active:scale-95 transition-all flex items-center gap-2"
+                                className="bg-green-500 hover:bg-green-600 text-white font-bold py-3 px-8 rounded-full shadow-lg transform active:scale-95 transition-all flex items-center gap-2"
                             >
-                                <i data-lucide="refresh-cw" class="w-5 h-5"></i>
+                                <i data-lucide="refresh-cw" className="w-5 h-5"></i>
                                 {t.btn}
                             </button>
                         </div>
@@ -866,9 +845,29 @@
         const App = () => {
             const [currentTool, setCurrentTool] = useState('text'); 
             const [isSidebarOpen, setIsSidebarOpen] = useState(false);
-            const [lang, setLang] = useState('ko'); // ko, en
+            const [lang, setLang] = useState('ko'); 
             
-            // Detect browser language on load
+            // --- URL Routing Logic ---
+            // 해시 변경을 감지하여 상태 업데이트
+            useEffect(() => {
+                const handleHashChange = () => {
+                    const hash = window.location.hash.replace('#/', '');
+                    const validTools = ['text', 'discount', 'unit', 'stopwatch', 'pomodoro', 'password', 'dday', 'lotto'];
+                    if (validTools.includes(hash)) {
+                        setCurrentTool(hash);
+                    } else if (!hash) {
+                        // 기본 경로 처리
+                        window.location.hash = '#/text';
+                    }
+                };
+
+                window.addEventListener('hashchange', handleHashChange);
+                // 초기 로드 시에도 체크
+                handleHashChange();
+
+                return () => window.removeEventListener('hashchange', handleHashChange);
+            }, []);
+
             useEffect(() => {
                 const browserLang = navigator.language || navigator.userLanguage;
                 if (browserLang.toLowerCase().startsWith('ko')) {
@@ -899,107 +898,108 @@
                     case 'discount': return <DiscountCalculator {...props} />;
                     case 'unit': return <UnitConverter {...props} />;
                     case 'stopwatch': return <Stopwatch {...props} />;
-                    case 'pomodoro': return <PomodoroTimer {...props} />; // New
-                    case 'password': return <PasswordGenerator {...props} />; // New
+                    case 'pomodoro': return <PomodoroTimer {...props} />;
+                    case 'password': return <PasswordGenerator {...props} />;
                     case 'dday': return <DDayCalculator {...props} />;
                     case 'lotto': return <LottoGenerator {...props} />;
                     default: return <WordCounter {...props} />;
                 }
             };
 
-            const NavButton = ({ id, label, icon, colorClass, activeClass }) => (
-                <button 
-                    onClick={() => { setCurrentTool(id); setIsSidebarOpen(false); }}
-                    class={`w-full flex items-center gap-3 px-4 py-3 rounded-lg text-sm font-medium transition-colors ${currentTool === id ? activeClass : 'text-slate-600 hover:bg-slate-50'}`}
+            const NavLink = ({ id, label, icon, activeClass }) => (
+                <a 
+                    href={`#/${id}`}
+                    onClick={() => setIsSidebarOpen(false)}
+                    className={`w-full flex items-center gap-3 px-4 py-3 rounded-lg text-sm font-medium transition-colors ${currentTool === id ? activeClass : 'text-slate-600 hover:bg-slate-50'}`}
                 >
-                    <i data-lucide={icon} class={`w-5 h-5 ${currentTool === id ? '' : 'text-slate-400'}`}></i>
+                    <i data-lucide={icon} className={`w-5 h-5 ${currentTool === id ? '' : 'text-slate-400'}`}></i>
                     {label}
-                </button>
+                </a>
             );
 
             return (
-                <div class="min-h-screen flex flex-col md:flex-row">
+                <div className="min-h-screen flex flex-col md:flex-row">
                     {/* Mobile Header */}
-                    <header class="md:hidden bg-white border-b border-slate-200 p-4 flex justify-between items-center sticky top-0 z-50">
-                        <div class="font-bold text-lg flex items-center gap-2">
-                            <div class="w-8 h-8 bg-blue-600 rounded-lg flex items-center justify-center text-white">
-                                <i data-lucide="box" class="w-5 h-5"></i>
+                    <header className="md:hidden bg-white border-b border-slate-200 p-4 flex justify-between items-center sticky top-0 z-50">
+                        <div className="font-bold text-lg flex items-center gap-2">
+                            <div className="w-8 h-8 bg-blue-600 rounded-lg flex items-center justify-center text-white">
+                                <i data-lucide="box" className="w-5 h-5"></i>
                             </div>
                             {t.title}
                         </div>
-                        <div class="flex gap-2">
-                            <button onClick={toggleLang} class="p-2 text-slate-600 hover:bg-slate-100 rounded-lg flex items-center gap-1 font-bold text-sm">
-                                <i data-lucide="globe" class="w-5 h-5"></i>
+                        <div className="flex gap-2">
+                            <button onClick={toggleLang} className="p-2 text-slate-600 hover:bg-slate-100 rounded-lg flex items-center gap-1 font-bold text-sm">
+                                <i data-lucide="globe" className="w-5 h-5"></i>
                                 {lang.toUpperCase()}
                             </button>
-                            <button onClick={() => setIsSidebarOpen(!isSidebarOpen)} class="text-slate-600">
-                                <i data-lucide={isSidebarOpen ? "x" : "menu"} class="w-6 h-6"></i>
+                            <button onClick={() => setIsSidebarOpen(!isSidebarOpen)} className="text-slate-600">
+                                <i data-lucide={isSidebarOpen ? "x" : "menu"} className="w-6 h-6"></i>
                             </button>
                         </div>
                     </header>
 
                     {/* Sidebar Navigation */}
-                    <aside class={`fixed inset-y-0 left-0 z-40 w-64 bg-white border-r border-slate-200 transform transition-transform duration-200 ease-in-out md:translate-x-0 md:static md:block ${isSidebarOpen ? 'translate-x-0' : '-translate-x-full'}`}>
-                        <div class="p-6 hidden md:block">
-                            <div class="flex justify-between items-start">
-                                <div class="font-bold text-xl flex items-center gap-2 text-slate-800">
-                                    <div class="w-8 h-8 bg-blue-600 rounded-lg flex items-center justify-center text-white">
-                                        <i data-lucide="box" class="w-5 h-5"></i>
+                    <aside className={`fixed inset-y-0 left-0 z-40 w-64 bg-white border-r border-slate-200 transform transition-transform duration-200 ease-in-out md:translate-x-0 md:static md:block ${isSidebarOpen ? 'translate-x-0' : '-translate-x-full'}`}>
+                        <div className="p-6 hidden md:block">
+                            <div className="flex justify-between items-start">
+                                <div className="font-bold text-xl flex items-center gap-2 text-slate-800">
+                                    <div className="w-8 h-8 bg-blue-600 rounded-lg flex items-center justify-center text-white">
+                                        <i data-lucide="box" className="w-5 h-5"></i>
                                     </div>
                                     {t.title}
                                 </div>
-                                <button onClick={toggleLang} class="text-slate-400 hover:text-blue-600 font-bold text-xs border px-2 py-1 rounded transition-colors">
+                                <button onClick={toggleLang} className="text-slate-400 hover:text-blue-600 font-bold text-xs border px-2 py-1 rounded transition-colors">
                                     {lang === 'ko' ? 'EN' : 'KO'}
                                 </button>
                             </div>
-                            <p class="text-xs text-slate-500 mt-2">{t.subtitle}</p>
+                            <p className="text-xs text-slate-500 mt-2">{t.subtitle}</p>
                         </div>
                         
-                        <nav class="p-4 space-y-1 h-[calc(100vh-180px)] overflow-y-auto hide-scrollbar">
-                            <div class="px-4 pb-2 text-xs font-semibold text-slate-400 uppercase tracking-wider">{t.categories.text}</div>
-                            <NavButton id="text" label={t.tools.text} icon="type" activeClass="bg-blue-50 text-blue-700" />
+                        <nav className="p-4 space-y-1 h-[calc(100vh-180px)] overflow-y-auto hide-scrollbar">
+                            <div className="px-4 pb-2 text-xs font-semibold text-slate-400 uppercase tracking-wider">{t.categories.text}</div>
+                            <NavLink id="text" label={t.tools.text} icon="type" activeClass="bg-blue-50 text-blue-700" />
                             
-                            <div class="px-4 pb-2 pt-4 text-xs font-semibold text-slate-400 uppercase tracking-wider">{t.categories.calc}</div>
-                            <NavButton id="discount" label={t.tools.discount} icon="percent" activeClass="bg-pink-50 text-pink-700" />
-                            <NavButton id="unit" label={t.tools.unit} icon="arrow-left-right" activeClass="bg-orange-50 text-orange-700" />
-                            <NavButton id="dday" label={t.tools.dday} icon="calendar" activeClass="bg-purple-50 text-purple-700" />
+                            <div className="px-4 pb-2 pt-4 text-xs font-semibold text-slate-400 uppercase tracking-wider">{t.categories.calc}</div>
+                            <NavLink id="discount" label={t.tools.discount} icon="percent" activeClass="bg-pink-50 text-pink-700" />
+                            <NavLink id="unit" label={t.tools.unit} icon="arrow-left-right" activeClass="bg-orange-50 text-orange-700" />
+                            <NavLink id="dday" label={t.tools.dday} icon="calendar" activeClass="bg-purple-50 text-purple-700" />
 
-                            <div class="px-4 pb-2 pt-4 text-xs font-semibold text-slate-400 uppercase tracking-wider">{t.categories.time}</div>
-                            <NavButton id="stopwatch" label={t.tools.stopwatch} icon="timer" activeClass="bg-red-50 text-red-700" />
-                            <NavButton id="pomodoro" label={t.tools.pomodoro} icon="clock" activeClass="bg-orange-50 text-orange-700" />
+                            <div className="px-4 pb-2 pt-4 text-xs font-semibold text-slate-400 uppercase tracking-wider">{t.categories.time}</div>
+                            <NavLink id="stopwatch" label={t.tools.stopwatch} icon="timer" activeClass="bg-red-50 text-red-700" />
+                            <NavLink id="pomodoro" label={t.tools.pomodoro} icon="clock" activeClass="bg-orange-50 text-orange-700" />
 
-                            <div class="px-4 pb-2 pt-4 text-xs font-semibold text-slate-400 uppercase tracking-wider">{t.categories.security}</div>
-                            <NavButton id="password" label={t.tools.password} icon="lock" activeClass="bg-indigo-50 text-indigo-700" />
+                            <div className="px-4 pb-2 pt-4 text-xs font-semibold text-slate-400 uppercase tracking-wider">{t.categories.security}</div>
+                            <NavLink id="password" label={t.tools.password} icon="lock" activeClass="bg-indigo-50 text-indigo-700" />
 
-                            <div class="px-4 pb-2 pt-4 text-xs font-semibold text-slate-400 uppercase tracking-wider">{t.categories.fun}</div>
-                            <NavButton id="lotto" label={t.tools.lotto} icon="clover" activeClass="bg-green-50 text-green-700" />
+                            <div className="px-4 pb-2 pt-4 text-xs font-semibold text-slate-400 uppercase tracking-wider">{t.categories.fun}</div>
+                            <NavLink id="lotto" label={t.tools.lotto} icon="clover" activeClass="bg-green-50 text-green-700" />
                         </nav>
                         
                         {/* Sidebar Ad Placeholder */}
-                        <div class="absolute bottom-6 left-4 right-4 hidden md:block">
-                            <div class="ad-placeholder h-40 rounded-lg border-2 border-dashed border-slate-300 flex flex-col items-center justify-center text-slate-400 text-sm">
-                                <span class="font-semibold mb-1">{t.ad}</span>
-                                <span class="text-xs">160x600</span>
+                        <div className="absolute bottom-6 left-4 right-4 hidden md:block">
+                            <div className="ad-placeholder h-40 rounded-lg border-2 border-dashed border-slate-300 flex flex-col items-center justify-center text-slate-400 text-sm">
+                                <span className="font-semibold mb-1">{t.ad}</span>
+                                <span className="text-xs">160x600</span>
                             </div>
                         </div>
                     </aside>
 
                     {/* Main Content */}
-                    <main class="flex-1 p-4 md:p-8 overflow-y-auto h-screen">
-                        <div class="max-w-4xl mx-auto space-y-6 pb-20 md:pb-0">
+                    <main className="flex-1 p-4 md:p-8 overflow-y-auto h-screen">
+                        <div className="max-w-4xl mx-auto space-y-6 pb-20 md:pb-0">
                             
                             {/* Top Ad Placeholder */}
-                            <div class="ad-placeholder h-24 rounded-lg border-2 border-dashed border-slate-300 flex flex-col items-center justify-center text-slate-400 text-sm w-full">
-                                <span class="font-semibold mb-1">{t.ad}</span>
-                                <span class="text-xs">728x90</span>
+                            <div className="ad-placeholder h-24 rounded-lg border-2 border-dashed border-slate-300 flex flex-col items-center justify-center text-slate-400 text-sm w-full">
+                                <span className="font-semibold mb-1">{t.ad}</span>
+                                <span className="text-xs">728x90</span>
                             </div>
 
                             {/* Tool Content */}
                             {renderTool()}
 
                             {/* Tip Content */}
-                            <div class="mt-12 prose prose-slate max-w-none text-slate-500 text-sm bg-white p-6 rounded-xl border border-slate-100">
-                                <h3 class="text-slate-700 font-bold mb-2">{t.tip.title}</h3>
+                            <div className="mt-12 prose prose-slate max-w-none text-slate-500 text-sm bg-white p-6 rounded-xl border border-slate-100">
+                                <h3 className="text-slate-700 font-bold mb-2">{t.tip.title}</h3>
                                 <p>{t.tip.desc}</p>
                             </div>
 
