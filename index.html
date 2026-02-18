@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>유틸리티 박스 - 생활 필수 도구 모음</title>
+    <title>Utility Box - Smart Tools</title>
     <!-- 파비콘 추가 (박스 이모지) -->
     <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>📦</text></svg>">
     
@@ -20,7 +20,9 @@
 
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;700&display=swap');
-        body { font-family: 'Noto Sans KR', sans-serif; }
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;700&display=swap');
+        
+        body { font-family: 'Inter', 'Noto Sans KR', sans-serif; }
         .ad-placeholder {
             background-image: repeating-linear-gradient(45deg, #f3f4f6 25%, transparent 25%, transparent 75%, #f3f4f6 75%, #f3f4f6), repeating-linear-gradient(45deg, #f3f4f6 25%, #fff 25%, #fff 75%, #f3f4f6 75%, #f3f4f6);
             background-position: 0 0, 10px 10px;
@@ -42,11 +44,162 @@
     <script type="text/babel">
         const { useState, useEffect, useRef } = React;
 
+        // --- Translations ---
+        const translations = {
+            ko: {
+                title: "유틸리티 박스",
+                subtitle: "생활 필수 도구 모음",
+                categories: { text: "텍스트", calc: "계산 & 변환", health: "건강 & 시간", fun: "재미" },
+                tools: {
+                    text: "글자 수 세기",
+                    discount: "할인율 계산기",
+                    unit: "단위 변환기",
+                    bmi: "비만도(BMI)",
+                    stopwatch: "스톱워치",
+                    dday: "D-Day 계산기",
+                    lotto: "로또 번호 생성"
+                },
+                wordCounter: {
+                    title: "글자 수 세기 & 검사기",
+                    placeholder: "이곳에 텍스트를 입력하거나 붙여넣으세요...",
+                    withSpace: "공백 포함",
+                    noSpace: "공백 제외",
+                    words: "단어 수",
+                    lines: "줄 수",
+                    unitChar: "자",
+                    unitWord: "개",
+                    unitLine: "줄"
+                },
+                discount: {
+                    title: "할인율 계산기",
+                    price: "원래 가격",
+                    rate: "할인율 (%)",
+                    saved: "할인 금액",
+                    final: "최종 가격"
+                },
+                unit: {
+                    title: "단위 변환기",
+                    input: "입력",
+                    result: "결과",
+                    types: { length: "길이", weight: "무게", temp: "온도" }
+                },
+                bmi: {
+                    title: "BMI 비만도 계산기",
+                    height: "신장 (cm)",
+                    weight: "체중 (kg)",
+                    calcBtn: "계산하기",
+                    myBmi: "나의 BMI",
+                    inputPrompt: "키와 몸무게를 입력하세요",
+                    status: { under: "저체중", normal: "정상", over: "과체중", obese: "비만" }
+                },
+                stopwatch: {
+                    title: "스톱워치",
+                    start: "시작",
+                    stop: "정지",
+                    reset: "리셋"
+                },
+                dday: {
+                    title: "D-Day 계산기",
+                    label: "기준 날짜 선택",
+                    guide: "* 기념일이나 시험 날짜를 입력하세요.",
+                    resultLabel: "남은 날짜",
+                    isToday: "🎉 D-Day 입니다!",
+                    select: "날짜를 선택해주세요",
+                    daysLeft: "일 남았습니다",
+                    daysPast: "일 지났습니다"
+                },
+                lotto: {
+                    title: "로또 번호 생성기",
+                    btn: "번호 생성하기",
+                    guide: "버튼을 눌러 행운의 번호를 확인하세요!"
+                },
+                ad: "광고 영역",
+                tip: {
+                    title: "💡 활용 꿀팁",
+                    desc: "이 도구들은 서버로 데이터를 전송하지 않으므로 보안 걱정 없이 안전하게 사용할 수 있습니다. 자주 사용하는 기능을 즐겨찾기 해두고, 언제든 빠르게 계산 결과를 확인해보세요."
+                }
+            },
+            en: {
+                title: "Utility Box",
+                subtitle: "Everyday Essential Tools",
+                categories: { text: "Text", calc: "Calc & Convert", health: "Health & Time", fun: "Fun" },
+                tools: {
+                    text: "Word Counter",
+                    discount: "Discount Calc",
+                    unit: "Unit Converter",
+                    bmi: "BMI Calculator",
+                    stopwatch: "Stopwatch",
+                    dday: "D-Day Counter",
+                    lotto: "Lotto Generator"
+                },
+                wordCounter: {
+                    title: "Word Counter",
+                    placeholder: "Type or paste your text here...",
+                    withSpace: "Chars (w/ space)",
+                    noSpace: "Chars (no space)",
+                    words: "Words",
+                    lines: "Lines",
+                    unitChar: "",
+                    unitWord: "",
+                    unitLine: ""
+                },
+                discount: {
+                    title: "Discount Calculator",
+                    price: "Original Price",
+                    rate: "Discount (%)",
+                    saved: "You Save",
+                    final: "Final Price"
+                },
+                unit: {
+                    title: "Unit Converter",
+                    input: "Input",
+                    result: "Result",
+                    types: { length: "Length", weight: "Weight", temp: "Temp" }
+                },
+                bmi: {
+                    title: "BMI Calculator",
+                    height: "Height (cm)",
+                    weight: "Weight (kg)",
+                    calcBtn: "Calculate",
+                    myBmi: "My BMI",
+                    inputPrompt: "Enter height and weight",
+                    status: { under: "Underweight", normal: "Normal", over: "Overweight", obese: "Obese" }
+                },
+                stopwatch: {
+                    title: "Stopwatch",
+                    start: "Start",
+                    stop: "Stop",
+                    reset: "Reset"
+                },
+                dday: {
+                    title: "D-Day Counter",
+                    label: "Select Date",
+                    guide: "* Enter an anniversary or exam date.",
+                    resultLabel: "Days Left",
+                    isToday: "🎉 It's D-Day!",
+                    select: "Please select a date",
+                    daysLeft: "days left",
+                    daysPast: "days past"
+                },
+                lotto: {
+                    title: "Lotto Generator",
+                    btn: "Generate Numbers",
+                    guide: "Click the button to get your lucky numbers!"
+                },
+                ad: "Ad Space",
+                tip: {
+                    title: "💡 Pro Tip",
+                    desc: "These tools run entirely in your browser. No data is sent to any server, ensuring your privacy. Bookmark this page for quick access!"
+                }
+            }
+        };
+
         // --- Components ---
 
         // 1. 글자 수 세기 도구
-        const WordCounter = () => {
+        const WordCounter = ({ lang }) => {
             const [text, setText] = useState('');
+            const t = translations[lang].wordCounter;
             
             const stats = {
                 charWithSpace: text.length,
@@ -60,20 +213,20 @@
                     <div class="bg-white p-6 rounded-2xl shadow-sm border border-slate-100">
                         <h2 class="text-xl font-bold mb-4 flex items-center gap-2">
                             <i data-lucide="type" class="w-6 h-6 text-blue-500"></i>
-                            글자 수 세기 & 검사기
+                            {t.title}
                         </h2>
                         <textarea
                             className="w-full h-64 p-4 rounded-xl border border-slate-200 focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none resize-none text-lg leading-relaxed"
-                            placeholder="이곳에 텍스트를 입력하거나 붙여넣으세요..."
+                            placeholder={t.placeholder}
                             value={text}
                             onChange={(e) => setText(e.target.value)}
                         ></textarea>
                         
                         <div class="grid grid-cols-2 md:grid-cols-4 gap-4 mt-6">
-                            <StatCard label="공백 포함" value={stats.charWithSpace} unit="자" color="blue" />
-                            <StatCard label="공백 제외" value={stats.charNoSpace} unit="자" color="indigo" />
-                            <StatCard label="단어 수" value={stats.words} unit="개" color="emerald" />
-                            <StatCard label="줄 수" value={stats.lines} unit="줄" color="amber" />
+                            <StatCard label={t.withSpace} value={stats.charWithSpace} unit={t.unitChar} color="blue" />
+                            <StatCard label={t.noSpace} value={stats.charNoSpace} unit={t.unitChar} color="indigo" />
+                            <StatCard label={t.words} value={stats.words} unit={t.unitWord} color="emerald" />
+                            <StatCard label={t.lines} value={stats.lines} unit={t.unitLine} color="amber" />
                         </div>
                     </div>
                 </div>
@@ -99,9 +252,10 @@
         };
 
         // 2. 할인율 계산기 도구
-        const DiscountCalculator = () => {
+        const DiscountCalculator = ({ lang }) => {
             const [price, setPrice] = useState('');
             const [discount, setDiscount] = useState('');
+            const t = translations[lang].discount;
             
             const finalPrice = price && discount ? price - (price * (discount / 100)) : 0;
             const savedAmount = price && discount ? price * (discount / 100) : 0;
@@ -111,13 +265,13 @@
                     <div class="bg-white p-6 rounded-2xl shadow-sm border border-slate-100">
                         <h2 class="text-xl font-bold mb-6 flex items-center gap-2">
                             <i data-lucide="percent" class="w-6 h-6 text-pink-500"></i>
-                            할인율 계산기
+                            {t.title}
                         </h2>
                         
                         <div class="grid md:grid-cols-2 gap-8">
                             <div class="space-y-4">
                                 <div>
-                                    <label class="block text-sm font-medium text-slate-600 mb-1">원래 가격 (원)</label>
+                                    <label class="block text-sm font-medium text-slate-600 mb-1">{t.price}</label>
                                     <input 
                                         type="number" 
                                         value={price}
@@ -127,7 +281,7 @@
                                     />
                                 </div>
                                 <div>
-                                    <label class="block text-sm font-medium text-slate-600 mb-1">할인율 (%)</label>
+                                    <label class="block text-sm font-medium text-slate-600 mb-1">{t.rate}</label>
                                     <div class="flex gap-2">
                                         {[10, 20, 30, 50].map(p => (
                                             <button 
@@ -151,13 +305,13 @@
                             
                             <div class="bg-slate-50 p-6 rounded-xl flex flex-col justify-center space-y-4">
                                 <div class="flex justify-between items-center text-slate-500">
-                                    <span>할인 금액</span>
-                                    <span class="font-mono">{savedAmount.toLocaleString()}원</span>
+                                    <span>{t.saved}</span>
+                                    <span class="font-mono">{savedAmount.toLocaleString()}</span>
                                 </div>
                                 <div class="w-full h-px bg-slate-200"></div>
                                 <div class="flex justify-between items-center text-xl font-bold text-slate-800">
-                                    <span>최종 가격</span>
-                                    <span class="text-pink-600 font-mono text-2xl">{finalPrice.toLocaleString()}원</span>
+                                    <span>{t.final}</span>
+                                    <span class="text-pink-600 font-mono text-2xl">{finalPrice.toLocaleString()}</span>
                                 </div>
                             </div>
                         </div>
@@ -166,12 +320,13 @@
             );
         };
 
-        // 3. 단위 변환기 (New)
-        const UnitConverter = () => {
+        // 3. 단위 변환기
+        const UnitConverter = ({ lang }) => {
             const [category, setCategory] = useState('length');
             const [val, setVal] = useState('');
             const [from, setFrom] = useState('cm');
             const [to, setTo] = useState('inch');
+            const t = translations[lang].unit;
 
             const units = {
                 length: ['cm', 'm', 'km', 'inch', 'ft', 'yard'],
@@ -189,7 +344,6 @@
                     if (fromUnit === 'Fahrenheit') return (v - 32) * 5/9;
                 }
 
-                // Simple conversion factors to base (cm for length, g for weight)
                 const toBase = {
                     cm: 1, m: 100, km: 100000, inch: 2.54, ft: 30.48, yard: 91.44,
                     g: 1, kg: 1000, lb: 453.592, oz: 28.3495
@@ -203,7 +357,6 @@
 
             const result = convert(val, from, to, category);
 
-            // Reset units when category changes
             useEffect(() => {
                 if(category === 'length') { setFrom('cm'); setTo('inch'); }
                 if(category === 'weight') { setFrom('kg'); setTo('lb'); }
@@ -216,7 +369,7 @@
                     <div class="bg-white p-6 rounded-2xl shadow-sm border border-slate-100">
                         <h2 class="text-xl font-bold mb-6 flex items-center gap-2">
                             <i data-lucide="arrow-left-right" class="w-6 h-6 text-orange-500"></i>
-                            단위 변환기
+                            {t.title}
                         </h2>
                         
                         <div class="flex gap-2 mb-6 p-1 bg-slate-100 rounded-lg">
@@ -226,14 +379,14 @@
                                     onClick={() => setCategory(c)}
                                     class={`flex-1 py-2 text-sm font-medium rounded-md capitalize transition-all ${category === c ? 'bg-white text-orange-600 shadow-sm' : 'text-slate-500'}`}
                                 >
-                                    {c === 'length' ? '길이' : c === 'weight' ? '무게' : '온도'}
+                                    {t.types[c]}
                                 </button>
                             ))}
                         </div>
 
                         <div class="grid md:grid-cols-2 gap-4 items-center">
                             <div class="space-y-2">
-                                <label class="text-sm text-slate-500">입력</label>
+                                <label class="text-sm text-slate-500">{t.input}</label>
                                 <div class="flex gap-2">
                                     <input type="number" value={val} onChange={e => setVal(e.target.value)} class="flex-1 p-3 border rounded-lg outline-none focus:ring-2 focus:ring-orange-500" placeholder="0" />
                                     <select value={from} onChange={e => setFrom(e.target.value)} class="p-3 border rounded-lg outline-none bg-white">
@@ -247,7 +400,7 @@
                             </div>
 
                             <div class="space-y-2">
-                                <label class="text-sm text-slate-500">결과</label>
+                                <label class="text-sm text-slate-500">{t.result}</label>
                                 <div class="flex gap-2">
                                     <input type="text" readOnly value={result} class="flex-1 p-3 bg-slate-50 border rounded-lg outline-none text-orange-600 font-bold" placeholder="0" />
                                     <select value={to} onChange={e => setTo(e.target.value)} class="p-3 border rounded-lg outline-none bg-white">
@@ -261,11 +414,12 @@
             );
         };
 
-        // 4. BMI 계산기 (New)
-        const BMICalculator = () => {
+        // 4. BMI 계산기
+        const BMICalculator = ({ lang }) => {
             const [height, setHeight] = useState('');
             const [weight, setWeight] = useState('');
             const [bmi, setBmi] = useState(null);
+            const t = translations[lang].bmi;
 
             const calculate = () => {
                 if(height && weight) {
@@ -276,10 +430,10 @@
             };
 
             const getStatus = (b) => {
-                if(b < 18.5) return { text: '저체중', color: 'text-blue-500', bg: 'bg-blue-100' };
-                if(b < 23) return { text: '정상', color: 'text-green-500', bg: 'bg-green-100' };
-                if(b < 25) return { text: '과체중', color: 'text-yellow-500', bg: 'bg-yellow-100' };
-                return { text: '비만', color: 'text-red-500', bg: 'bg-red-100' };
+                if(b < 18.5) return { text: t.status.under, color: 'text-blue-500', bg: 'bg-blue-100' };
+                if(b < 23) return { text: t.status.normal, color: 'text-green-500', bg: 'bg-green-100' };
+                if(b < 25) return { text: t.status.over, color: 'text-yellow-500', bg: 'bg-yellow-100' };
+                return { text: t.status.obese, color: 'text-red-500', bg: 'bg-red-100' };
             };
 
             const status = bmi ? getStatus(bmi) : null;
@@ -289,35 +443,35 @@
                     <div class="bg-white p-6 rounded-2xl shadow-sm border border-slate-100">
                         <h2 class="text-xl font-bold mb-6 flex items-center gap-2">
                             <i data-lucide="activity" class="w-6 h-6 text-cyan-500"></i>
-                            BMI 비만도 계산기
+                            {t.title}
                         </h2>
                         
                         <div class="grid md:grid-cols-2 gap-8 items-center">
                             <div class="space-y-4">
                                 <div>
-                                    <label class="block text-sm font-medium text-slate-600 mb-1">신장 (cm)</label>
+                                    <label class="block text-sm font-medium text-slate-600 mb-1">{t.height}</label>
                                     <input type="number" value={height} onChange={e => setHeight(e.target.value)} class="w-full p-3 rounded-lg border focus:ring-2 focus:ring-cyan-500 outline-none" placeholder="170" />
                                 </div>
                                 <div>
-                                    <label class="block text-sm font-medium text-slate-600 mb-1">체중 (kg)</label>
+                                    <label class="block text-sm font-medium text-slate-600 mb-1">{t.weight}</label>
                                     <input type="number" value={weight} onChange={e => setWeight(e.target.value)} class="w-full p-3 rounded-lg border focus:ring-2 focus:ring-cyan-500 outline-none" placeholder="60" />
                                 </div>
                                 <button onClick={calculate} class="w-full bg-cyan-500 hover:bg-cyan-600 text-white font-bold py-3 rounded-lg transition-colors">
-                                    계산하기
+                                    {t.calcBtn}
                                 </button>
                             </div>
 
                             <div class="flex items-center justify-center">
                                 {bmi ? (
                                     <div class={`text-center p-8 rounded-full h-48 w-48 flex flex-col items-center justify-center border-4 ${status.color.replace('text', 'border')} ${status.bg} bg-opacity-20`}>
-                                        <div class="text-sm text-slate-500 mb-1">나의 BMI</div>
+                                        <div class="text-sm text-slate-500 mb-1">{t.myBmi}</div>
                                         <div class={`text-4xl font-bold ${status.color} mb-1`}>{bmi}</div>
                                         <div class={`text-lg font-medium px-3 py-1 rounded-full ${status.bg} ${status.color}`}>{status.text}</div>
                                     </div>
                                 ) : (
                                     <div class="text-slate-300 text-center">
                                         <i data-lucide="user" class="w-24 h-24 mx-auto mb-2 opacity-20"></i>
-                                        <p>키와 몸무게를 입력하세요</p>
+                                        <p>{t.inputPrompt}</p>
                                     </div>
                                 )}
                             </div>
@@ -327,11 +481,12 @@
             );
         };
 
-        // 5. 스톱워치 (New)
-        const Stopwatch = () => {
+        // 5. 스톱워치
+        const Stopwatch = ({ lang }) => {
             const [time, setTime] = useState(0);
             const [isRunning, setIsRunning] = useState(false);
             const intervalRef = useRef(null);
+            const t = translations[lang].stopwatch;
 
             useEffect(() => {
                 if(isRunning) {
@@ -356,7 +511,7 @@
                     <div class="bg-white p-6 rounded-2xl shadow-sm border border-slate-100">
                         <h2 class="text-xl font-bold mb-6 flex items-center gap-2">
                             <i data-lucide="timer" class="w-6 h-6 text-red-500"></i>
-                            스톱워치
+                            {t.title}
                         </h2>
                         
                         <div class="flex flex-col items-center py-8">
@@ -369,13 +524,13 @@
                                     onClick={() => setIsRunning(!isRunning)}
                                     class={`px-8 py-3 rounded-full font-bold text-lg shadow-lg transform active:scale-95 transition-all w-32 ${isRunning ? 'bg-red-500 hover:bg-red-600 text-white' : 'bg-blue-500 hover:bg-blue-600 text-white'}`}
                                 >
-                                    {isRunning ? '정지' : '시작'}
+                                    {isRunning ? t.stop : t.start}
                                 </button>
                                 <button 
                                     onClick={() => { setIsRunning(false); setTime(0); }}
                                     class="px-8 py-3 rounded-full font-bold text-lg bg-slate-200 hover:bg-slate-300 text-slate-600 shadow-lg transform active:scale-95 transition-all w-32"
                                 >
-                                    리셋
+                                    {t.reset}
                                 </button>
                             </div>
                         </div>
@@ -384,10 +539,11 @@
             );
         };
 
-        // 6. D-Day 계산기 도구
-        const DDayCalculator = () => {
+        // 6. D-Day 계산기
+        const DDayCalculator = ({ lang }) => {
             const [date, setDate] = useState('');
             const [result, setResult] = useState(null);
+            const t = translations[lang].dday;
 
             useEffect(() => {
                 if (date) {
@@ -405,8 +561,8 @@
             }, [date]);
 
             const getMessage = () => {
-                if (result === null) return "날짜를 선택해주세요";
-                if (result === 0) return "🎉 D-Day 입니다!";
+                if (result === null) return t.select;
+                if (result === 0) return t.isToday;
                 if (result > 0) return `D-${result}`;
                 return `D+${Math.abs(result)}`;
             };
@@ -416,12 +572,12 @@
                     <div class="bg-white p-6 rounded-2xl shadow-sm border border-slate-100">
                         <h2 class="text-xl font-bold mb-6 flex items-center gap-2">
                             <i data-lucide="calendar" class="w-6 h-6 text-purple-500"></i>
-                            D-Day 계산기
+                            {t.title}
                         </h2>
                         
                         <div class="grid md:grid-cols-2 gap-8 items-center">
                             <div class="space-y-4">
-                                <label class="block text-sm font-medium text-slate-600 mb-1">기준 날짜 선택</label>
+                                <label class="block text-sm font-medium text-slate-600 mb-1">{t.label}</label>
                                 <input 
                                     type="date" 
                                     value={date}
@@ -429,18 +585,18 @@
                                     class="w-full p-3 rounded-lg border border-slate-200 focus:ring-2 focus:ring-purple-500 outline-none text-lg"
                                 />
                                 <div class="text-sm text-slate-400">
-                                    * 기념일이나 시험 날짜를 입력하세요.
+                                    {t.guide}
                                 </div>
                             </div>
                             
                             <div class="bg-purple-50 p-8 rounded-xl flex flex-col items-center justify-center text-center h-48">
-                                <div class="text-sm text-purple-600 font-medium mb-2">남은 날짜</div>
+                                <div class="text-sm text-purple-600 font-medium mb-2">{t.resultLabel}</div>
                                 <div class="text-4xl font-bold text-purple-800">
                                     {getMessage()}
                                 </div>
                                 {result !== null && result !== 0 && (
                                     <div class="mt-2 text-purple-400 text-sm">
-                                        {result > 0 ? `${result}일 남았습니다` : `${Math.abs(result)}일 지났습니다`}
+                                        {result > 0 ? `${result}${t.daysLeft}` : `${Math.abs(result)}${t.daysPast}`}
                                     </div>
                                 )}
                             </div>
@@ -451,8 +607,9 @@
         };
 
         // 7. 로또 번호 생성기
-        const LottoGenerator = () => {
+        const LottoGenerator = ({ lang }) => {
             const [numbers, setNumbers] = useState([]);
+            const t = translations[lang].lotto;
 
             const generateLotto = () => {
                 const numSet = new Set();
@@ -476,7 +633,7 @@
                     <div class="bg-white p-6 rounded-2xl shadow-sm border border-slate-100">
                         <h2 class="text-xl font-bold mb-6 flex items-center gap-2">
                             <i data-lucide="clover" class="w-6 h-6 text-green-500"></i>
-                            로또 번호 생성기
+                            {t.title}
                         </h2>
                         
                         <div class="flex flex-col items-center justify-center py-8 space-y-8">
@@ -486,7 +643,7 @@
                                         {num}
                                     </div>
                                 )) : (
-                                    <div class="text-slate-400 py-2">버튼을 눌러 행운의 번호를 확인하세요!</div>
+                                    <div class="text-slate-400 py-2">{t.guide}</div>
                                 )}
                             </div>
 
@@ -495,7 +652,7 @@
                                 class="bg-green-500 hover:bg-green-600 text-white font-bold py-3 px-8 rounded-full shadow-lg transform active:scale-95 transition-all flex items-center gap-2"
                             >
                                 <i data-lucide="refresh-cw" class="w-5 h-5"></i>
-                                번호 생성하기
+                                {t.btn}
                             </button>
                         </div>
                     </div>
@@ -508,23 +665,42 @@
         const App = () => {
             const [currentTool, setCurrentTool] = useState('text'); 
             const [isSidebarOpen, setIsSidebarOpen] = useState(false);
+            const [lang, setLang] = useState('ko'); // ko, en
+            
+            // Detect browser language on load
+            useEffect(() => {
+                const browserLang = navigator.language || navigator.userLanguage;
+                if (browserLang.toLowerCase().startsWith('ko')) {
+                    setLang('ko');
+                } else {
+                    setLang('en');
+                }
+            }, []);
 
             useEffect(() => {
                 if (window.lucide) {
                     window.lucide.createIcons();
                 }
-            }, [currentTool, isSidebarOpen]);
+                document.title = translations[lang].title + " - " + translations[lang].subtitle;
+            }, [currentTool, isSidebarOpen, lang]);
+
+            const toggleLang = () => {
+                setLang(prev => prev === 'ko' ? 'en' : 'ko');
+            };
+
+            const t = translations[lang];
 
             const renderTool = () => {
+                const props = { lang };
                 switch(currentTool) {
-                    case 'text': return <WordCounter />;
-                    case 'discount': return <DiscountCalculator />;
-                    case 'unit': return <UnitConverter />;
-                    case 'bmi': return <BMICalculator />;
-                    case 'stopwatch': return <Stopwatch />;
-                    case 'dday': return <DDayCalculator />;
-                    case 'lotto': return <LottoGenerator />;
-                    default: return <WordCounter />;
+                    case 'text': return <WordCounter {...props} />;
+                    case 'discount': return <DiscountCalculator {...props} />;
+                    case 'unit': return <UnitConverter {...props} />;
+                    case 'bmi': return <BMICalculator {...props} />;
+                    case 'stopwatch': return <Stopwatch {...props} />;
+                    case 'dday': return <DDayCalculator {...props} />;
+                    case 'lotto': return <LottoGenerator {...props} />;
+                    default: return <WordCounter {...props} />;
                 }
             };
 
@@ -546,47 +722,58 @@
                             <div class="w-8 h-8 bg-blue-600 rounded-lg flex items-center justify-center text-white">
                                 <i data-lucide="box" class="w-5 h-5"></i>
                             </div>
-                            유틸리티 박스
+                            {t.title}
                         </div>
-                        <button onClick={() => setIsSidebarOpen(!isSidebarOpen)} class="text-slate-600">
-                            <i data-lucide={isSidebarOpen ? "x" : "menu"} class="w-6 h-6"></i>
-                        </button>
+                        <div class="flex gap-2">
+                            <button onClick={toggleLang} class="p-2 text-slate-600 hover:bg-slate-100 rounded-lg flex items-center gap-1 font-bold text-sm">
+                                <i data-lucide="globe" class="w-5 h-5"></i>
+                                {lang.toUpperCase()}
+                            </button>
+                            <button onClick={() => setIsSidebarOpen(!isSidebarOpen)} class="text-slate-600">
+                                <i data-lucide={isSidebarOpen ? "x" : "menu"} class="w-6 h-6"></i>
+                            </button>
+                        </div>
                     </header>
 
                     {/* Sidebar Navigation */}
                     <aside class={`fixed inset-y-0 left-0 z-40 w-64 bg-white border-r border-slate-200 transform transition-transform duration-200 ease-in-out md:translate-x-0 md:static md:block ${isSidebarOpen ? 'translate-x-0' : '-translate-x-full'}`}>
                         <div class="p-6 hidden md:block">
-                            <div class="font-bold text-xl flex items-center gap-2 text-slate-800">
-                                <div class="w-8 h-8 bg-blue-600 rounded-lg flex items-center justify-center text-white">
-                                    <i data-lucide="box" class="w-5 h-5"></i>
+                            <div class="flex justify-between items-start">
+                                <div class="font-bold text-xl flex items-center gap-2 text-slate-800">
+                                    <div class="w-8 h-8 bg-blue-600 rounded-lg flex items-center justify-center text-white">
+                                        <i data-lucide="box" class="w-5 h-5"></i>
+                                    </div>
+                                    {t.title}
                                 </div>
-                                유틸리티 박스
+                                <button onClick={toggleLang} class="text-slate-400 hover:text-blue-600 font-bold text-xs border px-2 py-1 rounded transition-colors">
+                                    {lang === 'ko' ? 'EN' : 'KO'}
+                                </button>
                             </div>
-                            <p class="text-xs text-slate-500 mt-2">일상을 편리하게, 모든 도구 모음</p>
+                            <p class="text-xs text-slate-500 mt-2">{t.subtitle}</p>
                         </div>
                         
                         <nav class="p-4 space-y-1 h-[calc(100vh-180px)] overflow-y-auto hide-scrollbar">
-                            <div class="px-4 pb-2 text-xs font-semibold text-slate-400 uppercase tracking-wider">텍스트</div>
-                            <NavButton id="text" label="글자 수 세기" icon="type" activeClass="bg-blue-50 text-blue-700" />
+                            <div class="px-4 pb-2 text-xs font-semibold text-slate-400 uppercase tracking-wider">{t.categories.text}</div>
+                            <NavButton id="text" label={t.tools.text} icon="type" activeClass="bg-blue-50 text-blue-700" />
                             
-                            <div class="px-4 pb-2 pt-4 text-xs font-semibold text-slate-400 uppercase tracking-wider">계산 & 변환</div>
-                            <NavButton id="discount" label="할인율 계산기" icon="percent" activeClass="bg-pink-50 text-pink-700" />
-                            <NavButton id="unit" label="단위 변환기" icon="arrow-left-right" activeClass="bg-orange-50 text-orange-700" />
-                            <NavButton id="dday" label="D-Day 계산기" icon="calendar" activeClass="bg-purple-50 text-purple-700" />
+                            <div class="px-4 pb-2 pt-4 text-xs font-semibold text-slate-400 uppercase tracking-wider">{t.categories.calc}</div>
+                            <NavButton id="discount" label={t.tools.discount} icon="percent" activeClass="bg-pink-50 text-pink-700" />
+                            <NavButton id="unit" label={t.tools.unit} icon="arrow-left-right" activeClass="bg-orange-50 text-orange-700" />
+                            <NavButton id="dday" label={t.tools.dday} icon="calendar" activeClass="bg-purple-50 text-purple-700" />
 
-                            <div class="px-4 pb-2 pt-4 text-xs font-semibold text-slate-400 uppercase tracking-wider">건강 & 시간</div>
-                            <NavButton id="bmi" label="비만도(BMI) 측정" icon="activity" activeClass="bg-cyan-50 text-cyan-700" />
-                            <NavButton id="stopwatch" label="스톱워치" icon="timer" activeClass="bg-red-50 text-red-700" />
+                            <div class="px-4 pb-2 pt-4 text-xs font-semibold text-slate-400 uppercase tracking-wider">{t.categories.health}</div>
+                            <NavButton id="bmi" label={t.tools.bmi} icon="activity" activeClass="bg-cyan-50 text-cyan-700" />
+                            <NavButton id="stopwatch" label={t.tools.stopwatch} icon="timer" activeClass="bg-red-50 text-red-700" />
 
-                            <div class="px-4 pb-2 pt-4 text-xs font-semibold text-slate-400 uppercase tracking-wider">재미</div>
-                            <NavButton id="lotto" label="로또 번호 생성" icon="clover" activeClass="bg-green-50 text-green-700" />
+                            <div class="px-4 pb-2 pt-4 text-xs font-semibold text-slate-400 uppercase tracking-wider">{t.categories.fun}</div>
+                            <NavButton id="lotto" label={t.tools.lotto} icon="clover" activeClass="bg-green-50 text-green-700" />
                         </nav>
                         
                         {/* Sidebar Ad Placeholder */}
                         <div class="absolute bottom-6 left-4 right-4 hidden md:block">
                             <div class="ad-placeholder h-40 rounded-lg border-2 border-dashed border-slate-300 flex flex-col items-center justify-center text-slate-400 text-sm">
-                                <span class="font-semibold mb-1">광고 영역</span>
-                                <span class="text-xs">160x600 배너</span>
+                                <span class="font-semibold mb-1">{t.ad}</span>
+                                <span class="text-xs">160x600</span>
                             </div>
                         </div>
                     </aside>
@@ -597,20 +784,17 @@
                             
                             {/* Top Ad Placeholder */}
                             <div class="ad-placeholder h-24 rounded-lg border-2 border-dashed border-slate-300 flex flex-col items-center justify-center text-slate-400 text-sm w-full">
-                                <span class="font-semibold mb-1">상단 광고 영역</span>
-                                <span class="text-xs">728x90 리더보드</span>
+                                <span class="font-semibold mb-1">{t.ad}</span>
+                                <span class="text-xs">728x90</span>
                             </div>
 
                             {/* Tool Content */}
                             {renderTool()}
 
-                            {/* SEO Content (Example) */}
+                            {/* Tip Content */}
                             <div class="mt-12 prose prose-slate max-w-none text-slate-500 text-sm bg-white p-6 rounded-xl border border-slate-100">
-                                <h3 class="text-slate-700 font-bold mb-2">💡 활용 꿀팁</h3>
-                                <p>
-                                    이 도구들은 서버로 데이터를 전송하지 않으므로 보안 걱정 없이 안전하게 사용할 수 있습니다. 
-                                    자주 사용하는 기능을 즐겨찾기 해두고, 언제든 빠르게 계산 결과를 확인해보세요.
-                                </p>
+                                <h3 class="text-slate-700 font-bold mb-2">{t.tip.title}</h3>
+                                <p>{t.tip.desc}</p>
                             </div>
 
                         </div>
