@@ -464,25 +464,23 @@
             );
         };
 
-        // 4. BMI 계산기 (수정됨)
+        // 4. BMI 계산기 (안전장치 강화됨)
         const BMICalculator = ({ lang }) => {
             const [height, setHeight] = useState('');
             const [weight, setWeight] = useState('');
             const [bmi, setBmi] = useState(null);
-            const [errorMsg, setErrorMsg] = useState(''); // 에러 메시지 상태 추가
-            const t = translations[lang].bmi;
+            const [errorMsg, setErrorMsg] = useState(''); 
+            const t = translations[lang]?.bmi;
 
             const calculate = () => {
-                setErrorMsg(''); // 초기화
+                setErrorMsg(''); 
                 
-                // 입력값 보호: 숫자로 변환
                 const h = parseFloat(height);
                 const w = parseFloat(weight);
                 
-                // 유효성 검사: 0 이하 또는 빈 값일 경우 에러 처리
                 if (!h || !w || h <= 0 || w <= 0) {
                      setBmi(null);
-                     setErrorMsg(t.error); 
+                     setErrorMsg(t?.error || "Error"); 
                      return;
                 }
 
@@ -493,7 +491,7 @@
                     setBmi(result.toFixed(1));
                 } else {
                     setBmi(null);
-                    setErrorMsg(t.error);
+                    setErrorMsg(t?.error || "Error");
                 }
             };
 
@@ -501,36 +499,39 @@
                 const val = parseFloat(b);
                 if (isNaN(val)) return { text: '-', color: 'text-slate-400', bg: 'bg-slate-100' };
 
-                if(val < 18.5) return { text: t.status.under, color: 'text-blue-500', bg: 'bg-blue-100' };
-                if(val < 23) return { text: t.status.normal, color: 'text-green-500', bg: 'bg-green-100' };
-                if(val < 25) return { text: t.status.over, color: 'text-yellow-500', bg: 'bg-yellow-100' };
-                return { text: t.status.obese, color: 'text-red-500', bg: 'bg-red-100' };
+                // 안전장치: status 데이터가 없으면 기본값 반환
+                const s = t?.status || {};
+                
+                if(val < 18.5) return { text: s.under || 'Underweight', color: 'text-blue-500', bg: 'bg-blue-100' };
+                if(val < 23) return { text: s.normal || 'Normal', color: 'text-green-500', bg: 'bg-green-100' };
+                if(val < 25) return { text: s.over || 'Overweight', color: 'text-yellow-500', bg: 'bg-yellow-100' };
+                return { text: s.obese || 'Obese', color: 'text-red-500', bg: 'bg-red-100' };
             };
 
-            const status = bmi ? getStatus(bmi) : null;
+            // t와 status가 모두 존재할 때만 getStatus 실행
+            const status = (bmi && t?.status) ? getStatus(bmi) : null;
 
             return (
                 <div class="space-y-6">
                     <div class="bg-white p-6 rounded-2xl shadow-sm border border-slate-100">
                         <h2 class="text-xl font-bold mb-6 flex items-center gap-2">
                             <i data-lucide="activity" class="w-6 h-6 text-cyan-500"></i>
-                            {t.title}
+                            {t?.title || "BMI Calculator"}
                         </h2>
                         
                         <div class="grid md:grid-cols-2 gap-8 items-center">
                             <div class="space-y-4">
                                 <div>
-                                    <label class="block text-sm font-medium text-slate-600 mb-1">{t.height}</label>
+                                    <label class="block text-sm font-medium text-slate-600 mb-1">{t?.height || "Height"}</label>
                                     <input type="number" value={height} onChange={e => setHeight(e.target.value)} class="w-full p-3 rounded-lg border focus:ring-2 focus:ring-cyan-500 outline-none" placeholder="170" />
                                 </div>
                                 <div>
-                                    <label class="block text-sm font-medium text-slate-600 mb-1">{t.weight}</label>
+                                    <label class="block text-sm font-medium text-slate-600 mb-1">{t?.weight || "Weight"}</label>
                                     <input type="number" value={weight} onChange={e => setWeight(e.target.value)} class="w-full p-3 rounded-lg border focus:ring-2 focus:ring-cyan-500 outline-none" placeholder="60" />
                                 </div>
                                 <button onClick={calculate} class="w-full bg-cyan-500 hover:bg-cyan-600 text-white font-bold py-3 rounded-lg transition-colors">
-                                    {t.calcBtn}
+                                    {t?.calcBtn || "Calculate"}
                                 </button>
-                                {/* 에러 메시지 표시 영역 */}
                                 {errorMsg && (
                                     <div class="text-red-500 text-sm text-center font-medium animate-pulse">
                                         ⚠️ {errorMsg}
@@ -539,16 +540,17 @@
                             </div>
 
                             <div class="flex items-center justify-center">
+                                {/* 안전장치: status가 유효할 때만 렌더링 */}
                                 {bmi && status ? (
                                     <div class={`text-center p-8 rounded-full h-48 w-48 flex flex-col items-center justify-center border-4 ${status.color.replace('text', 'border')} ${status.bg} bg-opacity-20`}>
-                                        <div class="text-sm text-slate-500 mb-1">{t.myBmi}</div>
+                                        <div class="text-sm text-slate-500 mb-1">{t?.myBmi}</div>
                                         <div class={`text-4xl font-bold ${status.color} mb-1`}>{bmi}</div>
                                         <div class={`text-lg font-medium px-3 py-1 rounded-full ${status.bg} ${status.color}`}>{status.text}</div>
                                     </div>
                                 ) : (
                                     <div class="text-slate-300 text-center">
                                         <i data-lucide="user" class="w-24 h-24 mx-auto mb-2 opacity-20"></i>
-                                        <p>{t.inputPrompt}</p>
+                                        <p>{t?.inputPrompt}</p>
                                     </div>
                                 )}
                             </div>
