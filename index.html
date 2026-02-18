@@ -85,7 +85,10 @@
                     labels: {
                         cm: "cm", m: "m", km: "km", inch: "inch", ft: "ft", yard: "yard",
                         kg: "kg", g: "g", lb: "lb", oz: "oz",
-                        Celsius: "섭씨 (℃)", Fahrenheit: "화씨 (℉)"
+                        Celsius: "섭씨 (℃)", Fahrenheit: "화씨 (℉)",
+                        Kelvin: "켈빈 (K)", Rankine: "랭킨 (°R)",
+                        Delisle: "덜릴 (°De)", Newton: "뉴턴 (°N)",
+                        Reaumur: "열씨 (°Re)", Romer: "로머 (°Rø)"
                     }
                 },
                 bmi: {
@@ -164,7 +167,10 @@
                     labels: {
                         cm: "cm", m: "m", km: "km", inch: "inch", ft: "ft", yard: "yard",
                         kg: "kg", g: "g", lb: "lb", oz: "oz",
-                        Celsius: "Celsius (℃)", Fahrenheit: "Fahrenheit (℉)"
+                        Celsius: "Celsius (℃)", Fahrenheit: "Fahrenheit (℉)",
+                        Kelvin: "Kelvin (K)", Rankine: "Rankine (°R)",
+                        Delisle: "Delisle (°De)", Newton: "Newton (°N)",
+                        Reaumur: "Réaumur (°Re)", Romer: "Rømer (°Rø)"
                     }
                 },
                 bmi: {
@@ -343,7 +349,7 @@
             const units = {
                 length: ['cm', 'm', 'km', 'inch', 'ft', 'yard'],
                 weight: ['kg', 'g', 'lb', 'oz'],
-                temp: ['Celsius', 'Fahrenheit']
+                temp: ['Celsius', 'Fahrenheit', 'Kelvin', 'Rankine', 'Delisle', 'Newton', 'Reaumur', 'Romer']
             };
 
             const convert = (value, fromUnit, toUnit, type) => {
@@ -352,8 +358,36 @@
                 
                 if (type === 'temp') {
                     if (fromUnit === toUnit) return v;
-                    if (fromUnit === 'Celsius') return (v * 9/5) + 32;
-                    if (fromUnit === 'Fahrenheit') return (v - 32) * 5/9;
+
+                    // 1. Convert to Celsius (Base)
+                    let celsius;
+                    switch(fromUnit) {
+                        case 'Celsius': celsius = v; break;
+                        case 'Fahrenheit': celsius = (v - 32) * 5/9; break;
+                        case 'Kelvin': celsius = v - 273.15; break;
+                        case 'Rankine': celsius = (v - 491.67) * 5/9; break;
+                        case 'Delisle': celsius = 100 - (v * 2/3); break;
+                        case 'Newton': celsius = v * 100/33; break;
+                        case 'Reaumur': celsius = v * 5/4; break;
+                        case 'Romer': celsius = (v - 7.5) * 40/21; break;
+                        default: celsius = v;
+                    }
+
+                    // 2. Convert Celsius to Target
+                    let result;
+                    switch(toUnit) {
+                        case 'Celsius': result = celsius; break;
+                        case 'Fahrenheit': result = (celsius * 9/5) + 32; break;
+                        case 'Kelvin': result = celsius + 273.15; break;
+                        case 'Rankine': result = (celsius + 273.15) * 9/5; break;
+                        case 'Delisle': result = (100 - celsius) * 3/2; break;
+                        case 'Newton': result = celsius * 33/100; break;
+                        case 'Reaumur': result = celsius * 4/5; break;
+                        case 'Romer': result = (celsius * 21/40) + 7.5; break;
+                        default: result = celsius;
+                    }
+                    
+                    return Number.isInteger(result) ? result : parseFloat(result.toFixed(4));
                 }
 
                 const toBase = {
