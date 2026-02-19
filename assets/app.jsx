@@ -681,6 +681,47 @@ const { useState, useEffect, useRef, useCallback, useMemo } = React;
             const initialRoute = getInitialRoute();
             const [lang, setLang] = useState(initialRoute.lang);
             const [activeToolId, setActiveToolId] = useState(initialRoute.tool);
+
+// --- SEO: JSON-LD BreadcrumbList (auto per tool page) ---
+useEffect(() => {
+    try {
+        const origin = window.location.origin || "https://uboxtools.com";
+        const toolId = activeToolId;
+        const slug = TOOL_SLUG[toolId] || TOOL_SLUG.text;
+        const toolName = (translations?.[lang]?.tools?.[toolId]) || (lang === 'ko' ? '도구' : 'Tool');
+        const list = [
+            {
+                "@type": "ListItem",
+                "position": 1,
+                "name": (lang === 'ko' ? '도구 모음' : 'Tools'),
+                "item": `${origin}/${lang}/`
+            },
+            {
+                "@type": "ListItem",
+                "position": 2,
+                "name": toolName,
+                "item": `${origin}/${lang}/tools/${slug}/`
+            }
+        ];
+        const jsonLd = {
+            "@context": "https://schema.org",
+            "@type": "BreadcrumbList",
+            "itemListElement": list
+        };
+
+        const scriptId = "ubox-breadcrumb-jsonld";
+        let el = document.getElementById(scriptId);
+        if (!el) {
+            el = document.createElement("script");
+            el.type = "application/ld+json";
+            el.id = scriptId;
+            document.head.appendChild(el);
+        }
+        el.textContent = JSON.stringify(jsonLd);
+    } catch (e) {
+        // no-op: keep UI untouched even if SEO insert fails
+    }
+}, [lang, activeToolId]);
             const [menuOpen, setMenuOpen] = useState(false);
             const [isIconReady, setIsIconReady] = useState(false); // 아이콘 로딩 상태
             const t = translations[lang] || translations.ko;
