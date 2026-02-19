@@ -1,4 +1,5 @@
-const { useState, useEffect, useRef, useCallback, useMemo } = React;
+
+        const { useState, useEffect, useRef, useCallback, useMemo } = React;
 
         // --- Data & Translations ---
         const translations = {
@@ -656,135 +657,165 @@ const { useState, useEffect, useRef, useCallback, useMemo } = React;
 
         // --- Main App & Routing ---
         const App = () => {
-            
-            // --- Path-based router (no activeId) + /ko /en support ---
-            const getLangFromPath = () => {
-              const p = window.location.pathname || "/";
-              return p.startsWith("/en/") ? "en" : "ko";
-            };
+  const page = window.__PAGE__ || {};
+  const initialLang = page.lang || localStorage.getItem("ub_lang") || "ko";
+  const initialToolId = page.tool || "text";
 
-            const ROUTE_MAP = {
-              text: "/tools/word-counter/",
-              case: "/tools/case-converter/",
-              percent: "/tools/percent-calculator/",
-              discount: "/tools/discount-calculator/",
-              unit: "/tools/unit-converter/",
-              image: "/tools/image-compressor/",
-              color: "/tools/color-converter/",
-              stopwatch: "/tools/stopwatch/",
-              pomodoro: "/tools/pomodoro-timer/",
-              dday: "/tools/dday-calculator/",
-              security: "/tools/password-generator/"
-            };
+  const [lang, setLang] = useState(initialLang);
+  const [activeToolId, setActiveToolId] = useState(initialToolId);
 
-            const getActiveIdFromPath = () => {
-              const p0 = (window.location.pathname || "/").replace(/\/+$/, "/"); // ensure trailing slash
-              const p = p0.replace(/^\/(ko|en)\//, "/"); // strip lang prefix
-              // pick the longest matching route
-              const entries = Object.entries(ROUTE_MAP).sort((a,b) => b[1].length - a[1].length);
-              for (const [id, route] of entries) {
-                if (p.startsWith(route)) return id;
-              }
-              return "text";
-            };
+  const t = translations[lang];
 
-            const [activeId, setActiveId] = useState(getActiveIdFromPath());
-            const [lang, setLang] = useState(getLangFromPath());
+  const TOOL_SLUG = {
+    text: "word-counter",
+    case: "case-converter",
+    percent: "percent-calculator",
+    discount: "discount-calculator",
+    image: "image-resizer",
+    color: "color-code-converter",
+    unit: "unit-converter",
+    stopwatch: "stopwatch",
+    pomodoro: "pomodoro-timer",
+    dday: "dday-calculator",
+    password: "password-generator",
+    lotto: "lotto-generator",
+    bmi: "bmi-calculator",
+  };
 
-            const goToLang = (next) => {
-                const nextPath = ROUTE_MAP[activeId] || '/';
-                window.location.href = `/${next}${nextPath}`;
-            };
-            const toggleLang = () => goToLang(lang === 'ko' ? 'en' : 'ko');
-const [menuOpen, setMenuOpen] = useState(false);
-            const [isIconReady, setIsIconReady] = useState(false); // 아이콘 로딩 상태
-            const t = translations[lang];
-            const currentYear = 2026;
+  const toolPath = (lng, id) => `/${lng}/tools/${TOOL_SLUG[id]}/`;
+  const homePath = (lng) => `/${lng}/`;
 
-            useEffect(() => {
-                const handleRoute = () => {
-                    setLang(getLangFromPath());
-                    setActiveId(getActiveIdFromPath());
-                    window.scrollTo(0, 0);
-                    setMenuOpen(false);
-                };
+  const tools = [
+    { id: "text", name: t.menu.wordCounter, icon: IconText, category: t.categories.text, component: WordCounter, href: toolPath(lang, "text") },
+    { id: "case", name: t.menu.caseConverter, icon: IconCase, category: t.categories.text, component: CaseConverter, href: toolPath(lang, "case") },
 
-                // Sync on first load
-                handleRoute();
-                window.addEventListener('popstate', handleRoute);
+    { id: "percent", name: t.menu.percentCalc, icon: IconPercent, category: t.categories.calc, component: PercentCalc, href: toolPath(lang, "percent") },
+    { id: "discount", name: t.menu.discountCalc, icon: IconDiscount, category: t.categories.calc, component: DiscountCalc, href: toolPath(lang, "discount") },
+    { id: "unit", name: t.menu.unitConverter, icon: IconUnit, category: t.categories.calc, component: UnitConverter, href: toolPath(lang, "unit") },
 
-                // Ensure Lucide icons render even if script loads late
-                const checkLucide = setInterval(() => {
-                    if (window.lucide) {
-                        window.lucide.createIcons();
-                        clearInterval(checkLucide);
+    { id: "image", name: t.menu.imageResizer, icon: IconImage, category: t.categories.media, component: ImageResizer, href: toolPath(lang, "image") },
+    { id: "color", name: t.menu.colorConverter, icon: IconColor, category: t.categories.media, component: ColorConverter, href: toolPath(lang, "color") },
+
+    { id: "stopwatch", name: t.menu.stopwatch, icon: IconStopwatch, category: t.categories.time, component: Stopwatch, href: toolPath(lang, "stopwatch") },
+    { id: "pomodoro", name: t.menu.pomodoro, icon: IconPomodoro, category: t.categories.time, component: Pomodoro, href: toolPath(lang, "pomodoro") },
+    { id: "dday", name: t.menu.dday, icon: IconCalendar, category: t.categories.time, component: DdayCalc, href: toolPath(lang, "dday") },
+
+    { id: "password", name: t.menu.password, icon: IconLock, category: t.categories.security, component: PasswordGen, href: toolPath(lang, "password") },
+    { id: "lotto", name: t.menu.lotto, icon: IconDice, category: t.categories.security, component: LottoGen, href: toolPath(lang, "lotto") },
+    { id: "bmi", name: t.menu.bmi, icon: IconHealth, category: t.categories.security, component: BmiCalc, href: toolPath(lang, "bmi") },
+  ];
+
+  const activeTool = tools.find((tool) => tool.id === activeToolId) || tools[0];
+  const ActiveComponent = activeTool.component;
+
+  // keep language choice
+  useEffect(() => {
+    localStorage.setItem("ub_lang", lang);
+  }, [lang]);
+
+  // Keep document title in sync (each HTML already has SEO meta, but this helps language toggle before navigation)
+  useEffect(() => {
+    const seo = t.seo[activeToolId] || t.seo.text;
+    if (seo?.title) document.title = seo.title;
+  }, [lang, activeToolId]);
+
+  const groupedTools = tools.reduce((acc, tool) => {
+    if (!acc[tool.category]) acc[tool.category] = [];
+    acc[tool.category].push(tool);
+    return acc;
+  }, {});
+
+  const handleLangChange = (e) => {
+    const nextLang = e.target.value;
+    setLang(nextLang);
+
+    // navigate to the same tool in the other language (path-only, no hash)
+    const target = (nextLang === lang) ? null : toolPath(nextLang, activeToolId);
+    if (target) window.location.href = target;
+  };
+
+  return (
+    <div className="min-h-screen bg-gray-50">
+      <div className="flex">
+        <aside className="w-64 bg-white border-r border-gray-200 min-h-screen">
+          <div className="p-6">
+            <div className="flex items-center gap-3">
+              <div className="w-10 h-10 bg-blue-600 rounded-xl flex items-center justify-center">
+                <svg className="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 10V3L4 14h7v7l9-11h-7z" />
+                </svg>
+              </div>
+              <div>
+                <h1 className="text-xl font-bold text-gray-900">UtilityBox</h1>
+                <p className="text-sm text-gray-500">{t.tagline}</p>
+              </div>
+            </div>
+          </div>
+
+          <nav className="px-4 space-y-1">
+            {Object.entries(groupedTools).map(([category, categoryTools]) => (
+              <div key={category} className="mb-6">
+                <h3 className="px-3 text-xs font-semibold text-gray-500 uppercase tracking-wider mb-3">{category}</h3>
+                {categoryTools.map((tool) => (
+                  <a
+                    key={tool.id}
+                    href={tool.href}
+                    onClick={() => setActiveToolId(tool.id)}
+                    className={
+                      "flex items-center gap-3 px-3 py-2 rounded-lg text-sm font-medium transition-colors " +
+                      (tool.id === activeToolId ? "bg-gray-900 text-white shadow-sm" : "text-gray-700 hover:bg-gray-100")
                     }
-                }, 100);
+                  >
+                    <tool.icon className={"w-5 h-5 " + (tool.id === activeToolId ? "text-white" : "text-gray-500")} />
+                    {tool.name}
+                  </a>
+                ))}
+              </div>
+            ))}
+          </nav>
 
-                return () => {
-                    window.removeEventListener('popstate', handleRoute);
-                    clearInterval(checkLucide);
-                };
-            }, []);;
+          <div className="p-4 border-t border-gray-200 mt-auto">
+            <div className="flex items-center gap-2">
+              <svg className="w-5 h-5 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 5h12M9 3v2m1.048 9.5A18.022 18.022 0 016.412 9m6.088 9h7M11 21l5-10 5 10M12.751 5C11.783 10.77 8.07 15.61 3 18.129" />
+              </svg>
+              <select
+                value={lang}
+                onChange={handleLangChange}
+                className="flex-1 px-3 py-2 border border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+              >
+                <option value="ko">한국어</option>
+                <option value="en">English</option>
+              </select>
+            </div>
+            <p className="text-xs text-gray-500 mt-2">{t.footerNote}</p>
+          </div>
+        </aside>
 
-            useEffect(() => {
-                document.documentElement.lang = lang;
-            }, [lang]);
+        <main className="flex-1">
+          <div className="max-w-4xl mx-auto px-6 py-8">
+            {/* SEO H1 (visible title stays inside each tool component like before) */}
+            <h1 className="sr-only">{(t.seo[activeToolId] || t.seo.text).title}</h1>
 
-            const tools = [
-                { id: 'text', icon: 'type', cat: 'text', comp: WordCounter },
-                { id: 'case', icon: 'case-sensitive', cat: 'text', comp: CaseConverter },
-                { id: 'bmi', icon: 'activity', cat: 'health', comp: BMICalculator },
-                { id: 'percent', icon: 'calculator', cat: 'math', comp: PercentCalculator },
-                { id: 'discount', icon: 'percent', cat: 'math', comp: DiscountCalculator },
-                { id: 'unit', icon: 'arrow-left-right', cat: 'math', comp: UnitConverter },
-                { id: 'image', icon: 'image-plus', cat: 'media', comp: ImageTools },
-                { id: 'color', icon: 'palette', cat: 'media', comp: ColorConverter },
-                { id: 'stopwatch', icon: 'timer', cat: 'time', comp: Stopwatch },
-                { id: 'pomodoro', icon: 'clock', cat: 'time', comp: Pomodoro },
-                { id: 'dday', icon: 'calendar', cat: 'time', comp: DDay },
-                { id: 'password', icon: 'lock', cat: 'security', comp: PasswordGenerator },
-                { id: 'lotto', icon: 'clover', cat: 'fun', comp: Lotto },
-            ];
+            <div className="mb-8 text-center">
+              <div className="bg-gray-100 border-2 border-dashed border-gray-300 rounded-xl p-8 text-gray-500">
+                Google AdSense<br />
+                Display Ad (Responsive)
+              </div>
+            </div>
 
-            const activeTool = tools.find(x => x.id === activeId) || tools[0];
-            const ActiveComponent = activeTool.comp;
-            const seo = t.seo[activeTool.id] || { title: activeTool.id, desc: "Tool description", tags: [] };
+            <ActiveComponent lang={lang} t={t} />
+          </div>
 
-            return (
-                <div className="flex h-screen bg-slate-50">
-                    <aside className={`fixed inset-y-0 left-0 z-40 w-72 bg-white border-r border-slate-200 transform transition-transform duration-300 md:static md:translate-x-0 ${menuOpen ? 'translate-x-0' : '-translate-x-full'} flex flex-col`}>
-                        <div className="p-6"><h1 className="text-2xl font-bold flex items-center gap-3 text-slate-800"><div className="w-10 h-10 bg-blue-600 rounded-xl flex items-center justify-center text-white shadow-lg shadow-blue-200"><Icon name="box" size={24} /></div>UtilityBox</h1><p className="text-xs text-slate-400 mt-2 ml-1">스마트 툴 모음</p></div>
-                        <nav className="flex-1 px-4 py-2 space-y-8 overflow-y-auto custom-scrollbar">
-                            {['text', 'math', 'media', 'time', 'security', 'fun', 'health'].map(cat => (
-                                <div key={cat}>
-                                    <h3 className="text-xs font-bold text-slate-400 uppercase tracking-wider mb-2 px-3">{t.categories[cat]}</h3>
-                                    <div className="space-y-1">
-                                        {tools.filter(x => x.cat === cat).map(item => (
-                                            <a key={item.id} href={`#${item.id}`} className={`flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-medium transition-all ${activeId === item.id ? 'bg-slate-800 text-white shadow-md' : 'text-slate-600 hover:bg-slate-100'}`}><Icon name={item.icon} size={18} className={activeId === item.id ? 'text-blue-300' : 'text-slate-400'} />{t.tools[item.id]}</a>
-                                        ))}
-                                    </div>
-                                </div>
-                            ))}
-                        </nav>
-                        <div className="p-4 border-t border-slate-100"><button onClick={toggleLang} className="w-full flex items-center justify-center gap-2 py-2.5 rounded-xl border border-slate-200 text-sm font-bold text-slate-500 hover:bg-slate-50 hover:text-blue-600 transition-colors"><Icon name="globe" size={16} />{lang === 'ko' ? 'Language: 한국어' : 'Language: English'}</button></div>
-                    </aside>
-                    {menuOpen && <div className="fixed inset-0 bg-black/20 z-30 md:hidden backdrop-blur-sm" onClick={() => setMenuOpen(false)}></div>}
-                    <main className="flex-1 flex flex-col h-full relative overflow-hidden">
-                        <header className="md:hidden bg-white/80 backdrop-blur-md border-b border-slate-200 p-4 flex justify-between items-center sticky top-0 z-20"><span className="font-bold text-lg flex items-center gap-2"><Icon name="box" size={20} className="text-blue-600"/> {t.title}</span><div className="flex gap-2"><button onClick={toggleLang} className="p-2 bg-slate-100 rounded-lg text-slate-600"><Icon name="globe" size={20} /></button><button onClick={() => setMenuOpen(true)} className="p-2 bg-slate-100 rounded-lg text-slate-600"><Icon name="menu" size={20} /></button></div></header>
-                        <div className="flex-1 overflow-y-auto p-4 md:p-8">
-                            <div className="max-w-2xl mx-auto pb-20">
-                                <div className="mb-6 bg-slate-100 border-2 border-dashed border-slate-200 rounded-lg h-20 flex flex-col items-center justify-center text-slate-400 text-xs"><span className="font-bold">Google AdSense</span><span>Display Ad (Responsive)</span></div>
-                                <div className="mb-6 animate-fade-in"><div className="flex items-center gap-2 mb-2"><span className="text-xs font-bold text-blue-600 bg-blue-50 px-2 py-1 rounded-md uppercase tracking-wider">{t.categories[activeTool.cat]}</span></div><h2 className="text-3xl font-bold text-slate-900">{t.tools[activeTool.id]}</h2></div>
-                                <Card className="min-h-[300px] mb-8"><ActiveComponent t={t} /></Card>
-                                <div className="bg-white border-l-4 border-blue-500 p-6 rounded-r-xl shadow-sm prose prose-slate max-w-none prose-sm"><h3 className="text-lg font-bold text-slate-800 mb-2 flex items-center gap-2"><Icon name="lightbulb" size={18} className="text-blue-500" />활용 꿀팁</h3><h4 className="font-bold text-slate-700 m-0">{seo.title}</h4><p className="text-slate-600 mt-1">{seo.desc}</p><div className="flex flex-wrap gap-2 mt-3 not-prose">{seo.tags && seo.tags.map(tag => (<span key={tag} className="text-xs bg-slate-100 text-slate-500 px-2 py-1 rounded-full">{tag}</span>))}</div></div>
-                                <footer className="mt-12 text-center text-xs text-slate-400">&copy; {currentYear} Utility Box. All tools run locally in your browser.</footer>
-                            </div>
-                        </div>
-                    </main>
-                </div>
-            );
-        };
+          <footer className="border-t border-gray-200 py-6 text-center text-sm text-gray-500">
+            © 2026 Utility Box. All tools run locally in your browser.
+          </footer>
+        </main>
+      </div>
+    </div>
+  );
+};
 
         const root = ReactDOM.createRoot(document.getElementById('root'));
         root.render(<App />);
+    
