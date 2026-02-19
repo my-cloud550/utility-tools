@@ -664,7 +664,15 @@
   const [lang, setLang] = useState(initialLang);
   const [activeToolId, setActiveToolId] = useState(initialToolId);
 
-  const t = translations[lang];
+  const tBase = translations[lang] || translations.en || translations.ko;
+    // Defensive i18n fallbacks (avoid blank pages)
+    const t = tBase;
+    const tKo = translations.ko || tBase;
+    t.wordCounter = t.wordCounter || tKo.wordCounter;
+    t.caseConverter = t.caseConverter || t.case || tKo.caseConverter || tKo.case;
+    t.percentCalculator = t.percentCalculator || t.percent || tKo.percentCalculator || tKo.percent;
+    t.discountCalculator = t.discountCalculator || t.discount || tKo.discountCalculator || tKo.discount;
+
 
   const TOOL_SLUG = {
     text: "word-counter",
