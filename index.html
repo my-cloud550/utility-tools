@@ -4,10 +4,80 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
   <title>UtilityBox</title>
-  <meta name="robots" content="index,follow" />
+  <meta name="description" content="UtilityBox language selection. Choose 한국어 or English." />
   <link rel="canonical" href="https://uboxtools.com/" />
-  <script>location.replace("/ko/");</script>
-  <noscript><meta http-equiv="refresh" content="0; url=/ko/" /></noscript>
+
+  <!-- hreflang -->
+  <link rel="alternate" hreflang="ko" href="https://uboxtools.com/ko/" />
+  <link rel="alternate" hreflang="en" href="https://uboxtools.com/en/" />
+  <link rel="alternate" hreflang="x-default" href="https://uboxtools.com/" />
+
+  <link rel="icon" href="/favicon.ico" />
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: {
+            sans: ['Pretendard','Inter','Noto Sans KR','system-ui','-apple-system','Segoe UI','Roboto','sans-serif'],
+          }
+        }
+      }
+    };
+  </script>
 </head>
-<body></body>
+<body class="bg-slate-50 text-slate-900">
+  <main class="min-h-screen flex items-center justify-center px-5">
+    <div class="w-full max-w-lg">
+      <div class="bg-white border border-slate-100 shadow-sm rounded-3xl p-7 md:p-9">
+        <div class="flex items-center gap-4">
+          <!-- Blue box with cube icon -->
+          <div class="h-12 w-12 rounded-2xl bg-blue-600 flex items-center justify-center shadow-sm">
+            <svg width="26" height="26" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+              <path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16Z" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+              <path d="M3.3 7l8.7 5 8.7-5" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+              <path d="M12 22V12" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+          </div>
+          <div>
+            <div class="text-2xl font-extrabold leading-none">UtilityBox</div>
+            <div class="text-sm text-slate-500 mt-1 leading-snug">
+              <div>Online utility toolkit</div>
+              <div>온라인 유틸리티 툴킷</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="mt-7">
+          <div class="text-sm text-slate-600 leading-snug">
+            <div>Select language</div>
+            <div>언어를 선택하세요</div>
+          </div>
+
+          <div class="mt-4 grid grid-cols-1 gap-3">
+            <a href="/ko/" class="w-full px-4 py-4 rounded-2xl bg-slate-900 text-white font-bold text-center hover:bg-slate-800 transition">
+              한국어로 시작하기
+            </a>
+            <a href="/en/" class="w-full px-4 py-4 rounded-2xl bg-white border border-slate-200 text-slate-900 font-bold text-center hover:bg-slate-50 transition">
+              Continue in English
+            </a>
+          </div>
+
+          <!-- Tips (KO + EN) -->
+          <div class="mt-5 rounded-2xl border border-slate-100 bg-slate-50 px-4 py-3 text-xs text-slate-600 leading-relaxed">
+            <div><span class="font-bold text-slate-700">Tip:</span> 북마크는 <span class="font-semibold">/ko/</span> 또는 <span class="font-semibold">/en/</span>로 해두면 더 빠릅니다.</div>
+            <div class="mt-1"><span class="font-bold text-slate-700">Tip:</span> Bookmark <span class="font-semibold">/ko/</span> or <span class="font-semibold">/en/</span> for faster access.</div>
+          </div>
+
+          <div class="mt-4 text-xs text-slate-500 leading-relaxed">
+            <div>This page helps search engines and users choose the right language.</div>
+            <div>이 페이지는 검색엔진과 사용자가 올바른 언어를 선택하는 데 도움이 됩니다.</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="mt-6 text-center text-xs text-slate-400">© 2026 UtilityBox</div>
+    </div>
+  </main>
+</body>
 </html>
