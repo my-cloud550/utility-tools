@@ -726,12 +726,16 @@ const { useState, useEffect, useRef, useCallback, useMemo } = React;
                     <aside className={`fixed inset-y-0 left-0 z-40 w-72 bg-white border-r border-slate-200 transform transition-transform duration-300 md:static md:translate-x-0 ${menuOpen ? 'translate-x-0' : '-translate-x-full'} flex flex-col`}>
                         <div className="p-6"><h1 className="text-2xl font-bold flex items-center gap-3 text-slate-800"><div className="w-10 h-10 bg-blue-600 rounded-xl flex items-center justify-center text-white shadow-lg shadow-blue-200"><Icon name="box" size={24} /></div>UtilityBox</h1><p className="text-xs text-slate-400 mt-2 ml-1">스마트 툴 모음</p></div>
                         <nav className="flex-1 px-4 py-2 space-y-8 overflow-y-auto custom-scrollbar">
-                            <div className="px-2">
-                                <a href={`/${lang}/`} className="flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-bold text-slate-700 hover:bg-slate-100 transition-all">
-                                    <Icon name="home" size={18} className="text-slate-400" />
-                                    {lang === 'ko' ? '홈' : 'Home'}
-                                </a>
+                            <div>
+                                <h3 className="text-xs font-bold text-slate-400 uppercase tracking-wider mb-2 px-3">{lang === 'ko' ? '홈' : 'Home'}</h3>
+                                <div className="space-y-1">
+                                    <a href={`/${lang}/`} className="flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-medium transition-all hover:bg-slate-100 text-slate-700">
+                                        <Icon name="layout-grid" size={18} className="text-slate-400" />
+                                        {lang === 'ko' ? '도구 모음' : 'Tool Directory'}
+                                    </a>
+                                </div>
                             </div>
+
                             {['text', 'math', 'media', 'time', 'security', 'fun', 'health'].map(cat => (
                                 <div key={cat}>
                                     <h3 className="text-xs font-bold text-slate-400 uppercase tracking-wider mb-2 px-3">{t.categories[cat]}</h3>
