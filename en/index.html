@@ -6,10 +6,20 @@
   <meta name="viewport" content="width=device-width,initial-scale=1" />
 
   <title>UtilityBox | Online Utility Toolkit</title>
-  <meta name="description" content="A fast collection of browser-based utilities: word counter, case converter, percent/discount calculators, image tools, and more. Each tool has its own unique URL." />
+  <meta name="description" content="A fast collection of browser-based utilities: word counter, case converter, percent/discount calculators, and more. Each tool has its own unique URL." />
   <link rel="canonical" href="https://uboxtools.com/en/" />
 
-  <link rel="icon" href="/assets/favicon.png" />
+  <meta property="og:type" content="website" />
+  <meta property="og:title" content="UtilityBox | Online Utility Toolkit" />
+  <meta property="og:description" content="A fast collection of browser-based utilities: word counter, case converter, percent/discount calculators, and more. Each tool has its own unique URL." />
+  <meta property="og:url" content="https://uboxtools.com/en/" />
+
+  <meta name="twitter:card" content="summary" />
+  <meta name="twitter:title" content="UtilityBox | Online Utility Toolkit" />
+  <meta name="twitter:description" content="A fast collection of browser-based utilities: word counter, case converter, percent/discount calculators, and more. Each tool has its own unique URL." />
+
+  <link rel="icon" href="/favicon.ico" />
+
   <script src="https://cdn.tailwindcss.com"></script>
   <script>
     tailwind.config = {
@@ -48,20 +58,23 @@
           <a href="/en/" class="flex items-center gap-3 px-3 py-2 rounded-xl bg-blue-50 text-blue-700 font-semibold">
             <i data-lucide="home" class="h-4 w-4"></i> Home
           </a>
-          <div class="mt-5 text-xs font-bold text-slate-400 px-3">Tools</div>
 
+          <div class="mt-5 text-xs font-bold text-slate-400 px-3">Tools</div>
           <a href="/en/tools/word-counter/" class="flex items-center gap-3 px-3 py-2 rounded-xl hover:bg-slate-50 text-slate-700">
-            <i data-lucide="type" class="h-4 w-4"></i> Word Counter
-          </a>
-          <a href="/en/tools/case-converter/" class="flex items-center gap-3 px-3 py-2 rounded-xl hover:bg-slate-50 text-slate-700">
-            <i data-lucide="case-sensitive" class="h-4 w-4"></i> Case Converter
-          </a>
-          <a href="/en/tools/universal-percent/" class="flex items-center gap-3 px-3 py-2 rounded-xl hover:bg-slate-50 text-slate-700">
-            <i data-lucide="percent" class="h-4 w-4"></i> Universal Percent
-          </a>
-          <a href="/en/tools/discount-calculator/" class="flex items-center gap-3 px-3 py-2 rounded-xl hover:bg-slate-50 text-slate-700">
-            <i data-lucide="tag" class="h-4 w-4"></i> Discount Calculator
-          </a>
+              <i data-lucide="type" class="h-4 w-4"></i> Word Counter
+            </a>
+<a href="/en/tools/universal-percent/" class="flex items-center gap-3 px-3 py-2 rounded-xl hover:bg-slate-50 text-slate-700">
+              <i data-lucide="calculator" class="h-4 w-4"></i> Percent Calculator
+            </a>
+<a href="/en/tools/discount-calculator/" class="flex items-center gap-3 px-3 py-2 rounded-xl hover:bg-slate-50 text-slate-700">
+              <i data-lucide="percent" class="h-4 w-4"></i> Discount Calculator
+            </a>
+<a href="/en/tools/image-tools/" class="flex items-center gap-3 px-3 py-2 rounded-xl hover:bg-slate-50 text-slate-700">
+              <i data-lucide="image-plus" class="h-4 w-4"></i> Image Tools
+            </a>
+<a href="/en/tools/color-converter/" class="flex items-center gap-3 px-3 py-2 rounded-xl hover:bg-slate-50 text-slate-700">
+              <i data-lucide="palette" class="h-4 w-4"></i> Color Converter
+            </a>
         </nav>
 
         <div class="mt-10 rounded-2xl border border-slate-100 bg-white p-4">
@@ -112,7 +125,7 @@
         <section class="mt-7 md:mt-10">
           <div id="toolsGrid" class="grid sm:grid-cols-2 lg:grid-cols-3 gap-5">
             <a class="tool-card group rounded-3xl border border-slate-100 bg-white p-6 shadow-sm hover:shadow-md transition"
-           href="/en/tools/word-counter/" data-title="word counter">
+           href="/en/tools/word-counter/" data-title="word counter word-counter">
           <div class="flex items-start gap-4">
             <div class="icon-wrap h-12 w-12 rounded-2xl bg-slate-50 flex items-center justify-center border border-slate-100">
               <i data-lucide="type" class="h-6 w-6 text-slate-700"></i>
@@ -127,7 +140,7 @@
           </div>
         </a>
 <a class="tool-card group rounded-3xl border border-slate-100 bg-white p-6 shadow-sm hover:shadow-md transition"
-           href="/en/tools/case-converter/" data-title="case converter">
+           href="/en/tools/case-converter/" data-title="case converter case-converter">
           <div class="flex items-start gap-4">
             <div class="icon-wrap h-12 w-12 rounded-2xl bg-slate-50 flex items-center justify-center border border-slate-100">
               <i data-lucide="case-sensitive" class="h-6 w-6 text-slate-700"></i>
@@ -142,164 +155,164 @@
           </div>
         </a>
 <a class="tool-card group rounded-3xl border border-slate-100 bg-white p-6 shadow-sm hover:shadow-md transition"
-           href="/en/tools/universal-percent/" data-title="universal percent">
-          <div class="flex items-start gap-4">
-            <div class="icon-wrap h-12 w-12 rounded-2xl bg-slate-50 flex items-center justify-center border border-slate-100">
-              <i data-lucide="percent" class="h-6 w-6 text-slate-700"></i>
-            </div>
-            <div class="flex-1">
-              <div class="text-lg font-extrabold text-slate-900">Universal Percent</div>
-              <div class="mt-1 text-sm text-slate-600 leading-relaxed">Percent change, ratio, and % math in one place.</div>
-              <div class="mt-4 inline-flex items-center gap-1 text-sm font-semibold text-blue-700">
-                Open <span class="transition group-hover:translate-x-0.5">→</span>
-              </div>
-            </div>
-          </div>
-        </a>
-<a class="tool-card group rounded-3xl border border-slate-100 bg-white p-6 shadow-sm hover:shadow-md transition"
-           href="/en/tools/discount-calculator/" data-title="discount calculator">
-          <div class="flex items-start gap-4">
-            <div class="icon-wrap h-12 w-12 rounded-2xl bg-slate-50 flex items-center justify-center border border-slate-100">
-              <i data-lucide="tag" class="h-6 w-6 text-slate-700"></i>
-            </div>
-            <div class="flex-1">
-              <div class="text-lg font-extrabold text-slate-900">Discount Calculator</div>
-              <div class="mt-1 text-sm text-slate-600 leading-relaxed">Calculate original price, sale price, discount.</div>
-              <div class="mt-4 inline-flex items-center gap-1 text-sm font-semibold text-blue-700">
-                Open <span class="transition group-hover:translate-x-0.5">→</span>
-              </div>
-            </div>
-          </div>
-        </a>
-<a class="tool-card group rounded-3xl border border-slate-100 bg-white p-6 shadow-sm hover:shadow-md transition"
-           href="/en/tools/image-tools/" data-title="image tools">
-          <div class="flex items-start gap-4">
-            <div class="icon-wrap h-12 w-12 rounded-2xl bg-slate-50 flex items-center justify-center border border-slate-100">
-              <i data-lucide="image" class="h-6 w-6 text-slate-700"></i>
-            </div>
-            <div class="flex-1">
-              <div class="text-lg font-extrabold text-slate-900">Image Tools</div>
-              <div class="mt-1 text-sm text-slate-600 leading-relaxed">Convert/compress (WebP) to speed up sites.</div>
-              <div class="mt-4 inline-flex items-center gap-1 text-sm font-semibold text-blue-700">
-                Open <span class="transition group-hover:translate-x-0.5">→</span>
-              </div>
-            </div>
-          </div>
-        </a>
-<a class="tool-card group rounded-3xl border border-slate-100 bg-white p-6 shadow-sm hover:shadow-md transition"
-           href="/en/tools/color-converter/" data-title="color converter">
-          <div class="flex items-start gap-4">
-            <div class="icon-wrap h-12 w-12 rounded-2xl bg-slate-50 flex items-center justify-center border border-slate-100">
-              <i data-lucide="palette" class="h-6 w-6 text-slate-700"></i>
-            </div>
-            <div class="flex-1">
-              <div class="text-lg font-extrabold text-slate-900">Color Converter</div>
-              <div class="mt-1 text-sm text-slate-600 leading-relaxed">HEX/RGB/HSL conversion with preview.</div>
-              <div class="mt-4 inline-flex items-center gap-1 text-sm font-semibold text-blue-700">
-                Open <span class="transition group-hover:translate-x-0.5">→</span>
-              </div>
-            </div>
-          </div>
-        </a>
-<a class="tool-card group rounded-3xl border border-slate-100 bg-white p-6 shadow-sm hover:shadow-md transition"
-           href="/en/tools/unit-converter/" data-title="unit converter">
-          <div class="flex items-start gap-4">
-            <div class="icon-wrap h-12 w-12 rounded-2xl bg-slate-50 flex items-center justify-center border border-slate-100">
-              <i data-lucide="arrow-left-right" class="h-6 w-6 text-slate-700"></i>
-            </div>
-            <div class="flex-1">
-              <div class="text-lg font-extrabold text-slate-900">Unit Converter</div>
-              <div class="mt-1 text-sm text-slate-600 leading-relaxed">Convert length, weight, temperature, and more.</div>
-              <div class="mt-4 inline-flex items-center gap-1 text-sm font-semibold text-blue-700">
-                Open <span class="transition group-hover:translate-x-0.5">→</span>
-              </div>
-            </div>
-          </div>
-        </a>
-<a class="tool-card group rounded-3xl border border-slate-100 bg-white p-6 shadow-sm hover:shadow-md transition"
-           href="/en/tools/stopwatch/" data-title="stopwatch">
-          <div class="flex items-start gap-4">
-            <div class="icon-wrap h-12 w-12 rounded-2xl bg-slate-50 flex items-center justify-center border border-slate-100">
-              <i data-lucide="timer" class="h-6 w-6 text-slate-700"></i>
-            </div>
-            <div class="flex-1">
-              <div class="text-lg font-extrabold text-slate-900">Stopwatch</div>
-              <div class="mt-1 text-sm text-slate-600 leading-relaxed">Measure time for study, workouts, cooking.</div>
-              <div class="mt-4 inline-flex items-center gap-1 text-sm font-semibold text-blue-700">
-                Open <span class="transition group-hover:translate-x-0.5">→</span>
-              </div>
-            </div>
-          </div>
-        </a>
-<a class="tool-card group rounded-3xl border border-slate-100 bg-white p-6 shadow-sm hover:shadow-md transition"
-           href="/en/tools/pomodoro-timer/" data-title="pomodoro timer">
-          <div class="flex items-start gap-4">
-            <div class="icon-wrap h-12 w-12 rounded-2xl bg-slate-50 flex items-center justify-center border border-slate-100">
-              <i data-lucide="clock" class="h-6 w-6 text-slate-700"></i>
-            </div>
-            <div class="flex-1">
-              <div class="text-lg font-extrabold text-slate-900">Pomodoro Timer</div>
-              <div class="mt-1 text-sm text-slate-600 leading-relaxed">Focus/break routine made simple.</div>
-              <div class="mt-4 inline-flex items-center gap-1 text-sm font-semibold text-blue-700">
-                Open <span class="transition group-hover:translate-x-0.5">→</span>
-              </div>
-            </div>
-          </div>
-        </a>
-<a class="tool-card group rounded-3xl border border-slate-100 bg-white p-6 shadow-sm hover:shadow-md transition"
-           href="/en/tools/dday-calculator/" data-title="d-day calculator">
-          <div class="flex items-start gap-4">
-            <div class="icon-wrap h-12 w-12 rounded-2xl bg-slate-50 flex items-center justify-center border border-slate-100">
-              <i data-lucide="calendar" class="h-6 w-6 text-slate-700"></i>
-            </div>
-            <div class="flex-1">
-              <div class="text-lg font-extrabold text-slate-900">D-Day Calculator</div>
-              <div class="mt-1 text-sm text-slate-600 leading-relaxed">Days until events, exams, anniversaries.</div>
-              <div class="mt-4 inline-flex items-center gap-1 text-sm font-semibold text-blue-700">
-                Open <span class="transition group-hover:translate-x-0.5">→</span>
-              </div>
-            </div>
-          </div>
-        </a>
-<a class="tool-card group rounded-3xl border border-slate-100 bg-white p-6 shadow-sm hover:shadow-md transition"
-           href="/en/tools/password-generator/" data-title="password generator">
-          <div class="flex items-start gap-4">
-            <div class="icon-wrap h-12 w-12 rounded-2xl bg-slate-50 flex items-center justify-center border border-slate-100">
-              <i data-lucide="key-round" class="h-6 w-6 text-slate-700"></i>
-            </div>
-            <div class="flex-1">
-              <div class="text-lg font-extrabold text-slate-900">Password Generator</div>
-              <div class="mt-1 text-sm text-slate-600 leading-relaxed">Generate strong passwords in one click.</div>
-              <div class="mt-4 inline-flex items-center gap-1 text-sm font-semibold text-blue-700">
-                Open <span class="transition group-hover:translate-x-0.5">→</span>
-              </div>
-            </div>
-          </div>
-        </a>
-<a class="tool-card group rounded-3xl border border-slate-100 bg-white p-6 shadow-sm hover:shadow-md transition"
-           href="/en/tools/lotto-picker/" data-title="lotto picker">
-          <div class="flex items-start gap-4">
-            <div class="icon-wrap h-12 w-12 rounded-2xl bg-slate-50 flex items-center justify-center border border-slate-100">
-              <i data-lucide="dices" class="h-6 w-6 text-slate-700"></i>
-            </div>
-            <div class="flex-1">
-              <div class="text-lg font-extrabold text-slate-900">Lotto Picker</div>
-              <div class="mt-1 text-sm text-slate-600 leading-relaxed">Random number picker.</div>
-              <div class="mt-4 inline-flex items-center gap-1 text-sm font-semibold text-blue-700">
-                Open <span class="transition group-hover:translate-x-0.5">→</span>
-              </div>
-            </div>
-          </div>
-        </a>
-<a class="tool-card group rounded-3xl border border-slate-100 bg-white p-6 shadow-sm hover:shadow-md transition"
-           href="/en/tools/bmi-calculator/" data-title="bmi calculator">
+           href="/en/tools/bmi-calculator/" data-title="bmi calculator bmi-calculator">
           <div class="flex items-start gap-4">
             <div class="icon-wrap h-12 w-12 rounded-2xl bg-slate-50 flex items-center justify-center border border-slate-100">
               <i data-lucide="activity" class="h-6 w-6 text-slate-700"></i>
             </div>
             <div class="flex-1">
               <div class="text-lg font-extrabold text-slate-900">BMI Calculator</div>
-              <div class="mt-1 text-sm text-slate-600 leading-relaxed">Quick BMI from height and weight.</div>
+              <div class="mt-1 text-sm text-slate-600 leading-relaxed">Quick BMI from height & weight.</div>
+              <div class="mt-4 inline-flex items-center gap-1 text-sm font-semibold text-blue-700">
+                Open <span class="transition group-hover:translate-x-0.5">→</span>
+              </div>
+            </div>
+          </div>
+        </a>
+<a class="tool-card group rounded-3xl border border-slate-100 bg-white p-6 shadow-sm hover:shadow-md transition"
+           href="/en/tools/universal-percent/" data-title="percent calculator universal-percent">
+          <div class="flex items-start gap-4">
+            <div class="icon-wrap h-12 w-12 rounded-2xl bg-slate-50 flex items-center justify-center border border-slate-100">
+              <i data-lucide="calculator" class="h-6 w-6 text-slate-700"></i>
+            </div>
+            <div class="flex-1">
+              <div class="text-lg font-extrabold text-slate-900">Percent Calculator</div>
+              <div class="mt-1 text-sm text-slate-600 leading-relaxed">Ratios, changes, returns.</div>
+              <div class="mt-4 inline-flex items-center gap-1 text-sm font-semibold text-blue-700">
+                Open <span class="transition group-hover:translate-x-0.5">→</span>
+              </div>
+            </div>
+          </div>
+        </a>
+<a class="tool-card group rounded-3xl border border-slate-100 bg-white p-6 shadow-sm hover:shadow-md transition"
+           href="/en/tools/discount-calculator/" data-title="discount calculator discount-calculator">
+          <div class="flex items-start gap-4">
+            <div class="icon-wrap h-12 w-12 rounded-2xl bg-slate-50 flex items-center justify-center border border-slate-100">
+              <i data-lucide="percent" class="h-6 w-6 text-slate-700"></i>
+            </div>
+            <div class="flex-1">
+              <div class="text-lg font-extrabold text-slate-900">Discount Calculator</div>
+              <div class="mt-1 text-sm text-slate-600 leading-relaxed">Original/sale/discount in one go.</div>
+              <div class="mt-4 inline-flex items-center gap-1 text-sm font-semibold text-blue-700">
+                Open <span class="transition group-hover:translate-x-0.5">→</span>
+              </div>
+            </div>
+          </div>
+        </a>
+<a class="tool-card group rounded-3xl border border-slate-100 bg-white p-6 shadow-sm hover:shadow-md transition"
+           href="/en/tools/unit-converter/" data-title="unit converter unit-converter">
+          <div class="flex items-start gap-4">
+            <div class="icon-wrap h-12 w-12 rounded-2xl bg-slate-50 flex items-center justify-center border border-slate-100">
+              <i data-lucide="arrow-left-right" class="h-6 w-6 text-slate-700"></i>
+            </div>
+            <div class="flex-1">
+              <div class="text-lg font-extrabold text-slate-900">Unit Converter</div>
+              <div class="mt-1 text-sm text-slate-600 leading-relaxed">Length/weight/temp conversions.</div>
+              <div class="mt-4 inline-flex items-center gap-1 text-sm font-semibold text-blue-700">
+                Open <span class="transition group-hover:translate-x-0.5">→</span>
+              </div>
+            </div>
+          </div>
+        </a>
+<a class="tool-card group rounded-3xl border border-slate-100 bg-white p-6 shadow-sm hover:shadow-md transition"
+           href="/en/tools/image-tools/" data-title="image tools image-tools">
+          <div class="flex items-start gap-4">
+            <div class="icon-wrap h-12 w-12 rounded-2xl bg-slate-50 flex items-center justify-center border border-slate-100">
+              <i data-lucide="image-plus" class="h-6 w-6 text-slate-700"></i>
+            </div>
+            <div class="flex-1">
+              <div class="text-lg font-extrabold text-slate-900">Image Tools</div>
+              <div class="mt-1 text-sm text-slate-600 leading-relaxed">Convert to WebP to save size.</div>
+              <div class="mt-4 inline-flex items-center gap-1 text-sm font-semibold text-blue-700">
+                Open <span class="transition group-hover:translate-x-0.5">→</span>
+              </div>
+            </div>
+          </div>
+        </a>
+<a class="tool-card group rounded-3xl border border-slate-100 bg-white p-6 shadow-sm hover:shadow-md transition"
+           href="/en/tools/color-converter/" data-title="color converter color-converter">
+          <div class="flex items-start gap-4">
+            <div class="icon-wrap h-12 w-12 rounded-2xl bg-slate-50 flex items-center justify-center border border-slate-100">
+              <i data-lucide="palette" class="h-6 w-6 text-slate-700"></i>
+            </div>
+            <div class="flex-1">
+              <div class="text-lg font-extrabold text-slate-900">Color Converter</div>
+              <div class="mt-1 text-sm text-slate-600 leading-relaxed">HEX/RGB/HSL/CMYK convert.</div>
+              <div class="mt-4 inline-flex items-center gap-1 text-sm font-semibold text-blue-700">
+                Open <span class="transition group-hover:translate-x-0.5">→</span>
+              </div>
+            </div>
+          </div>
+        </a>
+<a class="tool-card group rounded-3xl border border-slate-100 bg-white p-6 shadow-sm hover:shadow-md transition"
+           href="/en/tools/stopwatch/" data-title="stopwatch stopwatch">
+          <div class="flex items-start gap-4">
+            <div class="icon-wrap h-12 w-12 rounded-2xl bg-slate-50 flex items-center justify-center border border-slate-100">
+              <i data-lucide="timer" class="h-6 w-6 text-slate-700"></i>
+            </div>
+            <div class="flex-1">
+              <div class="text-lg font-extrabold text-slate-900">Stopwatch</div>
+              <div class="mt-1 text-sm text-slate-600 leading-relaxed">Track time precisely.</div>
+              <div class="mt-4 inline-flex items-center gap-1 text-sm font-semibold text-blue-700">
+                Open <span class="transition group-hover:translate-x-0.5">→</span>
+              </div>
+            </div>
+          </div>
+        </a>
+<a class="tool-card group rounded-3xl border border-slate-100 bg-white p-6 shadow-sm hover:shadow-md transition"
+           href="/en/tools/pomodoro-timer/" data-title="pomodoro timer pomodoro-timer">
+          <div class="flex items-start gap-4">
+            <div class="icon-wrap h-12 w-12 rounded-2xl bg-slate-50 flex items-center justify-center border border-slate-100">
+              <i data-lucide="clock" class="h-6 w-6 text-slate-700"></i>
+            </div>
+            <div class="flex-1">
+              <div class="text-lg font-extrabold text-slate-900">Pomodoro Timer</div>
+              <div class="mt-1 text-sm text-slate-600 leading-relaxed">Focus/break cycles.</div>
+              <div class="mt-4 inline-flex items-center gap-1 text-sm font-semibold text-blue-700">
+                Open <span class="transition group-hover:translate-x-0.5">→</span>
+              </div>
+            </div>
+          </div>
+        </a>
+<a class="tool-card group rounded-3xl border border-slate-100 bg-white p-6 shadow-sm hover:shadow-md transition"
+           href="/en/tools/dday-calculator/" data-title="d-day counter dday-calculator">
+          <div class="flex items-start gap-4">
+            <div class="icon-wrap h-12 w-12 rounded-2xl bg-slate-50 flex items-center justify-center border border-slate-100">
+              <i data-lucide="calendar" class="h-6 w-6 text-slate-700"></i>
+            </div>
+            <div class="flex-1">
+              <div class="text-lg font-extrabold text-slate-900">D-Day Counter</div>
+              <div class="mt-1 text-sm text-slate-600 leading-relaxed">Days left or passed.</div>
+              <div class="mt-4 inline-flex items-center gap-1 text-sm font-semibold text-blue-700">
+                Open <span class="transition group-hover:translate-x-0.5">→</span>
+              </div>
+            </div>
+          </div>
+        </a>
+<a class="tool-card group rounded-3xl border border-slate-100 bg-white p-6 shadow-sm hover:shadow-md transition"
+           href="/en/tools/password-generator/" data-title="password generator password-generator">
+          <div class="flex items-start gap-4">
+            <div class="icon-wrap h-12 w-12 rounded-2xl bg-slate-50 flex items-center justify-center border border-slate-100">
+              <i data-lucide="lock" class="h-6 w-6 text-slate-700"></i>
+            </div>
+            <div class="flex-1">
+              <div class="text-lg font-extrabold text-slate-900">Password Generator</div>
+              <div class="mt-1 text-sm text-slate-600 leading-relaxed">Generate strong passwords.</div>
+              <div class="mt-4 inline-flex items-center gap-1 text-sm font-semibold text-blue-700">
+                Open <span class="transition group-hover:translate-x-0.5">→</span>
+              </div>
+            </div>
+          </div>
+        </a>
+<a class="tool-card group rounded-3xl border border-slate-100 bg-white p-6 shadow-sm hover:shadow-md transition"
+           href="/en/tools/lotto-picker/" data-title="lotto picker lotto-picker">
+          <div class="flex items-start gap-4">
+            <div class="icon-wrap h-12 w-12 rounded-2xl bg-slate-50 flex items-center justify-center border border-slate-100">
+              <i data-lucide="clover" class="h-6 w-6 text-slate-700"></i>
+            </div>
+            <div class="flex-1">
+              <div class="text-lg font-extrabold text-slate-900">Lotto Picker</div>
+              <div class="mt-1 text-sm text-slate-600 leading-relaxed">Random lucky numbers.</div>
               <div class="mt-4 inline-flex items-center gap-1 text-sm font-semibold text-blue-700">
                 Open <span class="transition group-hover:translate-x-0.5">→</span>
               </div>
@@ -321,7 +334,9 @@
 
   <script src="https://unpkg.com/lucide@latest"></script>
   <script>
-    if (window.lucide && window.lucide.createIcons) { window.lucide.createIcons(); }
+    if (window.lucide && window.lucide.createIcons) {
+      window.lucide.createIcons();
+    }
 
     const input = document.getElementById("toolSearch");
     const cards = Array.from(document.querySelectorAll(".tool-card"));

@@ -6,10 +6,20 @@
   <meta name="viewport" content="width=device-width,initial-scale=1" />
 
   <title>UtilityBox | 온라인 만능 도구 모음</title>
-  <meta name="description" content="글자 수 세기, 대소문자 변환, 퍼센트/할인 계산, 이미지 도구 등 브라우저에서 바로 쓰는 유틸리티 도구 모음. 각 도구는 고유 링크로 제공됩니다." />
+  <meta name="description" content="글자 수 세기, 대소문자 변환, 퍼센트/할인 계산 등 브라우저에서 바로 쓰는 유틸리티 도구 모음. 각 도구는 고유 링크로 제공됩니다." />
   <link rel="canonical" href="https://uboxtools.com/ko/" />
 
-  <link rel="icon" href="/assets/favicon.png" />
+  <meta property="og:type" content="website" />
+  <meta property="og:title" content="UtilityBox | 온라인 만능 도구 모음" />
+  <meta property="og:description" content="글자 수 세기, 대소문자 변환, 퍼센트/할인 계산 등 브라우저에서 바로 쓰는 유틸리티 도구 모음. 각 도구는 고유 링크로 제공됩니다." />
+  <meta property="og:url" content="https://uboxtools.com/ko/" />
+
+  <meta name="twitter:card" content="summary" />
+  <meta name="twitter:title" content="UtilityBox | 온라인 만능 도구 모음" />
+  <meta name="twitter:description" content="글자 수 세기, 대소문자 변환, 퍼센트/할인 계산 등 브라우저에서 바로 쓰는 유틸리티 도구 모음. 각 도구는 고유 링크로 제공됩니다." />
+
+  <link rel="icon" href="/favicon.ico" />
+
   <script src="https://cdn.tailwindcss.com"></script>
   <script>
     tailwind.config = {
@@ -48,20 +58,23 @@
           <a href="/ko/" class="flex items-center gap-3 px-3 py-2 rounded-xl bg-blue-50 text-blue-700 font-semibold">
             <i data-lucide="home" class="h-4 w-4"></i> 홈
           </a>
-          <div class="mt-5 text-xs font-bold text-slate-400 px-3">도구</div>
 
+          <div class="mt-5 text-xs font-bold text-slate-400 px-3">도구</div>
           <a href="/ko/tools/word-counter/" class="flex items-center gap-3 px-3 py-2 rounded-xl hover:bg-slate-50 text-slate-700">
-            <i data-lucide="type" class="h-4 w-4"></i> 글자 수 세기
-          </a>
-          <a href="/ko/tools/case-converter/" class="flex items-center gap-3 px-3 py-2 rounded-xl hover:bg-slate-50 text-slate-700">
-            <i data-lucide="case-sensitive" class="h-4 w-4"></i> 대소문자 변환
-          </a>
-          <a href="/ko/tools/universal-percent/" class="flex items-center gap-3 px-3 py-2 rounded-xl hover:bg-slate-50 text-slate-700">
-            <i data-lucide="percent" class="h-4 w-4"></i> 만능 퍼센트 계산
-          </a>
-          <a href="/ko/tools/discount-calculator/" class="flex items-center gap-3 px-3 py-2 rounded-xl hover:bg-slate-50 text-slate-700">
-            <i data-lucide="tag" class="h-4 w-4"></i> 할인율 계산
-          </a>
+              <i data-lucide="type" class="h-4 w-4"></i> 글자 수 세기
+            </a>
+<a href="/ko/tools/universal-percent/" class="flex items-center gap-3 px-3 py-2 rounded-xl hover:bg-slate-50 text-slate-700">
+              <i data-lucide="calculator" class="h-4 w-4"></i> 만능 퍼센트 계산
+            </a>
+<a href="/ko/tools/discount-calculator/" class="flex items-center gap-3 px-3 py-2 rounded-xl hover:bg-slate-50 text-slate-700">
+              <i data-lucide="percent" class="h-4 w-4"></i> 할인율 계산
+            </a>
+<a href="/ko/tools/image-tools/" class="flex items-center gap-3 px-3 py-2 rounded-xl hover:bg-slate-50 text-slate-700">
+              <i data-lucide="image-plus" class="h-4 w-4"></i> 이미지 용량 줄이기
+            </a>
+<a href="/ko/tools/color-converter/" class="flex items-center gap-3 px-3 py-2 rounded-xl hover:bg-slate-50 text-slate-700">
+              <i data-lucide="palette" class="h-4 w-4"></i> 색상 코드 변환기
+            </a>
         </nav>
 
         <div class="mt-10 rounded-2xl border border-slate-100 bg-white p-4">
@@ -112,14 +125,14 @@
         <section class="mt-7 md:mt-10">
           <div id="toolsGrid" class="grid sm:grid-cols-2 lg:grid-cols-3 gap-5">
             <a class="tool-card group rounded-3xl border border-slate-100 bg-white p-6 shadow-sm hover:shadow-md transition"
-           href="/ko/tools/word-counter/" data-title="글자 수 세기">
+           href="/ko/tools/word-counter/" data-title="글자 수 세기 word-counter">
           <div class="flex items-start gap-4">
             <div class="icon-wrap h-12 w-12 rounded-2xl bg-slate-50 flex items-center justify-center border border-slate-100">
               <i data-lucide="type" class="h-6 w-6 text-slate-700"></i>
             </div>
             <div class="flex-1">
               <div class="text-lg font-extrabold text-slate-900">글자 수 세기</div>
-              <div class="mt-1 text-sm text-slate-600 leading-relaxed">공백 포함/제외, 단어/줄까지 한 번에.</div>
+              <div class="mt-1 text-sm text-slate-600 leading-relaxed">공백 포함/제외, 단어·줄까지 한 번에.</div>
               <div class="mt-4 inline-flex items-center gap-1 text-sm font-semibold text-blue-700">
                 열기 <span class="transition group-hover:translate-x-0.5">→</span>
               </div>
@@ -127,14 +140,14 @@
           </div>
         </a>
 <a class="tool-card group rounded-3xl border border-slate-100 bg-white p-6 shadow-sm hover:shadow-md transition"
-           href="/ko/tools/case-converter/" data-title="대소문자 변환">
+           href="/ko/tools/case-converter/" data-title="대소문자 변환 case-converter">
           <div class="flex items-start gap-4">
             <div class="icon-wrap h-12 w-12 rounded-2xl bg-slate-50 flex items-center justify-center border border-slate-100">
               <i data-lucide="case-sensitive" class="h-6 w-6 text-slate-700"></i>
             </div>
             <div class="flex-1">
               <div class="text-lg font-extrabold text-slate-900">대소문자 변환</div>
-              <div class="mt-1 text-sm text-slate-600 leading-relaxed">대문자/소문자/카멜·스네이크 등 빠른 변환.</div>
+              <div class="mt-1 text-sm text-slate-600 leading-relaxed">대문자/소문자/카멜·스네이크까지 변환.</div>
               <div class="mt-4 inline-flex items-center gap-1 text-sm font-semibold text-blue-700">
                 열기 <span class="transition group-hover:translate-x-0.5">→</span>
               </div>
@@ -142,164 +155,164 @@
           </div>
         </a>
 <a class="tool-card group rounded-3xl border border-slate-100 bg-white p-6 shadow-sm hover:shadow-md transition"
-           href="/ko/tools/universal-percent/" data-title="만능 퍼센트 계산">
-          <div class="flex items-start gap-4">
-            <div class="icon-wrap h-12 w-12 rounded-2xl bg-slate-50 flex items-center justify-center border border-slate-100">
-              <i data-lucide="percent" class="h-6 w-6 text-slate-700"></i>
-            </div>
-            <div class="flex-1">
-              <div class="text-lg font-extrabold text-slate-900">만능 퍼센트 계산</div>
-              <div class="mt-1 text-sm text-slate-600 leading-relaxed">증감률·비율·% 계산을 한 화면에서.</div>
-              <div class="mt-4 inline-flex items-center gap-1 text-sm font-semibold text-blue-700">
-                열기 <span class="transition group-hover:translate-x-0.5">→</span>
-              </div>
-            </div>
-          </div>
-        </a>
-<a class="tool-card group rounded-3xl border border-slate-100 bg-white p-6 shadow-sm hover:shadow-md transition"
-           href="/ko/tools/discount-calculator/" data-title="할인율 계산">
-          <div class="flex items-start gap-4">
-            <div class="icon-wrap h-12 w-12 rounded-2xl bg-slate-50 flex items-center justify-center border border-slate-100">
-              <i data-lucide="tag" class="h-6 w-6 text-slate-700"></i>
-            </div>
-            <div class="flex-1">
-              <div class="text-lg font-extrabold text-slate-900">할인율 계산</div>
-              <div class="mt-1 text-sm text-slate-600 leading-relaxed">정가/할인가/할인율을 즉시 계산.</div>
-              <div class="mt-4 inline-flex items-center gap-1 text-sm font-semibold text-blue-700">
-                열기 <span class="transition group-hover:translate-x-0.5">→</span>
-              </div>
-            </div>
-          </div>
-        </a>
-<a class="tool-card group rounded-3xl border border-slate-100 bg-white p-6 shadow-sm hover:shadow-md transition"
-           href="/ko/tools/image-tools/" data-title="이미지 용량 줄이기">
-          <div class="flex items-start gap-4">
-            <div class="icon-wrap h-12 w-12 rounded-2xl bg-slate-50 flex items-center justify-center border border-slate-100">
-              <i data-lucide="image" class="h-6 w-6 text-slate-700"></i>
-            </div>
-            <div class="flex-1">
-              <div class="text-lg font-extrabold text-slate-900">이미지 용량 줄이기</div>
-              <div class="mt-1 text-sm text-slate-600 leading-relaxed">WebP 변환·압축으로 로딩 속도 개선.</div>
-              <div class="mt-4 inline-flex items-center gap-1 text-sm font-semibold text-blue-700">
-                열기 <span class="transition group-hover:translate-x-0.5">→</span>
-              </div>
-            </div>
-          </div>
-        </a>
-<a class="tool-card group rounded-3xl border border-slate-100 bg-white p-6 shadow-sm hover:shadow-md transition"
-           href="/ko/tools/color-converter/" data-title="색상 코드 변환기">
-          <div class="flex items-start gap-4">
-            <div class="icon-wrap h-12 w-12 rounded-2xl bg-slate-50 flex items-center justify-center border border-slate-100">
-              <i data-lucide="palette" class="h-6 w-6 text-slate-700"></i>
-            </div>
-            <div class="flex-1">
-              <div class="text-lg font-extrabold text-slate-900">색상 코드 변환기</div>
-              <div class="mt-1 text-sm text-slate-600 leading-relaxed">HEX/RGB/HSL 등 변환과 미리보기.</div>
-              <div class="mt-4 inline-flex items-center gap-1 text-sm font-semibold text-blue-700">
-                열기 <span class="transition group-hover:translate-x-0.5">→</span>
-              </div>
-            </div>
-          </div>
-        </a>
-<a class="tool-card group rounded-3xl border border-slate-100 bg-white p-6 shadow-sm hover:shadow-md transition"
-           href="/ko/tools/unit-converter/" data-title="단위 변환">
-          <div class="flex items-start gap-4">
-            <div class="icon-wrap h-12 w-12 rounded-2xl bg-slate-50 flex items-center justify-center border border-slate-100">
-              <i data-lucide="arrow-left-right" class="h-6 w-6 text-slate-700"></i>
-            </div>
-            <div class="flex-1">
-              <div class="text-lg font-extrabold text-slate-900">단위 변환</div>
-              <div class="mt-1 text-sm text-slate-600 leading-relaxed">길이·무게·온도 등 단위 변환.</div>
-              <div class="mt-4 inline-flex items-center gap-1 text-sm font-semibold text-blue-700">
-                열기 <span class="transition group-hover:translate-x-0.5">→</span>
-              </div>
-            </div>
-          </div>
-        </a>
-<a class="tool-card group rounded-3xl border border-slate-100 bg-white p-6 shadow-sm hover:shadow-md transition"
-           href="/ko/tools/stopwatch/" data-title="스톱워치">
-          <div class="flex items-start gap-4">
-            <div class="icon-wrap h-12 w-12 rounded-2xl bg-slate-50 flex items-center justify-center border border-slate-100">
-              <i data-lucide="timer" class="h-6 w-6 text-slate-700"></i>
-            </div>
-            <div class="flex-1">
-              <div class="text-lg font-extrabold text-slate-900">스톱워치</div>
-              <div class="mt-1 text-sm text-slate-600 leading-relaxed">공부/운동/요리 시간 측정.</div>
-              <div class="mt-4 inline-flex items-center gap-1 text-sm font-semibold text-blue-700">
-                열기 <span class="transition group-hover:translate-x-0.5">→</span>
-              </div>
-            </div>
-          </div>
-        </a>
-<a class="tool-card group rounded-3xl border border-slate-100 bg-white p-6 shadow-sm hover:shadow-md transition"
-           href="/ko/tools/pomodoro-timer/" data-title="포모도로 타이머">
-          <div class="flex items-start gap-4">
-            <div class="icon-wrap h-12 w-12 rounded-2xl bg-slate-50 flex items-center justify-center border border-slate-100">
-              <i data-lucide="clock" class="h-6 w-6 text-slate-700"></i>
-            </div>
-            <div class="flex-1">
-              <div class="text-lg font-extrabold text-slate-900">포모도로 타이머</div>
-              <div class="mt-1 text-sm text-slate-600 leading-relaxed">집중·휴식 루틴을 간단하게.</div>
-              <div class="mt-4 inline-flex items-center gap-1 text-sm font-semibold text-blue-700">
-                열기 <span class="transition group-hover:translate-x-0.5">→</span>
-              </div>
-            </div>
-          </div>
-        </a>
-<a class="tool-card group rounded-3xl border border-slate-100 bg-white p-6 shadow-sm hover:shadow-md transition"
-           href="/ko/tools/dday-calculator/" data-title="d-day 계산기">
-          <div class="flex items-start gap-4">
-            <div class="icon-wrap h-12 w-12 rounded-2xl bg-slate-50 flex items-center justify-center border border-slate-100">
-              <i data-lucide="calendar" class="h-6 w-6 text-slate-700"></i>
-            </div>
-            <div class="flex-1">
-              <div class="text-lg font-extrabold text-slate-900">D-Day 계산기</div>
-              <div class="mt-1 text-sm text-slate-600 leading-relaxed">기념일·시험일까지 남은 일수.</div>
-              <div class="mt-4 inline-flex items-center gap-1 text-sm font-semibold text-blue-700">
-                열기 <span class="transition group-hover:translate-x-0.5">→</span>
-              </div>
-            </div>
-          </div>
-        </a>
-<a class="tool-card group rounded-3xl border border-slate-100 bg-white p-6 shadow-sm hover:shadow-md transition"
-           href="/ko/tools/password-generator/" data-title="비밀번호 생성">
-          <div class="flex items-start gap-4">
-            <div class="icon-wrap h-12 w-12 rounded-2xl bg-slate-50 flex items-center justify-center border border-slate-100">
-              <i data-lucide="key-round" class="h-6 w-6 text-slate-700"></i>
-            </div>
-            <div class="flex-1">
-              <div class="text-lg font-extrabold text-slate-900">비밀번호 생성</div>
-              <div class="mt-1 text-sm text-slate-600 leading-relaxed">원클릭 안전한 비밀번호 생성.</div>
-              <div class="mt-4 inline-flex items-center gap-1 text-sm font-semibold text-blue-700">
-                열기 <span class="transition group-hover:translate-x-0.5">→</span>
-              </div>
-            </div>
-          </div>
-        </a>
-<a class="tool-card group rounded-3xl border border-slate-100 bg-white p-6 shadow-sm hover:shadow-md transition"
-           href="/ko/tools/lotto-picker/" data-title="로또 번호 추첨">
-          <div class="flex items-start gap-4">
-            <div class="icon-wrap h-12 w-12 rounded-2xl bg-slate-50 flex items-center justify-center border border-slate-100">
-              <i data-lucide="dices" class="h-6 w-6 text-slate-700"></i>
-            </div>
-            <div class="flex-1">
-              <div class="text-lg font-extrabold text-slate-900">로또 번호 추첨</div>
-              <div class="mt-1 text-sm text-slate-600 leading-relaxed">랜덤 번호 뽑기.</div>
-              <div class="mt-4 inline-flex items-center gap-1 text-sm font-semibold text-blue-700">
-                열기 <span class="transition group-hover:translate-x-0.5">→</span>
-              </div>
-            </div>
-          </div>
-        </a>
-<a class="tool-card group rounded-3xl border border-slate-100 bg-white p-6 shadow-sm hover:shadow-md transition"
-           href="/ko/tools/bmi-calculator/" data-title="bmi 비만도 계산">
+           href="/ko/tools/bmi-calculator/" data-title="bmi 비만도 계산 bmi-calculator">
           <div class="flex items-start gap-4">
             <div class="icon-wrap h-12 w-12 rounded-2xl bg-slate-50 flex items-center justify-center border border-slate-100">
               <i data-lucide="activity" class="h-6 w-6 text-slate-700"></i>
             </div>
             <div class="flex-1">
               <div class="text-lg font-extrabold text-slate-900">BMI 비만도 계산</div>
-              <div class="mt-1 text-sm text-slate-600 leading-relaxed">키/몸무게로 BMI를 빠르게 확인.</div>
+              <div class="mt-1 text-sm text-slate-600 leading-relaxed">키·몸무게로 BMI를 빠르게 확인.</div>
+              <div class="mt-4 inline-flex items-center gap-1 text-sm font-semibold text-blue-700">
+                열기 <span class="transition group-hover:translate-x-0.5">→</span>
+              </div>
+            </div>
+          </div>
+        </a>
+<a class="tool-card group rounded-3xl border border-slate-100 bg-white p-6 shadow-sm hover:shadow-md transition"
+           href="/ko/tools/universal-percent/" data-title="만능 퍼센트 계산 universal-percent">
+          <div class="flex items-start gap-4">
+            <div class="icon-wrap h-12 w-12 rounded-2xl bg-slate-50 flex items-center justify-center border border-slate-100">
+              <i data-lucide="calculator" class="h-6 w-6 text-slate-700"></i>
+            </div>
+            <div class="flex-1">
+              <div class="text-lg font-extrabold text-slate-900">만능 퍼센트 계산</div>
+              <div class="mt-1 text-sm text-slate-600 leading-relaxed">비율·증감률·수익률 계산.</div>
+              <div class="mt-4 inline-flex items-center gap-1 text-sm font-semibold text-blue-700">
+                열기 <span class="transition group-hover:translate-x-0.5">→</span>
+              </div>
+            </div>
+          </div>
+        </a>
+<a class="tool-card group rounded-3xl border border-slate-100 bg-white p-6 shadow-sm hover:shadow-md transition"
+           href="/ko/tools/discount-calculator/" data-title="할인율 계산 discount-calculator">
+          <div class="flex items-start gap-4">
+            <div class="icon-wrap h-12 w-12 rounded-2xl bg-slate-50 flex items-center justify-center border border-slate-100">
+              <i data-lucide="percent" class="h-6 w-6 text-slate-700"></i>
+            </div>
+            <div class="flex-1">
+              <div class="text-lg font-extrabold text-slate-900">할인율 계산</div>
+              <div class="mt-1 text-sm text-slate-600 leading-relaxed">정가·할인가·할인율을 즉시 계산.</div>
+              <div class="mt-4 inline-flex items-center gap-1 text-sm font-semibold text-blue-700">
+                열기 <span class="transition group-hover:translate-x-0.5">→</span>
+              </div>
+            </div>
+          </div>
+        </a>
+<a class="tool-card group rounded-3xl border border-slate-100 bg-white p-6 shadow-sm hover:shadow-md transition"
+           href="/ko/tools/unit-converter/" data-title="단위 변환 unit-converter">
+          <div class="flex items-start gap-4">
+            <div class="icon-wrap h-12 w-12 rounded-2xl bg-slate-50 flex items-center justify-center border border-slate-100">
+              <i data-lucide="arrow-left-right" class="h-6 w-6 text-slate-700"></i>
+            </div>
+            <div class="flex-1">
+              <div class="text-lg font-extrabold text-slate-900">단위 변환</div>
+              <div class="mt-1 text-sm text-slate-600 leading-relaxed">길이·무게·온도 변환.</div>
+              <div class="mt-4 inline-flex items-center gap-1 text-sm font-semibold text-blue-700">
+                열기 <span class="transition group-hover:translate-x-0.5">→</span>
+              </div>
+            </div>
+          </div>
+        </a>
+<a class="tool-card group rounded-3xl border border-slate-100 bg-white p-6 shadow-sm hover:shadow-md transition"
+           href="/ko/tools/image-tools/" data-title="이미지 용량 줄이기 image-tools">
+          <div class="flex items-start gap-4">
+            <div class="icon-wrap h-12 w-12 rounded-2xl bg-slate-50 flex items-center justify-center border border-slate-100">
+              <i data-lucide="image-plus" class="h-6 w-6 text-slate-700"></i>
+            </div>
+            <div class="flex-1">
+              <div class="text-lg font-extrabold text-slate-900">이미지 용량 줄이기</div>
+              <div class="mt-1 text-sm text-slate-600 leading-relaxed">WebP 변환으로 용량 절감.</div>
+              <div class="mt-4 inline-flex items-center gap-1 text-sm font-semibold text-blue-700">
+                열기 <span class="transition group-hover:translate-x-0.5">→</span>
+              </div>
+            </div>
+          </div>
+        </a>
+<a class="tool-card group rounded-3xl border border-slate-100 bg-white p-6 shadow-sm hover:shadow-md transition"
+           href="/ko/tools/color-converter/" data-title="색상 코드 변환기 color-converter">
+          <div class="flex items-start gap-4">
+            <div class="icon-wrap h-12 w-12 rounded-2xl bg-slate-50 flex items-center justify-center border border-slate-100">
+              <i data-lucide="palette" class="h-6 w-6 text-slate-700"></i>
+            </div>
+            <div class="flex-1">
+              <div class="text-lg font-extrabold text-slate-900">색상 코드 변환기</div>
+              <div class="mt-1 text-sm text-slate-600 leading-relaxed">HEX/RGB/HSL/CMYK 변환.</div>
+              <div class="mt-4 inline-flex items-center gap-1 text-sm font-semibold text-blue-700">
+                열기 <span class="transition group-hover:translate-x-0.5">→</span>
+              </div>
+            </div>
+          </div>
+        </a>
+<a class="tool-card group rounded-3xl border border-slate-100 bg-white p-6 shadow-sm hover:shadow-md transition"
+           href="/ko/tools/stopwatch/" data-title="스톱워치 stopwatch">
+          <div class="flex items-start gap-4">
+            <div class="icon-wrap h-12 w-12 rounded-2xl bg-slate-50 flex items-center justify-center border border-slate-100">
+              <i data-lucide="timer" class="h-6 w-6 text-slate-700"></i>
+            </div>
+            <div class="flex-1">
+              <div class="text-lg font-extrabold text-slate-900">스톱워치</div>
+              <div class="mt-1 text-sm text-slate-600 leading-relaxed">공부·운동·작업 시간 측정.</div>
+              <div class="mt-4 inline-flex items-center gap-1 text-sm font-semibold text-blue-700">
+                열기 <span class="transition group-hover:translate-x-0.5">→</span>
+              </div>
+            </div>
+          </div>
+        </a>
+<a class="tool-card group rounded-3xl border border-slate-100 bg-white p-6 shadow-sm hover:shadow-md transition"
+           href="/ko/tools/pomodoro-timer/" data-title="포모도로 타이머 pomodoro-timer">
+          <div class="flex items-start gap-4">
+            <div class="icon-wrap h-12 w-12 rounded-2xl bg-slate-50 flex items-center justify-center border border-slate-100">
+              <i data-lucide="clock" class="h-6 w-6 text-slate-700"></i>
+            </div>
+            <div class="flex-1">
+              <div class="text-lg font-extrabold text-slate-900">포모도로 타이머</div>
+              <div class="mt-1 text-sm text-slate-600 leading-relaxed">집중·휴식 루틴으로 효율 업.</div>
+              <div class="mt-4 inline-flex items-center gap-1 text-sm font-semibold text-blue-700">
+                열기 <span class="transition group-hover:translate-x-0.5">→</span>
+              </div>
+            </div>
+          </div>
+        </a>
+<a class="tool-card group rounded-3xl border border-slate-100 bg-white p-6 shadow-sm hover:shadow-md transition"
+           href="/ko/tools/dday-calculator/" data-title="d-day 계산기 dday-calculator">
+          <div class="flex items-start gap-4">
+            <div class="icon-wrap h-12 w-12 rounded-2xl bg-slate-50 flex items-center justify-center border border-slate-100">
+              <i data-lucide="calendar" class="h-6 w-6 text-slate-700"></i>
+            </div>
+            <div class="flex-1">
+              <div class="text-lg font-extrabold text-slate-900">D-Day 계산기</div>
+              <div class="mt-1 text-sm text-slate-600 leading-relaxed">남은 날/지난 날 바로 계산.</div>
+              <div class="mt-4 inline-flex items-center gap-1 text-sm font-semibold text-blue-700">
+                열기 <span class="transition group-hover:translate-x-0.5">→</span>
+              </div>
+            </div>
+          </div>
+        </a>
+<a class="tool-card group rounded-3xl border border-slate-100 bg-white p-6 shadow-sm hover:shadow-md transition"
+           href="/ko/tools/password-generator/" data-title="비밀번호 생성 password-generator">
+          <div class="flex items-start gap-4">
+            <div class="icon-wrap h-12 w-12 rounded-2xl bg-slate-50 flex items-center justify-center border border-slate-100">
+              <i data-lucide="lock" class="h-6 w-6 text-slate-700"></i>
+            </div>
+            <div class="flex-1">
+              <div class="text-lg font-extrabold text-slate-900">비밀번호 생성</div>
+              <div class="mt-1 text-sm text-slate-600 leading-relaxed">강력한 랜덤 비밀번호 생성.</div>
+              <div class="mt-4 inline-flex items-center gap-1 text-sm font-semibold text-blue-700">
+                열기 <span class="transition group-hover:translate-x-0.5">→</span>
+              </div>
+            </div>
+          </div>
+        </a>
+<a class="tool-card group rounded-3xl border border-slate-100 bg-white p-6 shadow-sm hover:shadow-md transition"
+           href="/ko/tools/lotto-picker/" data-title="로또 번호 추첨 lotto-picker">
+          <div class="flex items-start gap-4">
+            <div class="icon-wrap h-12 w-12 rounded-2xl bg-slate-50 flex items-center justify-center border border-slate-100">
+              <i data-lucide="clover" class="h-6 w-6 text-slate-700"></i>
+            </div>
+            <div class="flex-1">
+              <div class="text-lg font-extrabold text-slate-900">로또 번호 추첨</div>
+              <div class="mt-1 text-sm text-slate-600 leading-relaxed">무작위로 로또 번호 생성.</div>
               <div class="mt-4 inline-flex items-center gap-1 text-sm font-semibold text-blue-700">
                 열기 <span class="transition group-hover:translate-x-0.5">→</span>
               </div>
@@ -321,7 +334,9 @@
 
   <script src="https://unpkg.com/lucide@latest"></script>
   <script>
-    if (window.lucide && window.lucide.createIcons) { window.lucide.createIcons(); }
+    if (window.lucide && window.lucide.createIcons) {
+      window.lucide.createIcons();
+    }
 
     const input = document.getElementById("toolSearch");
     const cards = Array.from(document.querySelectorAll(".tool-card"));

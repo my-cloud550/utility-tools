@@ -565,7 +565,7 @@ const { useState, useEffect, useRef, useCallback, useMemo } = React;
                 <div className="grid md:grid-cols-2 gap-8 items-start">
                     <div className="space-y-6">
                         <InputGroup label={t.discount.price}><input type="number" value={price} onChange={e => setPrice(Number(e.target.value))} className="w-full p-4 rounded-xl bg-slate-50 border border-slate-200 focus:border-blue-500 outline-none text-xl font-bold text-slate-700" placeholder="0" /></InputGroup>
-                        <InputGroup label={t.discount.rate}><div className="space-y-3"><div className="flex gap-2"><button onClick={() => { window.location.href = `/${lang}/`; }} className="p-2 bg-slate-100 rounded-lg text-slate-600"><Icon name="home" size={20} /></button>{[10, 20, 30, 50].map(p => (<button key={p} onClick={() => setDiscount(p)} className={`flex-1 py-2 rounded-lg text-sm font-bold transition-all ${discount === p ? 'bg-blue-600 text-white' : 'bg-slate-100 text-slate-500 hover:bg-slate-200'}`}>{p}%</button>))}</div><input type="number" value={discount} onChange={e => setDiscount(Number(e.target.value))} className="w-full p-4 rounded-xl bg-slate-50 border border-slate-200 focus:border-blue-500 outline-none text-xl font-bold text-slate-700" placeholder="0" /></div></InputGroup>
+                        <InputGroup label={t.discount.rate}><div className="space-y-3"><div className="flex gap-2">{[10, 20, 30, 50].map(p => (<button key={p} onClick={() => setDiscount(p)} className={`flex-1 py-2 rounded-lg text-sm font-bold transition-all ${discount === p ? 'bg-blue-600 text-white' : 'bg-slate-100 text-slate-500 hover:bg-slate-200'}`}>{p}%</button>))}</div><input type="number" value={discount} onChange={e => setDiscount(Number(e.target.value))} className="w-full p-4 rounded-xl bg-slate-50 border border-slate-200 focus:border-blue-500 outline-none text-xl font-bold text-slate-700" placeholder="0" /></div></InputGroup>
                     </div>
                     <div className="bg-slate-900 p-8 rounded-2xl text-white shadow-xl flex flex-col justify-center h-full"><div className="flex justify-between items-center text-slate-400"><span>{t.discount.saved}</span><span className="font-mono text-lg text-blue-400">-{saved.toLocaleString()}</span></div><div className="h-px bg-slate-700 my-4"></div><div><div className="text-slate-400 text-sm mb-1">{t.discount.final}</div><div className="text-4xl font-bold font-mono text-white">{final.toLocaleString()}</div></div></div>
                 </div>
@@ -725,13 +725,13 @@ const { useState, useEffect, useRef, useCallback, useMemo } = React;
                 <div className="flex h-screen bg-slate-50">
                     <aside className={`fixed inset-y-0 left-0 z-40 w-72 bg-white border-r border-slate-200 transform transition-transform duration-300 md:static md:translate-x-0 ${menuOpen ? 'translate-x-0' : '-translate-x-full'} flex flex-col`}>
                         <div className="p-6"><h1 className="text-2xl font-bold flex items-center gap-3 text-slate-800"><div className="w-10 h-10 bg-blue-600 rounded-xl flex items-center justify-center text-white shadow-lg shadow-blue-200"><Icon name="box" size={24} /></div>UtilityBox</h1><p className="text-xs text-slate-400 mt-2 ml-1">스마트 툴 모음</p></div>
-                        <div className="px-6 pb-2">
-                          <a href={`/${lang}/`} className="flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-semibold bg-blue-50 text-blue-700 hover:bg-blue-100 transition">
-                            <Icon name="home" size={18} className="text-blue-700" />
-                            {lang === 'ko' ? '홈' : 'Home'}
-                          </a>
-                        </div>
                         <nav className="flex-1 px-4 py-2 space-y-8 overflow-y-auto custom-scrollbar">
+                            <div className="px-2">
+                                <a href={`/${lang}/`} className="flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-bold text-slate-700 hover:bg-slate-100 transition-all">
+                                    <Icon name="home" size={18} className="text-slate-400" />
+                                    {lang === 'ko' ? '홈' : 'Home'}
+                                </a>
+                            </div>
                             {['text', 'math', 'media', 'time', 'security', 'fun', 'health'].map(cat => (
                                 <div key={cat}>
                                     <h3 className="text-xs font-bold text-slate-400 uppercase tracking-wider mb-2 px-3">{t.categories[cat]}</h3>
@@ -747,7 +747,7 @@ const { useState, useEffect, useRef, useCallback, useMemo } = React;
                     </aside>
                     {menuOpen && <div className="fixed inset-0 bg-black/20 z-30 md:hidden backdrop-blur-sm" onClick={() => setMenuOpen(false)}></div>}
                     <main className="flex-1 flex flex-col h-full relative overflow-hidden">
-                        <header className="md:hidden bg-white/80 backdrop-blur-md border-b border-slate-200 p-4 flex justify-between items-center sticky top-0 z-20"><span className="font-bold text-lg flex items-center gap-2"><Icon name="box" size={20} className="text-blue-600"/> {t.title}</span><div className="flex gap-2"><button onClick={() => { window.location.href = makePath(lang === 'ko' ? 'en' : 'ko', activeToolId); }} className="p-2 bg-slate-100 rounded-lg text-slate-600"><Icon name="globe" size={20} /></button><button onClick={() => setMenuOpen(true)} className="p-2 bg-slate-100 rounded-lg text-slate-600"><Icon name="menu" size={20} /></button></div></header>
+                        <header className="md:hidden bg-white/80 backdrop-blur-md border-b border-slate-200 p-4 flex justify-between items-center sticky top-0 z-20"><span className="font-bold text-lg flex items-center gap-2"><Icon name="box" size={20} className="text-blue-600"/> {t.title}</span><div className="flex gap-2"><button onClick={() => { window.location.href = `/${lang}/`; }} className="p-2 bg-slate-100 rounded-lg text-slate-600"><Icon name="home" size={20} /></button><button onClick={() => { window.location.href = makePath(lang === 'ko' ? 'en' : 'ko', activeToolId); }} className="p-2 bg-slate-100 rounded-lg text-slate-600"><Icon name="globe" size={20} /></button><button onClick={() => setMenuOpen(true)} className="p-2 bg-slate-100 rounded-lg text-slate-600"><Icon name="menu" size={20} /></button></div></header>
                         <div className="flex-1 overflow-y-auto p-4 md:p-8">
                             <div className="max-w-2xl mx-auto pb-20">
                                 <div className="mb-6 bg-slate-100 border-2 border-dashed border-slate-200 rounded-lg h-20 flex flex-col items-center justify-center text-slate-400 text-xs"><span className="font-bold">Google AdSense</span><span>Display Ad (Responsive)</span></div>
