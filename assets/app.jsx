@@ -656,35 +656,76 @@ const { useState, useEffect, useRef, useCallback, useMemo } = React;
 
         // --- Main App & Routing ---
         const App = () => {
-            const [activeId, setHash] = useState(window.location.activeId.slice(1) || 'text');
-            const [lang, setLang] = useState('ko');
-            const [menuOpen, setMenuOpen] = useState(false);
+            
+            // --- Path-based router (no activeId) + /ko /en support ---
+            const getLangFromPath = () => {
+              const p = window.location.pathname || "/";
+              return p.startsWith("/en/") ? "en" : "ko";
+            };
+
+            const ROUTE_MAP = {
+              text: "/tools/word-counter/",
+              case: "/tools/case-converter/",
+              percent: "/tools/percent-calculator/",
+              discount: "/tools/discount-calculator/",
+              unit: "/tools/unit-converter/",
+              image: "/tools/image-compressor/",
+              color: "/tools/color-converter/",
+              stopwatch: "/tools/stopwatch/",
+              pomodoro: "/tools/pomodoro-timer/",
+              dday: "/tools/dday-calculator/",
+              security: "/tools/password-generator/"
+            };
+
+            const getActiveIdFromPath = () => {
+              const p0 = (window.location.pathname || "/").replace(/\/+$/, "/"); // ensure trailing slash
+              const p = p0.replace(/^\/(ko|en)\//, "/"); // strip lang prefix
+              // pick the longest matching route
+              const entries = Object.entries(ROUTE_MAP).sort((a,b) => b[1].length - a[1].length);
+              for (const [id, route] of entries) {
+                if (p.startsWith(route)) return id;
+              }
+              return "text";
+            };
+
+            const [activeId, setActiveId] = useState(getActiveIdFromPath());
+            const [lang, setLang] = useState(getLangFromPath());
+
+            const goToLang = (next) => {
+                const nextPath = ROUTE_MAP[activeId] || '/';
+                window.location.href = `/${next}${nextPath}`;
+            };
+            const toggleLang = () => goToLang(lang === 'ko' ? 'en' : 'ko');
+const [menuOpen, setMenuOpen] = useState(false);
             const [isIconReady, setIsIconReady] = useState(false); // 아이콘 로딩 상태
             const t = translations[lang];
             const currentYear = 2026;
 
             useEffect(() => {
-                const handleHash = () => {
-                    const h = window.location.activeId.slice(1);
-                    setHash(h || 'text');
-                    window.scrollTo(0,0);
+                const handleRoute = () => {
+                    setLang(getLangFromPath());
+                    setActiveId(getActiveIdFromPath());
+                    window.scrollTo(0, 0);
                     setMenuOpen(false);
                 };
-                window.addEventListener('activeIdchange', handleHash);
-                
-                // Lucide 로딩 확인 폴링 (안정성 확보)
+
+                // Sync on first load
+                handleRoute();
+                window.addEventListener('popstate', handleRoute);
+
+                // Ensure Lucide icons render even if script loads late
                 const checkLucide = setInterval(() => {
-                    if (window.lucide && window.lucide.createIcons) {
-                        setIsIconReady(true);
+                    if (window.lucide) {
+                        window.lucide.createIcons();
                         clearInterval(checkLucide);
                     }
                 }, 100);
 
                 return () => {
-                    window.removeEventListener('activeIdchange', handleHash);
+                    window.removeEventListener('popstate', handleRoute);
                     clearInterval(checkLucide);
                 };
-            }, []);
+            }, []);;
 
             useEffect(() => {
                 document.documentElement.lang = lang;
@@ -707,12 +748,6 @@ const { useState, useEffect, useRef, useCallback, useMemo } = React;
             ];
 
             const activeTool = tools.find(x => x.id === activeId) || tools[0];
-
-  const goLang = (nextLang) => {
-    const next = nextLang === "en" ? "en" : "ko";
-    const tool = activeId || (activeTool && activeTool.id) || "word-counter";
-    window.location.href = `/${next}/tools/${tool}/`;
-  };
             const ActiveComponent = activeTool.comp;
             const seo = t.seo[activeTool.id] || { title: activeTool.id, desc: "Tool description", tags: [] };
 
@@ -732,11 +767,11 @@ const { useState, useEffect, useRef, useCallback, useMemo } = React;
                                 </div>
                             ))}
                         </nav>
-                        <div className="p-4 border-t border-slate-100"><button onClick={() => setLang(l => l === 'ko' ? 'en' : 'ko')} className="w-full flex items-center justify-center gap-2 py-2.5 rounded-xl border border-slate-200 text-sm font-bold text-slate-500 hover:bg-slate-50 hover:text-blue-600 transition-colors"><Icon name="globe" size={16} />{lang === 'ko' ? 'Language: 한국어' : 'Language: English'}</button></div>
+                        <div className="p-4 border-t border-slate-100"><button onClick={toggleLang} className="w-full flex items-center justify-center gap-2 py-2.5 rounded-xl border border-slate-200 text-sm font-bold text-slate-500 hover:bg-slate-50 hover:text-blue-600 transition-colors"><Icon name="globe" size={16} />{lang === 'ko' ? 'Language: 한국어' : 'Language: English'}</button></div>
                     </aside>
                     {menuOpen && <div className="fixed inset-0 bg-black/20 z-30 md:hidden backdrop-blur-sm" onClick={() => setMenuOpen(false)}></div>}
                     <main className="flex-1 flex flex-col h-full relative overflow-hidden">
-                        <header className="md:hidden bg-white/80 backdrop-blur-md border-b border-slate-200 p-4 flex justify-between items-center sticky top-0 z-20"><span className="font-bold text-lg flex items-center gap-2"><Icon name="box" size={20} className="text-blue-600"/> {t.title}</span><div className="flex gap-2"><button onClick={() => setLang(l => l === 'ko' ? 'en' : 'ko')} className="p-2 bg-slate-100 rounded-lg text-slate-600"><Icon name="globe" size={20} /></button><button onClick={() => setMenuOpen(true)} className="p-2 bg-slate-100 rounded-lg text-slate-600"><Icon name="menu" size={20} /></button></div></header>
+                        <header className="md:hidden bg-white/80 backdrop-blur-md border-b border-slate-200 p-4 flex justify-between items-center sticky top-0 z-20"><span className="font-bold text-lg flex items-center gap-2"><Icon name="box" size={20} className="text-blue-600"/> {t.title}</span><div className="flex gap-2"><button onClick={toggleLang} className="p-2 bg-slate-100 rounded-lg text-slate-600"><Icon name="globe" size={20} /></button><button onClick={() => setMenuOpen(true)} className="p-2 bg-slate-100 rounded-lg text-slate-600"><Icon name="menu" size={20} /></button></div></header>
                         <div className="flex-1 overflow-y-auto p-4 md:p-8">
                             <div className="max-w-2xl mx-auto pb-20">
                                 <div className="mb-6 bg-slate-100 border-2 border-dashed border-slate-200 rounded-lg h-20 flex flex-col items-center justify-center text-slate-400 text-xs"><span className="font-bold">Google AdSense</span><span>Display Ad (Responsive)</span></div>

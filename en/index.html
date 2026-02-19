@@ -1,52 +1,49 @@
 <!doctype html>
 <html lang="en">
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <meta name="theme-color" content="#0ea5e9" />
-  <link rel="icon" href="/favicon.ico" />
-  <link rel="canonical" href="https://uboxtools.com/en/" />
-  <link rel="alternate" hreflang="ko" href="https://uboxtools.com/ko/" />
-  <link rel="alternate" hreflang="en" href="https://uboxtools.com/en/" />
-  <link rel="alternate" hreflang="x-default" href="https://uboxtools.com/ko/" />
-
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="description" content="A collection of handy tools you can use instantly in your browser."/>
+  <link rel="canonical" href="https://uboxtools.com/en/"/>
+    <link rel="alternate" hreflang="ko" href="https://uboxtools.com/ko/"/>
+    <link rel="alternate" hreflang="en" href="https://uboxtools.com/en/"/>
+    <link rel="alternate" hreflang="x-default" href="https://uboxtools.com/"/>
+  <meta property="og:type" content="website"/>
+  <meta property="og:site_name" content="UtilityBox"/>
+  <meta property="og:title" content="UtilityBox | Online Utility Tools"/>
+  <meta property="og:description" content="A collection of handy tools you can use instantly in your browser."/>
+  <meta property="og:url" content="https://uboxtools.com/en/"/>
+  <meta name="twitter:card" content="summary"/>
+  <meta name="twitter:title" content="UtilityBox | Online Utility Tools"/>
+  <meta name="twitter:description" content="A collection of handy tools you can use instantly in your browser."/>
   <title>UtilityBox | Online Utility Tools</title>
-  <meta name="description" content="Word counter, case converter, percentage calculator and more — fast and lightweight." />
 
-  <meta property="og:type" content="website" />
-  <meta property="og:site_name" content="UtilityBox" />
-  <meta property="og:title" content="UtilityBox | Online Utility Tools" />
-  <meta property="og:description" content="Word counter, case converter, percentage calculator and more — fast and lightweight." />
-  <meta property="og:url" content="https://uboxtools.com/en/" />
-  <meta property="og:image" content="https://uboxtools.com/assets/og/og-default.png" />
-
-  <meta name="twitter:card" content="summary_large_image" />
-  <meta name="twitter:title" content="UtilityBox | Online Utility Tools" />
-  <meta name="twitter:description" content="Word counter, case converter, percentage calculator and more — fast and lightweight." />
-  <meta name="twitter:image" content="https://uboxtools.com/assets/og/og-default.png" />
-
+  <!-- Tailwind (CDN) -->
   <script src="https://cdn.tailwindcss.com"></script>
-  <script>
-    tailwind.config = {
-      theme: {
-        extend: {
-          fontFamily: {
-            sans: ["Pretendard", "system-ui", "-apple-system", "Segoe UI", "Roboto", "Noto Sans KR", "Noto Sans", "Arial", "sans-serif"]
-          }
-        }
-      }
-    };
-  </script>
 
-  <script src="https://unpkg.com/lucide@latest"></script>
+  <!-- Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com"/>
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+  <link href="https://fonts.googleapis.com/css2?family=Pretendard:wght@400;500;600;700&display=swap" rel="stylesheet"/>
 
-  <script crossorigin src="https://unpkg.com/react@18/umd/react.development.js"></script>
-  <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.development.js"></script>
-  <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+  <style>
+    :root { color-scheme: light; }
+    body { font-family: Pretendard, ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial; }
+  </style>
+
+  <!-- OpenGraph/Twitter image intentionally omitted (add /assets/og.png later if you want) -->
 </head>
 <body class="bg-slate-50">
   <div id="root"></div>
-  <script>window.__PAGE__ = {"lang": "en", "tool": "word-counter"};</script>
+
+  <!-- React + Babel -->
+  <script src="https://unpkg.com/react@18/umd/react.development.js" crossorigin></script>
+  <script src="https://unpkg.com/react-dom@18/umd/react-dom.development.js" crossorigin></script>
+  <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+
+  <!-- Lucide Icons -->
+  <script src="https://unpkg.com/lucide@latest"></script>
+
   <script type="text/babel" data-presets="env,react" src="/assets/app.jsx"></script>
 </body>
 </html>
