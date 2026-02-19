@@ -681,47 +681,6 @@ const { useState, useEffect, useRef, useCallback, useMemo } = React;
             const initialRoute = getInitialRoute();
             const [lang, setLang] = useState(initialRoute.lang);
             const [activeToolId, setActiveToolId] = useState(initialRoute.tool);
-
-// --- SEO: JSON-LD BreadcrumbList (auto per tool page) ---
-useEffect(() => {
-    try {
-        const origin = window.location.origin || "https://uboxtools.com";
-        const toolId = activeToolId;
-        const slug = TOOL_SLUG[toolId] || TOOL_SLUG.text;
-        const toolName = (translations?.[lang]?.tools?.[toolId]) || (lang === 'ko' ? '도구' : 'Tool');
-        const list = [
-            {
-                "@type": "ListItem",
-                "position": 1,
-                "name": (lang === 'ko' ? '도구 모음' : 'Tools'),
-                "item": `${origin}/${lang}/`
-            },
-            {
-                "@type": "ListItem",
-                "position": 2,
-                "name": toolName,
-                "item": `${origin}/${lang}/tools/${slug}/`
-            }
-        ];
-        const jsonLd = {
-            "@context": "https://schema.org",
-            "@type": "BreadcrumbList",
-            "itemListElement": list
-        };
-
-        const scriptId = "ubox-breadcrumb-jsonld";
-        let el = document.getElementById(scriptId);
-        if (!el) {
-            el = document.createElement("script");
-            el.type = "application/ld+json";
-            el.id = scriptId;
-            document.head.appendChild(el);
-        }
-        el.textContent = JSON.stringify(jsonLd);
-    } catch (e) {
-        // no-op: keep UI untouched even if SEO insert fails
-    }
-}, [lang, activeToolId]);
             const [menuOpen, setMenuOpen] = useState(false);
             const [isIconReady, setIsIconReady] = useState(false); // 아이콘 로딩 상태
             const t = translations[lang] || translations.ko;
@@ -765,7 +724,7 @@ useEffect(() => {
             return (
                 <div className="flex h-screen bg-slate-50">
                     <aside className={`fixed inset-y-0 left-0 z-40 w-72 bg-white border-r border-slate-200 transform transition-transform duration-300 md:static md:translate-x-0 ${menuOpen ? 'translate-x-0' : '-translate-x-full'} flex flex-col`}>
-                        <div className="p-6"><h1 className="text-2xl font-bold flex items-center gap-3 text-slate-800"><div className="w-10 h-10 bg-blue-600 rounded-xl flex items-center justify-center text-white shadow-lg shadow-blue-200"><Icon name="box" size={24} /></div>UtilityBox</h1><p className="text-xs text-slate-400 mt-2 ml-1">스마트 툴 모음</p></div>
+                        <div className="p-6"><a href={`/${lang}/`} className="group inline-flex flex-col"><h1 className="text-2xl font-bold flex items-center gap-3 text-slate-800 group-hover:text-slate-900"><div className="w-10 h-10 bg-blue-600 rounded-xl flex items-center justify-center text-white shadow-lg shadow-blue-200 group-hover:shadow-blue-300 transition"><Icon name="box" size={24} /></div>UtilityBox</h1><p className="text-xs text-slate-400 mt-2 ml-1 group-hover:text-slate-500 transition">스마트 툴 모음</p></a></div>
                         <nav className="flex-1 px-4 py-2 space-y-8 overflow-y-auto custom-scrollbar">
                             <div>
                                 <h3 className="text-xs font-bold text-slate-400 uppercase tracking-wider mb-2 px-3">{lang === 'ko' ? '홈' : 'Home'}</h3>
