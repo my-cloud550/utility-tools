@@ -112,6 +112,7 @@ const { useState, useEffect, useRef, useCallback, useMemo } = React;
                 password: { length: "길이", numbers: "숫자 (0-9)", symbols: "특수문자 (!@#)", generate: "새로 생성", copied: "복사 완료!" },
                 dday: { label: "날짜 선택", guide: "기념일이나 목표일을 선택하세요", isToday: "🎉 오늘입니다!", daysLeft: "일 남음", daysPast: "일 지남" },
                 lotto: { btn: "번호 추첨하기", guide: "행운의 번호를 확인해보세요" },
+                tipsTitle: "활용 꿀팁",
                 ad: "광고 영역"
             },
             en: {
@@ -205,6 +206,7 @@ const { useState, useEffect, useRef, useCallback, useMemo } = React;
                 password: { length: "Length", numbers: "Numbers", symbols: "Symbols", generate: "Generate", copied: "Copied!" },
                 dday: { label: "Target Date", guide: "Select your target date", isToday: "🎉 It's Today!", daysLeft: "days left", daysPast: "days past" },
                 lotto: { btn: "Draw Numbers", guide: "Check your lucky numbers" },
+                tipsTitle: "Usage Tips",
                 ad: "Ad Space"
             }
         };
@@ -793,7 +795,7 @@ const { useState, useEffect, useRef, useCallback, useMemo } = React;
                                 <div className="mb-6 bg-slate-100 border-2 border-dashed border-slate-200 rounded-lg h-20 flex flex-col items-center justify-center text-slate-400 text-xs"><span className="font-bold">Google AdSense</span><span>Display Ad (Responsive)</span></div>
                                 <div className="mb-6 animate-fade-in"><div className="flex items-center gap-2 mb-2"><span className="text-xs font-bold text-blue-600 bg-blue-50 px-2 py-1 rounded-md uppercase tracking-wider">{t.categories[activeTool.cat]}</span></div><h1 className="text-3xl font-bold text-slate-900">{t.tools[activeTool.id]}</h1></div>
                                 <Card className="min-h-[300px] mb-8"><ActiveComponent t={t} /></Card>
-                                <div className="bg-white border-l-4 border-blue-500 p-6 rounded-r-xl shadow-sm prose prose-slate max-w-none prose-sm"><h3 className="text-lg font-bold text-slate-800 mb-2 flex items-center gap-2"><Icon name="lightbulb" size={18} className="text-blue-500" />활용 꿀팁</h3><h4 className="font-bold text-slate-700 m-0">{seo.title}</h4><p className="text-slate-600 mt-1">{seo.desc}</p><div className="flex flex-wrap gap-2 mt-3 not-prose">{seo.tags && seo.tags.map(tag => (<span key={tag} className="text-xs bg-slate-100 text-slate-500 px-2 py-1 rounded-full">{tag}</span>))}</div></div>
+                                <div className="bg-white border-l-4 border-blue-500 p-6 rounded-r-xl shadow-sm prose prose-slate max-w-none prose-sm"><h3 className="text-lg font-bold text-slate-800 mb-2 flex items-center gap-2"><Icon name="lightbulb" size={18} className="text-blue-500" />{t.tipsTitle || (lang === "ko" ? "활용 꿀팁" : "Usage Tips")}</h3><h4 className="font-bold text-slate-700 m-0">{seo.title}</h4><p className="text-slate-600 mt-1">{seo.desc}</p><div className="flex flex-wrap gap-2 mt-3 not-prose">{seo.tags && seo.tags.map(tag => (<span key={tag} className="text-xs bg-slate-100 text-slate-500 px-2 py-1 rounded-full">{tag}</span>))}</div></div>
                                 <footer className="mt-12 text-center text-xs text-slate-400">&copy; {currentYear} Utility Box. All tools run locally in your browser.</footer>
                             </div>
                         </div>
