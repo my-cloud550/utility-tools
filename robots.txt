@@ -1,0 +1,6 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://uboxtools.com/sitemap.xml
+Sitemap: https://uboxtools.com/sitemap-ko.xml
+Sitemap: https://uboxtools.com/sitemap-en.xml
