@@ -789,7 +789,7 @@ useEffect(() => {
                 { id: 'lotto', icon: 'clover', cat: 'fun', comp: Lotto },
             ];
 
-            const activeTool = tools.find(x => x.id === hash) || tools[0];
+            const activeTool = tools.find(x => x.id === activeToolId) || tools[0];
             const ActiveComponent = activeTool.comp;
             const seo = t.seo[activeTool.id] || { title: activeTool.id, desc: "Tool description", tags: [] };
 
@@ -803,7 +803,7 @@ useEffect(() => {
                                     <h3 className="text-xs font-bold text-slate-400 uppercase tracking-wider mb-2 px-3">{t.categories[cat]}</h3>
                                     <div className="space-y-1">
                                         {tools.filter(x => x.cat === cat).map(item => (
-                                            <a key={item.id} href={`#${item.id}`} className={`flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-medium transition-all ${hash === item.id ? 'bg-slate-800 text-white shadow-md' : 'text-slate-600 hover:bg-slate-100'}`}><Icon name={item.icon} size={18} className={hash === item.id ? 'text-blue-300' : 'text-slate-400'} />{t.tools[item.id]}</a>
+                                            <a key={item.id} href={`#${item.id}`} className={`flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-medium transition-all ${activeToolId === item.id ? 'bg-slate-800 text-white shadow-md' : 'text-slate-600 hover:bg-slate-100'}`}><Icon name={item.icon} size={18} className={activeToolId === item.id ? 'text-blue-300' : 'text-slate-400'} />{t.tools[item.id]}</a>
                                         ))}
                                     </div>
                                 </div>

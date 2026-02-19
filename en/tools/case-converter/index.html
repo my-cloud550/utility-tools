@@ -6,7 +6,7 @@
 <meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" name="viewport"/>
 <meta content="Convert text to UPPER, lower, Title Case, Sentence case, and more." name="description"/>
 <meta content="글자수세기, BMI계산기, 색상변환기, HEX변환, CMYK변환, HSV변환, 퍼센트계산기, 이미지변환, 뽀모도로타이머, 비밀번호생성, 로또번호" name="keywords"/>
-<title>Case Converter | UtilityBox</title>
+<title>Case Converter | Upper/Lower/Title/Sentence | UtilityBox</title>
 <!-- 파비콘 -->
 <link href="/favicon.ico" rel="icon" type="image/x-icon"/>
 <!-- Tailwind CSS -->
@@ -789,7 +789,7 @@ useEffect(() => {
                 { id: 'lotto', icon: 'clover', cat: 'fun', comp: Lotto },
             ];
 
-            const activeTool = tools.find(x => x.id === hash) || tools[0];
+            const activeTool = tools.find(x => x.id === activeToolId) || tools[0];
             const ActiveComponent = activeTool.comp;
             const seo = t.seo[activeTool.id] || { title: activeTool.id, desc: "Tool description", tags: [] };
 
@@ -803,7 +803,7 @@ useEffect(() => {
                                     <h3 className="text-xs font-bold text-slate-400 uppercase tracking-wider mb-2 px-3">{t.categories[cat]}</h3>
                                     <div className="space-y-1">
                                         {tools.filter(x => x.cat === cat).map(item => (
-                                            <a key={item.id} href={`#${item.id}`} className={`flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-medium transition-all ${hash === item.id ? 'bg-slate-800 text-white shadow-md' : 'text-slate-600 hover:bg-slate-100'}`}><Icon name={item.icon} size={18} className={hash === item.id ? 'text-blue-300' : 'text-slate-400'} />{t.tools[item.id]}</a>
+                                            <a key={item.id} href={`#${item.id}`} className={`flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-medium transition-all ${activeToolId === item.id ? 'bg-slate-800 text-white shadow-md' : 'text-slate-600 hover:bg-slate-100'}`}><Icon name={item.icon} size={18} className={activeToolId === item.id ? 'text-blue-300' : 'text-slate-400'} />{t.tools[item.id]}</a>
                                         ))}
                                     </div>
                                 </div>
