@@ -2,3 +2,5 @@ User-agent: *
 Allow: /
 
 Sitemap: https://uboxtools.com/sitemap.xml
+
+#DaumWebMasterTool:be3f80e783b1d3c69b463aeff52cee2c5c31d92c825079f09d40f7dabb5fcb9f:93xIHOhxihnp4yitsJD3hw==
