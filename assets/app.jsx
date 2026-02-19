@@ -7,9 +7,7 @@ const { useState, useEffect, useRef, useCallback, useMemo } = React;
                 subtitle: "생활 필수 웹 도구 모음",
                 categories: { text: "텍스트 도구", math: "계산 도구", media: "미디어 도구", time: "시간 관리", security: "보안", fun: "재미", health: "건강 관리" },
                 tools: {
-                    
-                    home: "도구 모아보기",
-text: "글자 수 세기",
+                    text: "글자 수 세기",
                     case: "대소문자 변환",
                     percent: "만능 퍼센트 계산",
                     discount: "할인율 계산",
@@ -24,12 +22,6 @@ text: "글자 수 세기",
                     bmi: "BMI 비만도 계산"
                 },
                 seo: {
-                    
-                    home: {
-                        title: "🏠 UtilityBox 도구 모아보기",
-                        desc: "글자 수 세기, 대소문자 변환, 퍼센트/할인 계산, 이미지·단위·색상 도구까지 한 곳에서 빠르게 골라 실행하세요.",
-                        tags: ["#유틸리티", "#웹도구", "#도구모음", "#UtilityBox"]
-                    },
                     text: { 
                         title: "📝 자소서/블로그 필수! 글자 수 세기", 
                         desc: "네이버 글자수세기와 동일한 기준으로 공백 포함 글자 수와 공백 제외 글자 수를 정확하게 계산합니다. 자기소개서(자소서) 작성, 블로그 포스팅, 리포트 작성 시 500자, 1000자 제한을 맞출 때 필수적인 도구입니다.", 
@@ -668,7 +660,7 @@ text: "글자 수 세기",
         const parseRouteFromPath = () => {
             const parts = window.location.pathname.split('/').filter(Boolean);
             const lang = (parts[0] === 'en' || parts[0] === 'ko') ? parts[0] : 'ko';
-            let tool = 'home';
+            let tool = 'text';
             if (parts[1] === 'tools' && parts[2]) tool = SLUG_TOOL[parts[2]] || 'text';
             return { lang, tool };
         };
@@ -680,88 +672,8 @@ text: "글자 수 세기",
             return parseRouteFromPath();
         };
         const makePath = (lang, toolId) => {
-            if (toolId === 'home') return `/${lang}/`;
             const slug = TOOL_SLUG[toolId] || TOOL_SLUG.text;
             return `/${lang}/tools/${slug}/`;
-        };
-
-        // --- Home Directory ---
-
-        const HomeDirectory = ({ t, lang, tools, makePath }) => {
-            const [q, setQ] = useState("");
-            const query = (q || "").trim().toLowerCase();
-
-            const items = useMemo(() => {
-                const list = tools
-                    .map(x => ({
-                        id: x.id,
-                        icon: x.icon,
-                        cat: x.cat,
-                        name: t.tools[x.id],
-                        href: makePath(lang, x.id),
-                    }))
-                    .filter(x => x.id !== 'home');
-
-                if (!query) return list;
-                return list.filter(x => (x.name || "").toLowerCase().includes(query));
-            }, [tools, query, t, lang]);
-
-            return (
-                <div className="p-6 md:p-10">
-                    <div className="mb-8 animate-fade-in">
-                        <div className="inline-flex items-center px-3 py-1 rounded-full bg-blue-50 text-blue-700 text-xs font-bold">
-                            {lang === 'ko' ? '도구 모음' : 'Toolkit'}
-                        </div>
-                        <h1 className="mt-3 text-3xl md:text-4xl font-extrabold text-slate-900">
-                            {t.tools.home || (lang === 'ko' ? '도구 모아보기' : 'Tool Directory')}
-                        </h1>
-                        <p className="mt-2 text-slate-600">
-                            {lang === 'ko' ? '원하는 도구를 검색하고 바로 실행하세요.' : 'Search and run a tool instantly.'}
-                        </p>
-
-                        <div className="mt-6">
-                            <div className="relative">
-                                <div className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400">
-                                    <Icon name="search" size={16} />
-                                </div>
-                                <input
-                                    value={q}
-                                    onChange={(e) => setQ(e.target.value)}
-                                    placeholder={lang === 'ko' ? '도구 이름 검색…' : 'Search tools…'}
-                                    className="w-full pl-11 pr-4 py-3 rounded-2xl border border-slate-200 bg-slate-50 focus:bg-white focus:border-blue-500 outline-none"
-                                />
-                            </div>
-                            <div className="mt-3 text-xs text-slate-500">
-                                {lang === 'ko' ? '예: 글자 수, 퍼센트, 할인' : 'Try: word, percent, discount'}
-                            </div>
-                        </div>
-                    </div>
-
-                    <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-5">
-                        {items.map(item => (
-                            <a key={item.id} href={item.href} className="rounded-3xl border border-slate-100 bg-white p-6 shadow-sm hover:shadow-md transition group">
-                                <div className="flex items-start gap-4">
-                                    <div className="h-12 w-12 rounded-2xl bg-slate-50 flex items-center justify-center border border-slate-100">
-                                        <Icon name={item.icon} size={22} className="text-slate-700" />
-                                    </div>
-                                    <div className="flex-1">
-                                        <div className="text-lg font-extrabold text-slate-900">{item.name}</div>
-                                        <div className="mt-3 inline-flex items-center gap-1 text-sm font-semibold text-blue-700">
-                                            {lang === 'ko' ? '열기' : 'Open'} <span className="transition group-hover:translate-x-0.5">→</span>
-                                        </div>
-                                    </div>
-                                </div>
-                            </a>
-                        ))}
-                    </div>
-
-                    {items.length === 0 && (
-                        <div className="mt-10 text-center text-slate-500">
-                            {lang === 'ko' ? '검색 결과가 없습니다.' : 'No matching tools.'}
-                        </div>
-                    )}
-                </div>
-            );
         };
 
         // --- Main App & Routing ---
@@ -805,23 +717,21 @@ text: "글자 수 세기",
                 { id: 'lotto', icon: 'clover', cat: 'fun', comp: Lotto },
             ];
 
-            const isHome = activeToolId === 'home';
-            const activeTool = isHome ? null : (tools.find(x => x.id === activeToolId) || tools[0]);
-            const ActiveComponent = isHome ? HomeDirectory : activeTool.comp;
-            const seo = isHome ? (t.seo.home || { title: t.tools.home || 'Home', desc: '', tags: [] }) : (t.seo[activeTool.id] || { title: activeTool.id, desc: "Tool description", tags: [] });
+            const activeTool = tools.find(x => x.id === activeToolId) || tools[0];
+            const ActiveComponent = activeTool.comp;
+            const seo = t.seo[activeTool.id] || { title: activeTool.id, desc: "Tool description", tags: [] };
 
             return (
                 <div className="flex h-screen bg-slate-50">
                     <aside className={`fixed inset-y-0 left-0 z-40 w-72 bg-white border-r border-slate-200 transform transition-transform duration-300 md:static md:translate-x-0 ${menuOpen ? 'translate-x-0' : '-translate-x-full'} flex flex-col`}>
                         <div className="p-6"><h1 className="text-2xl font-bold flex items-center gap-3 text-slate-800"><div className="w-10 h-10 bg-blue-600 rounded-xl flex items-center justify-center text-white shadow-lg shadow-blue-200"><Icon name="box" size={24} /></div>UtilityBox</h1><p className="text-xs text-slate-400 mt-2 ml-1">스마트 툴 모음</p></div>
                         <nav className="flex-1 px-4 py-2 space-y-8 overflow-y-auto custom-scrollbar">
-                            <div>
-                                <a href={makePath(lang, 'home')} className={`flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-bold transition-all ${activeToolId === 'home' ? 'bg-slate-800 text-white shadow-md' : 'text-slate-600 hover:bg-slate-100'}`}>
-                                    <Icon name="home" size={18} className={activeToolId === 'home' ? 'text-blue-300' : 'text-slate-400'} />
+                            <div className="px-2">
+                                <a href={`/${lang}/`} className="flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-bold text-slate-700 hover:bg-slate-100 transition-all">
+                                    <Icon name="home" size={18} className="text-slate-400" />
                                     {lang === 'ko' ? '홈' : 'Home'}
                                 </a>
                             </div>
-
                             {['text', 'math', 'media', 'time', 'security', 'fun', 'health'].map(cat => (
                                 <div key={cat}>
                                     <h3 className="text-xs font-bold text-slate-400 uppercase tracking-wider mb-2 px-3">{t.categories[cat]}</h3>
@@ -837,27 +747,13 @@ text: "글자 수 세기",
                     </aside>
                     {menuOpen && <div className="fixed inset-0 bg-black/20 z-30 md:hidden backdrop-blur-sm" onClick={() => setMenuOpen(false)}></div>}
                     <main className="flex-1 flex flex-col h-full relative overflow-hidden">
-                        <header className="md:hidden bg-white/80 backdrop-blur-md border-b border-slate-200 p-4 flex justify-between items-center sticky top-0 z-20"><span className="font-bold text-lg flex items-center gap-2"><Icon name="box" size={20} className="text-blue-600"/> {t.title}</span><div className="flex gap-2"><button onClick={() => { window.location.href = makePath(lang === 'ko' ? 'en' : 'ko', activeToolId); }} className="p-2 bg-slate-100 rounded-lg text-slate-600"><Icon name="globe" size={20} /></button><button onClick={() => setMenuOpen(true)} className="p-2 bg-slate-100 rounded-lg text-slate-600"><Icon name="menu" size={20} /></button></div></header>
+                        <header className="md:hidden bg-white/80 backdrop-blur-md border-b border-slate-200 p-4 flex justify-between items-center sticky top-0 z-20"><span className="font-bold text-lg flex items-center gap-2"><Icon name="box" size={20} className="text-blue-600"/> {t.title}</span><div className="flex gap-2"><button onClick={() => { window.location.href = `/${lang}/`; }} className="p-2 bg-slate-100 rounded-lg text-slate-600"><Icon name="home" size={20} /></button><button onClick={() => { window.location.href = makePath(lang === 'ko' ? 'en' : 'ko', activeToolId); }} className="p-2 bg-slate-100 rounded-lg text-slate-600"><Icon name="globe" size={20} /></button><button onClick={() => setMenuOpen(true)} className="p-2 bg-slate-100 rounded-lg text-slate-600"><Icon name="menu" size={20} /></button></div></header>
                         <div className="flex-1 overflow-y-auto p-4 md:p-8">
                             <div className="max-w-2xl mx-auto pb-20">
                                 <div className="mb-6 bg-slate-100 border-2 border-dashed border-slate-200 rounded-lg h-20 flex flex-col items-center justify-center text-slate-400 text-xs"><span className="font-bold">Google AdSense</span><span>Display Ad (Responsive)</span></div>
-                                {isHome ? (
-                                    <div className="mb-8 animate-fade-in">
-                                        <div className="inline-flex items-center px-3 py-1 rounded-full bg-blue-50 text-blue-700 text-xs font-bold">
-                                            {lang === 'ko' ? '도구 모음' : 'Toolkit'}
-                                        </div>
-                                        <h1 className="mt-3 text-3xl md:text-4xl font-extrabold text-slate-900">
-                                            {t.tools.home || (lang === 'ko' ? '도구 모아보기' : 'Tool Directory')}
-                                        </h1>
-                                        <p className="mt-2 text-slate-600">
-                                            {lang === 'ko' ? '원하는 도구를 골라 바로 실행하세요.' : 'Pick a tool and run it instantly.'}
-                                        </p>
-                                    </div>
-                                ) : (
-                                    <div className="mb-6 animate-fade-in"><div className="flex items-center gap-2 mb-2"><span className="text-xs font-bold text-blue-600 bg-blue-50 px-2 py-1 rounded-md uppercase tracking-wider">{t.categories[activeTool.cat]}</span></div><h1 className="text-3xl font-bold text-slate-900">{t.tools[activeTool.id]}</h1></div>
-                                )}
-                                <Card className="min-h-[300px] mb-8"><ActiveComponent t={t} lang={lang} tools={tools} makePath={makePath} /></Card>
-                                {!isHome && <div className="bg-white border-l-4 border-blue-500 p-6 rounded-r-xl shadow-sm prose prose-slate max-w-none prose-sm"><h3 className="text-lg font-bold text-slate-800 mb-2 flex items-center gap-2"><Icon name="lightbulb" size={18} className="text-blue-500" />활용 꿀팁</h3><h4 className="font-bold text-slate-700 m-0">{seo.title}</h4><p className="text-slate-600 mt-1">{seo.desc}</p><div className="flex flex-wrap gap-2 mt-3 not-prose">{seo.tags && seo.tags.map(tag => (<span key={tag} className="text-xs bg-slate-100 text-slate-500 px-2 py-1 rounded-full">{tag}</span>))}</div></div>}
+                                <div className="mb-6 animate-fade-in"><div className="flex items-center gap-2 mb-2"><span className="text-xs font-bold text-blue-600 bg-blue-50 px-2 py-1 rounded-md uppercase tracking-wider">{t.categories[activeTool.cat]}</span></div><h1 className="text-3xl font-bold text-slate-900">{t.tools[activeTool.id]}</h1></div>
+                                <Card className="min-h-[300px] mb-8"><ActiveComponent t={t} /></Card>
+                                <div className="bg-white border-l-4 border-blue-500 p-6 rounded-r-xl shadow-sm prose prose-slate max-w-none prose-sm"><h3 className="text-lg font-bold text-slate-800 mb-2 flex items-center gap-2"><Icon name="lightbulb" size={18} className="text-blue-500" />활용 꿀팁</h3><h4 className="font-bold text-slate-700 m-0">{seo.title}</h4><p className="text-slate-600 mt-1">{seo.desc}</p><div className="flex flex-wrap gap-2 mt-3 not-prose">{seo.tags && seo.tags.map(tag => (<span key={tag} className="text-xs bg-slate-100 text-slate-500 px-2 py-1 rounded-full">{tag}</span>))}</div></div>
                                 <footer className="mt-12 text-center text-xs text-slate-400">&copy; {currentYear} Utility Box. All tools run locally in your browser.</footer>
                             </div>
                         </div>
