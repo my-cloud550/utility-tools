@@ -682,6 +682,42 @@ const { useState, useEffect, useRef, useCallback, useMemo } = React;
             const [lang, setLang] = useState(initialRoute.lang);
             const [activeToolId, setActiveToolId] = useState(initialRoute.tool);
             const [menuOpen, setMenuOpen] = useState(false);
+
+            // --- SEO: BreadcrumbList JSON-LD (auto, per tool page) ---
+            useEffect(() => {
+                try {
+                    // Only for tool pages (these pages set window.__UBOX_PAGE__)
+                    const page = window.__UBOX_PAGE__ || null;
+                    if (!page || !page.tool) return;
+
+                    const rootName = (lang === 'ko') ? '도구 모음' : 'Tool Directory';
+                    const toolName = (translations?.[lang]?.tools?.[activeToolId]) || (translations?.[lang]?.title) || 'Tool';
+
+                    const origin = window.location.origin || 'https://uboxtools.com';
+                    const rootUrl = `${origin}/${lang}/`;
+                    const slug = TOOL_SLUG[activeToolId] || TOOL_SLUG.text;
+                    const toolUrl = `${origin}/${lang}/tools/${slug}/`;
+
+                    const jsonLd = {
+                        "@context": "https://schema.org",
+                        "@type": "BreadcrumbList",
+                        "itemListElement": [
+                            { "@type": "ListItem", "position": 1, "name": rootName, "item": rootUrl },
+                            { "@type": "ListItem", "position": 2, "name": toolName, "item": toolUrl }
+                        ]
+                    };
+
+                    const id = "ubox-breadcrumb-jsonld";
+                    let el = document.getElementById(id);
+                    if (!el) {
+                        el = document.createElement("script");
+                        el.type = "application/ld+json";
+                        el.id = id;
+                        document.head.appendChild(el);
+                    }
+                    el.textContent = JSON.stringify(jsonLd);
+                } catch (e) { /* ignore */ }
+            }, [lang, activeToolId]);
             const [isIconReady, setIsIconReady] = useState(false); // 아이콘 로딩 상태
             const t = translations[lang] || translations.ko;
             const currentYear = 2026;
