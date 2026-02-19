@@ -1,360 +1,535 @@
-<!doctype html>
+<!DOCTYPE html>
+<html lang="ko">
+<!DOCTYPE html>
 <html lang="ko">
 <head>
-  <meta charset="UTF-8" />
-  <base href="/" />
-  <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="description" content="생활 필수 웹 도구 모음. 원하는 도구를 찾아 바로 실행하세요." />
+    <meta name="keywords" content="utility box, tools, word counter, case converter, percent calculator, 온라인 도구" />
+    <title>도구 모음 | UtilityBox</title>
 
-  <title>UtilityBox | 온라인 만능 도구 모음</title>
-  <meta name="description" content="글자 수 세기, 대소문자 변환, 퍼센트/할인 계산 등 브라우저에서 바로 쓰는 유틸리티 도구 모음. 각 도구는 고유 링크로 제공됩니다." />
-  <link rel="canonical" href="https://uboxtools.com/ko/" />
+    <link rel="canonical" href="https://uboxtools.com/ko/" />
+    <link rel="alternate" hreflang="x-default" href="https://uboxtools.com/ko/" />
+    <link rel="alternate" hreflang="ko" href="https://uboxtools.com/ko/" />
+    <link rel="alternate" hreflang="en" href="https://uboxtools.com/en/" />
 
-  <meta property="og:type" content="website" />
-  <meta property="og:title" content="UtilityBox | 온라인 만능 도구 모음" />
-  <meta property="og:description" content="글자 수 세기, 대소문자 변환, 퍼센트/할인 계산 등 브라우저에서 바로 쓰는 유틸리티 도구 모음. 각 도구는 고유 링크로 제공됩니다." />
-  <meta property="og:url" content="https://uboxtools.com/ko/" />
+    <meta property="og:type" content="website" />
+    <meta property="og:site_name" content="UtilityBox" />
+    <meta property="og:locale" content="ko_KR" />
+    <meta property="og:title" content="도구 모음 | UtilityBox" />
+    <meta property="og:description" content="생활 필수 웹 도구 모음. 원하는 도구를 찾아 바로 실행하세요." />
+    <meta property="og:url" content="https://uboxtools.com/ko/" />
 
-  <meta name="twitter:card" content="summary" />
-  <meta name="twitter:title" content="UtilityBox | 온라인 만능 도구 모음" />
-  <meta name="twitter:description" content="글자 수 세기, 대소문자 변환, 퍼센트/할인 계산 등 브라우저에서 바로 쓰는 유틸리티 도구 모음. 각 도구는 고유 링크로 제공됩니다." />
+    <meta name="twitter:card" content="summary" />
+    <meta name="twitter:title" content="도구 모음 | UtilityBox" />
+    <meta name="twitter:description" content="생활 필수 웹 도구 모음. 원하는 도구를 찾아 바로 실행하세요." />
 
-  <link rel="icon" href="/favicon.ico" />
-
-  <script src="https://cdn.tailwindcss.com"></script>
-  <script>
-    tailwind.config = {
-      theme: {
-        extend: {
-          fontFamily: {
-            sans: ['Pretendard','Inter','Noto Sans KR','system-ui','-apple-system','Segoe UI','Roboto','sans-serif'],
-          }
+    <link rel="icon" type="image/png" href="/assets/favicon.png" />
+<!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Pretendard', 'Inter', 'Noto Sans KR', 'sans-serif'],
+                        mono: ['JetBrains Mono', 'monospace'],
+                    },
+                    colors: {
+                        brand: { 50: '#eff6ff', 100: '#dbeafe', 500: '#3b82f6', 600: '#2563eb', 900: '#1e3a8a' },
+                    },
+                    animation: {
+                        'fade-in': 'fadeIn 0.3s ease-out',
+                        'slide-up': 'slideUp 0.4s ease-out',
+                        'bounce-short': 'bounceShort 0.5s ease-in-out 1',
+                    },
+                    keyframes: {
+                        fadeIn: { '0%': { opacity: '0' }, '100%': { opacity: '1' } },
+                        slideUp: { '0%': { transform: 'translateY(10px)', opacity: '0' }, '100%': { transform: 'translateY(0)', opacity: '1' } },
+                        bounceShort: { '0%, 100%': { transform: 'translateY(0)' }, '50%': { transform: 'translateY(-10px)' } }
+                    }
+                }
+            }
         }
-      }
-    };
-  </script>
-  <style>
-    .animate-slide-up { animation: slideUp .35s ease-out both; }
-    @keyframes slideUp {
-      from { transform: translateY(8px); opacity: .0; }
-      to { transform: translateY(0); opacity: 1; }
-    }
-  </style>
+    </script>
+
+    <!-- React Libraries -->
+    <script crossorigin src="https://unpkg.com/react@18/umd/react.development.js"></script>
+    <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.development.js"></script>
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+    <!-- Icons (Lucide) -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+
+    <style>
+        @import url('https://cdn.jsdelivr.net/gh/orioncactus/pretendard/dist/web/static/pretendard.css');
+        
+        body { 
+            font-family: 'Pretendard', -apple-system, BlinkMacSystemFont, system-ui, Roboto, sans-serif;
+            background-color: #f8fafc;
+            -webkit-tap-highlight-color: transparent;
+        }
+        
+        /* Custom Scrollbar */
+        .custom-scrollbar::-webkit-scrollbar { width: 5px; }
+        .custom-scrollbar::-webkit-scrollbar-track { background: transparent; }
+        .custom-scrollbar::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 3px; }
+
+        /* Hide Number Input Arrows */
+        input[type=number]::-webkit-inner-spin-button, 
+        input[type=number]::-webkit-outer-spin-button { -webkit-appearance: none; margin: 0; }
+    </style>
+
 </head>
-
 <body class="bg-slate-50 text-slate-800">
-  <div class="min-h-screen flex">
+  <div class="flex h-screen bg-slate-50">
     <!-- Sidebar -->
-    <aside class="hidden md:flex w-72 border-r border-slate-100 bg-white/70 backdrop-blur">
-      <div class="w-full px-6 py-8">
-        <a href="/ko/" class="flex items-center gap-3">
-          <div class="h-10 w-10 rounded-2xl bg-blue-600 text-white flex items-center justify-center font-extrabold">U</div>
-          <div>
-            <div class="text-lg font-extrabold text-slate-900">UtilityBox</div>
-            <div class="text-xs text-slate-500">한국어</div>
+    <aside id="sidebar" class="fixed inset-y-0 left-0 z-40 w-72 bg-white border-r border-slate-200 transform transition-transform duration-300 md:static md:translate-x-0 -translate-x-full flex flex-col">
+      <div class="p-6">
+        <a href="/ko/" class="text-2xl font-bold flex items-center gap-3 text-slate-800">
+          <div class="w-10 h-10 bg-blue-600 rounded-xl flex items-center justify-center text-white shadow-lg shadow-blue-200">
+            <i data-lucide="box" class="w-6 h-6"></i>
           </div>
+          UtilityBox
         </a>
+        <p class="text-xs text-slate-400 mt-2 ml-1">스마트 툴 모음</p>
+      </div>
 
-        <nav class="mt-8 space-y-1">
-          <a href="/ko/" class="flex items-center gap-3 px-3 py-2 rounded-xl bg-blue-50 text-blue-700 font-semibold">
-            <i data-lucide="home" class="h-4 w-4"></i> 홈
-          </a>
-
-          <div class="mt-5 text-xs font-bold text-slate-400 px-3">도구</div>
-          <a href="/ko/tools/word-counter/" class="flex items-center gap-3 px-3 py-2 rounded-xl hover:bg-slate-50 text-slate-700">
-              <i data-lucide="type" class="h-4 w-4"></i> 글자 수 세기
+      <nav class="flex-1 px-4 py-2 space-y-8 overflow-y-auto custom-scrollbar">
+        <div>
+          <h3 class="text-xs font-bold text-slate-400 uppercase tracking-wider mb-2 px-3">홈</h3>
+          <div class="space-y-1">
+            <a href="/ko/" class="flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-medium transition-all bg-slate-800 text-white shadow-md">
+              <i data-lucide="layout-grid" class="w-[18px] h-[18px] text-blue-300"></i>
+              도구 모음
             </a>
-<a href="/ko/tools/universal-percent/" class="flex items-center gap-3 px-3 py-2 rounded-xl hover:bg-slate-50 text-slate-700">
-              <i data-lucide="calculator" class="h-4 w-4"></i> 만능 퍼센트 계산
-            </a>
-<a href="/ko/tools/discount-calculator/" class="flex items-center gap-3 px-3 py-2 rounded-xl hover:bg-slate-50 text-slate-700">
-              <i data-lucide="percent" class="h-4 w-4"></i> 할인율 계산
-            </a>
-<a href="/ko/tools/image-tools/" class="flex items-center gap-3 px-3 py-2 rounded-xl hover:bg-slate-50 text-slate-700">
-              <i data-lucide="image-plus" class="h-4 w-4"></i> 이미지 용량 줄이기
-            </a>
-<a href="/ko/tools/color-converter/" class="flex items-center gap-3 px-3 py-2 rounded-xl hover:bg-slate-50 text-slate-700">
-              <i data-lucide="palette" class="h-4 w-4"></i> 색상 코드 변환기
-            </a>
-        </nav>
-
-        <div class="mt-10 rounded-2xl border border-slate-100 bg-white p-4">
-          <div class="text-xs font-bold text-slate-500">Language</div>
-          <a href="/en/" class="mt-2 inline-flex items-center justify-center w-full px-3 py-2 rounded-xl bg-slate-900 text-white font-semibold hover:bg-slate-800 transition">
-            English
-          </a>
+          </div>
         </div>
 
-        <div class="mt-6 text-xs text-slate-400 leading-relaxed">
-          © 2026 UtilityBox<br />
-          브라우저에서 로컬로 실행됩니다.
-        </div>
+        
+          <div>
+            <h3 class="text-xs font-bold text-slate-400 uppercase tracking-wider mb-2 px-3">텍스트 도구</h3>
+            <div class="space-y-1">
+              
+            <a href="/ko/tools/word-counter/" class="flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-medium transition-all text-slate-600 hover:bg-slate-100">
+              <i data-lucide="type" class="w-[18px] h-[18px] text-slate-400"></i>
+              글자 수 세기
+            </a>
+            <a href="/ko/tools/case-converter/" class="flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-medium transition-all text-slate-600 hover:bg-slate-100">
+              <i data-lucide="case-sensitive" class="w-[18px] h-[18px] text-slate-400"></i>
+              대소문자 변환
+            </a>
+            </div>
+          </div>
+
+          <div>
+            <h3 class="text-xs font-bold text-slate-400 uppercase tracking-wider mb-2 px-3">계산 도구</h3>
+            <div class="space-y-1">
+              
+            <a href="/ko/tools/universal-percent/" class="flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-medium transition-all text-slate-600 hover:bg-slate-100">
+              <i data-lucide="calculator" class="w-[18px] h-[18px] text-slate-400"></i>
+              만능 퍼센트 계산
+            </a>
+            <a href="/ko/tools/discount-calculator/" class="flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-medium transition-all text-slate-600 hover:bg-slate-100">
+              <i data-lucide="percent" class="w-[18px] h-[18px] text-slate-400"></i>
+              할인율 계산
+            </a>
+            <a href="/ko/tools/unit-converter/" class="flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-medium transition-all text-slate-600 hover:bg-slate-100">
+              <i data-lucide="arrow-left-right" class="w-[18px] h-[18px] text-slate-400"></i>
+              단위 변환
+            </a>
+            </div>
+          </div>
+
+          <div>
+            <h3 class="text-xs font-bold text-slate-400 uppercase tracking-wider mb-2 px-3">미디어 도구</h3>
+            <div class="space-y-1">
+              
+            <a href="/ko/tools/image-tools/" class="flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-medium transition-all text-slate-600 hover:bg-slate-100">
+              <i data-lucide="image-plus" class="w-[18px] h-[18px] text-slate-400"></i>
+              이미지 용량 줄이기
+            </a>
+            <a href="/ko/tools/color-converter/" class="flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-medium transition-all text-slate-600 hover:bg-slate-100">
+              <i data-lucide="palette" class="w-[18px] h-[18px] text-slate-400"></i>
+              색상 코드 변환기
+            </a>
+            </div>
+          </div>
+
+          <div>
+            <h3 class="text-xs font-bold text-slate-400 uppercase tracking-wider mb-2 px-3">시간 관리</h3>
+            <div class="space-y-1">
+              
+            <a href="/ko/tools/stopwatch/" class="flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-medium transition-all text-slate-600 hover:bg-slate-100">
+              <i data-lucide="timer" class="w-[18px] h-[18px] text-slate-400"></i>
+              스톱워치
+            </a>
+            <a href="/ko/tools/pomodoro-timer/" class="flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-medium transition-all text-slate-600 hover:bg-slate-100">
+              <i data-lucide="clock" class="w-[18px] h-[18px] text-slate-400"></i>
+              포모도로 타이머
+            </a>
+            <a href="/ko/tools/dday-calculator/" class="flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-medium transition-all text-slate-600 hover:bg-slate-100">
+              <i data-lucide="calendar" class="w-[18px] h-[18px] text-slate-400"></i>
+              D-Day 계산기
+            </a>
+            </div>
+          </div>
+
+          <div>
+            <h3 class="text-xs font-bold text-slate-400 uppercase tracking-wider mb-2 px-3">보안</h3>
+            <div class="space-y-1">
+              
+            <a href="/ko/tools/password-generator/" class="flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-medium transition-all text-slate-600 hover:bg-slate-100">
+              <i data-lucide="lock" class="w-[18px] h-[18px] text-slate-400"></i>
+              비밀번호 생성
+            </a>
+            </div>
+          </div>
+
+          <div>
+            <h3 class="text-xs font-bold text-slate-400 uppercase tracking-wider mb-2 px-3">재미</h3>
+            <div class="space-y-1">
+              
+            <a href="/ko/tools/lotto-picker/" class="flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-medium transition-all text-slate-600 hover:bg-slate-100">
+              <i data-lucide="clover" class="w-[18px] h-[18px] text-slate-400"></i>
+              로또 번호 추첨
+            </a>
+            </div>
+          </div>
+
+          <div>
+            <h3 class="text-xs font-bold text-slate-400 uppercase tracking-wider mb-2 px-3">건강 관리</h3>
+            <div class="space-y-1">
+              
+            <a href="/ko/tools/bmi-calculator/" class="flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-medium transition-all text-slate-600 hover:bg-slate-100">
+              <i data-lucide="activity" class="w-[18px] h-[18px] text-slate-400"></i>
+              BMI 비만도 계산
+            </a>
+            </div>
+          </div>
+      </nav>
+
+      <div class="p-4 border-t border-slate-100">
+        <a href="/en/" class="w-full flex items-center justify-center gap-2 py-2.5 rounded-xl border border-slate-200 text-sm font-bold text-slate-500 hover:bg-slate-50 hover:text-blue-600 transition-colors">
+          <i data-lucide="globe" class="w-4 h-4"></i>
+          Language: 한국어
+        </a>
       </div>
     </aside>
 
+    <!-- Backdrop (mobile) -->
+    <div id="backdrop" class="fixed inset-0 bg-black/20 z-30 md:hidden backdrop-blur-sm hidden"></div>
+
     <!-- Main -->
-    <main class="flex-1">
-      <div class="max-w-6xl mx-auto px-5 md:px-10 py-8 md:py-10">
-        <!-- Top bar (mobile) -->
-        <div class="md:hidden flex items-center justify-between mb-6">
-          <a href="/ko/" class="font-extrabold text-slate-900">UtilityBox</a>
-          <a href="/en/" class="px-3 py-2 rounded-xl bg-slate-900 text-white text-sm font-semibold">English</a>
+    <main class="flex-1 flex flex-col h-full relative overflow-hidden">
+      <header class="md:hidden bg-white/80 backdrop-blur-md border-b border-slate-200 p-4 flex justify-between items-center sticky top-0 z-20">
+        <span class="font-bold text-lg flex items-center gap-2">
+          <i data-lucide="box" class="w-5 h-5 text-blue-600"></i> UtilityBox
+        </span>
+        <div class="flex gap-2">
+          <a href="/en/" class="p-2 bg-slate-100 rounded-lg text-slate-600" aria-label="switch language">
+            <i data-lucide="globe" class="w-5 h-5"></i>
+          </a>
+          <button id="openMenu" class="p-2 bg-slate-100 rounded-lg text-slate-600" aria-label="open menu">
+            <i data-lucide="menu" class="w-5 h-5"></i>
+          </button>
         </div>
+      </header>
 
-        <section class="rounded-3xl border border-slate-100 bg-white p-7 md:p-10 shadow-sm animate-slide-up">
-          <div class="inline-flex items-center px-3 py-1 rounded-full bg-blue-50 text-blue-700 text-xs font-bold">
-            도구 모음
+      <div class="flex-1 overflow-y-auto p-4 md:p-8">
+        <div class="max-w-5xl mx-auto pb-20">
+          <div class="mb-6 bg-slate-100 border-2 border-dashed border-slate-200 rounded-lg h-20 flex flex-col items-center justify-center text-slate-400 text-xs">
+            <span class="font-bold">Google AdSense</span>
+            <span>Display Ad (Responsive)</span>
           </div>
-          <h1 class="mt-3 text-3xl md:text-4xl font-extrabold text-slate-900">UtilityBox 도구 모아보기</h1>
-          <p class="mt-2 text-slate-600">원하는 도구를 검색해서 바로 열어보세요.</p>
 
-          <div class="mt-6">
-            <div class="relative">
-              <div class="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400">
-                <i data-lucide="search" class="h-4 w-4"></i>
-              </div>
-              <input id="toolSearch" type="text"
-                     placeholder="도구 이름 검색…"
-                     class="w-full pl-11 pr-4 py-3 rounded-2xl border border-slate-200 bg-slate-50 focus:bg-white focus:border-blue-500 outline-none" />
+          <div class="mb-6 animate-fade-in">
+            <div class="flex items-center gap-2 mb-2">
+              <span class="text-xs font-bold text-blue-600 bg-blue-50 px-2 py-1 rounded-md uppercase tracking-wider">
+                도구 모음
+              </span>
             </div>
-            <div class="mt-3 text-xs text-slate-500">
-              예: 글자 수, 퍼센트, 이미지
-            </div>
-          </div>
-        </section>
+            <h1 class="text-3xl font-bold text-slate-900">도구 모아보기</h1>
+            <p class="mt-2 text-slate-600">원하는 도구를 검색해서 바로 실행하세요.</p>
 
-        <section class="mt-7 md:mt-10">
-          <div id="toolsGrid" class="grid sm:grid-cols-2 lg:grid-cols-3 gap-5">
-            <a class="tool-card group rounded-3xl border border-slate-100 bg-white p-6 shadow-sm hover:shadow-md transition"
-           href="/ko/tools/word-counter/" data-title="글자 수 세기 word-counter">
-          <div class="flex items-start gap-4">
-            <div class="icon-wrap h-12 w-12 rounded-2xl bg-slate-50 flex items-center justify-center border border-slate-100">
-              <i data-lucide="type" class="h-6 w-6 text-slate-700"></i>
+            <div class="mt-5">
+              <div class="relative">
+                <div class="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400">
+                  <i data-lucide="search" class="w-4 h-4"></i>
+                </div>
+                <input id="toolSearch" type="text" placeholder="도구 이름 검색 (예: 글자수, 할인, BMI)"
+                  class="w-full pl-11 pr-4 py-3 rounded-2xl border border-slate-200 bg-white focus:border-blue-500 outline-none" />
+              </div>
+              <div class="mt-2 text-xs text-slate-400">
+                입력하면 카드가 바로 필터링됩니다.
+              </div>
+            </div>
+          </div>
+
+          <div id="cards" class="grid sm:grid-cols-2 lg:grid-cols-3 gap-4">
+            
+        <a href="/ko/tools/word-counter/" class="group bg-white border border-slate-200 rounded-2xl p-5 shadow-sm hover:shadow-md transition-all">
+          <div class="flex items-start gap-3">
+            <div class="w-11 h-11 bg-blue-50 rounded-xl flex items-center justify-center border border-blue-100">
+              <i data-lucide="type" class="w-6 h-6 text-blue-600"></i>
             </div>
             <div class="flex-1">
-              <div class="text-lg font-extrabold text-slate-900">글자 수 세기</div>
-              <div class="mt-1 text-sm text-slate-600 leading-relaxed">공백 포함/제외, 단어·줄까지 한 번에.</div>
-              <div class="mt-4 inline-flex items-center gap-1 text-sm font-semibold text-blue-700">
-                열기 <span class="transition group-hover:translate-x-0.5">→</span>
+              <div class="text-sm font-bold text-blue-600">텍스트 도구</div>
+              <div class="mt-1 text-xl font-bold text-slate-900">글자 수 세기</div>
+              <p class="mt-2 text-sm text-slate-600 leading-relaxed">공백 포함/제외 글자수, 단어수, 문장수 등을 바로 계산합니다.</p>
+              <div class="mt-4 inline-flex items-center gap-2 text-sm font-bold text-slate-700 group-hover:text-blue-700">
+                바로 열기 <span class="transition-transform group-hover:translate-x-0.5">→</span>
               </div>
             </div>
           </div>
         </a>
-<a class="tool-card group rounded-3xl border border-slate-100 bg-white p-6 shadow-sm hover:shadow-md transition"
-           href="/ko/tools/case-converter/" data-title="대소문자 변환 case-converter">
-          <div class="flex items-start gap-4">
-            <div class="icon-wrap h-12 w-12 rounded-2xl bg-slate-50 flex items-center justify-center border border-slate-100">
-              <i data-lucide="case-sensitive" class="h-6 w-6 text-slate-700"></i>
+
+        <a href="/ko/tools/case-converter/" class="group bg-white border border-slate-200 rounded-2xl p-5 shadow-sm hover:shadow-md transition-all">
+          <div class="flex items-start gap-3">
+            <div class="w-11 h-11 bg-blue-50 rounded-xl flex items-center justify-center border border-blue-100">
+              <i data-lucide="case-sensitive" class="w-6 h-6 text-blue-600"></i>
             </div>
             <div class="flex-1">
-              <div class="text-lg font-extrabold text-slate-900">대소문자 변환</div>
-              <div class="mt-1 text-sm text-slate-600 leading-relaxed">대문자/소문자/카멜·스네이크까지 변환.</div>
-              <div class="mt-4 inline-flex items-center gap-1 text-sm font-semibold text-blue-700">
-                열기 <span class="transition group-hover:translate-x-0.5">→</span>
+              <div class="text-sm font-bold text-blue-600">텍스트 도구</div>
+              <div class="mt-1 text-xl font-bold text-slate-900">대소문자 변환</div>
+              <p class="mt-2 text-sm text-slate-600 leading-relaxed">영문 대문자/소문자/타이틀/스네이크 등 다양한 케이스로 변환합니다.</p>
+              <div class="mt-4 inline-flex items-center gap-2 text-sm font-bold text-slate-700 group-hover:text-blue-700">
+                바로 열기 <span class="transition-transform group-hover:translate-x-0.5">→</span>
               </div>
             </div>
           </div>
         </a>
-<a class="tool-card group rounded-3xl border border-slate-100 bg-white p-6 shadow-sm hover:shadow-md transition"
-           href="/ko/tools/bmi-calculator/" data-title="bmi 비만도 계산 bmi-calculator">
-          <div class="flex items-start gap-4">
-            <div class="icon-wrap h-12 w-12 rounded-2xl bg-slate-50 flex items-center justify-center border border-slate-100">
-              <i data-lucide="activity" class="h-6 w-6 text-slate-700"></i>
+
+        <a href="/ko/tools/universal-percent/" class="group bg-white border border-slate-200 rounded-2xl p-5 shadow-sm hover:shadow-md transition-all">
+          <div class="flex items-start gap-3">
+            <div class="w-11 h-11 bg-blue-50 rounded-xl flex items-center justify-center border border-blue-100">
+              <i data-lucide="calculator" class="w-6 h-6 text-blue-600"></i>
             </div>
             <div class="flex-1">
-              <div class="text-lg font-extrabold text-slate-900">BMI 비만도 계산</div>
-              <div class="mt-1 text-sm text-slate-600 leading-relaxed">키·몸무게로 BMI를 빠르게 확인.</div>
-              <div class="mt-4 inline-flex items-center gap-1 text-sm font-semibold text-blue-700">
-                열기 <span class="transition group-hover:translate-x-0.5">→</span>
+              <div class="text-sm font-bold text-blue-600">계산 도구</div>
+              <div class="mt-1 text-xl font-bold text-slate-900">만능 퍼센트 계산</div>
+              <p class="mt-2 text-sm text-slate-600 leading-relaxed">증감률, 비율, 기준값 대비 퍼센트를 한 번에 계산합니다.</p>
+              <div class="mt-4 inline-flex items-center gap-2 text-sm font-bold text-slate-700 group-hover:text-blue-700">
+                바로 열기 <span class="transition-transform group-hover:translate-x-0.5">→</span>
               </div>
             </div>
           </div>
         </a>
-<a class="tool-card group rounded-3xl border border-slate-100 bg-white p-6 shadow-sm hover:shadow-md transition"
-           href="/ko/tools/universal-percent/" data-title="만능 퍼센트 계산 universal-percent">
-          <div class="flex items-start gap-4">
-            <div class="icon-wrap h-12 w-12 rounded-2xl bg-slate-50 flex items-center justify-center border border-slate-100">
-              <i data-lucide="calculator" class="h-6 w-6 text-slate-700"></i>
+
+        <a href="/ko/tools/discount-calculator/" class="group bg-white border border-slate-200 rounded-2xl p-5 shadow-sm hover:shadow-md transition-all">
+          <div class="flex items-start gap-3">
+            <div class="w-11 h-11 bg-blue-50 rounded-xl flex items-center justify-center border border-blue-100">
+              <i data-lucide="percent" class="w-6 h-6 text-blue-600"></i>
             </div>
             <div class="flex-1">
-              <div class="text-lg font-extrabold text-slate-900">만능 퍼센트 계산</div>
-              <div class="mt-1 text-sm text-slate-600 leading-relaxed">비율·증감률·수익률 계산.</div>
-              <div class="mt-4 inline-flex items-center gap-1 text-sm font-semibold text-blue-700">
-                열기 <span class="transition group-hover:translate-x-0.5">→</span>
+              <div class="text-sm font-bold text-blue-600">계산 도구</div>
+              <div class="mt-1 text-xl font-bold text-slate-900">할인율 계산</div>
+              <p class="mt-2 text-sm text-slate-600 leading-relaxed">정가·판매가로 할인율과 할인금액을 계산합니다.</p>
+              <div class="mt-4 inline-flex items-center gap-2 text-sm font-bold text-slate-700 group-hover:text-blue-700">
+                바로 열기 <span class="transition-transform group-hover:translate-x-0.5">→</span>
               </div>
             </div>
           </div>
         </a>
-<a class="tool-card group rounded-3xl border border-slate-100 bg-white p-6 shadow-sm hover:shadow-md transition"
-           href="/ko/tools/discount-calculator/" data-title="할인율 계산 discount-calculator">
-          <div class="flex items-start gap-4">
-            <div class="icon-wrap h-12 w-12 rounded-2xl bg-slate-50 flex items-center justify-center border border-slate-100">
-              <i data-lucide="percent" class="h-6 w-6 text-slate-700"></i>
+
+        <a href="/ko/tools/unit-converter/" class="group bg-white border border-slate-200 rounded-2xl p-5 shadow-sm hover:shadow-md transition-all">
+          <div class="flex items-start gap-3">
+            <div class="w-11 h-11 bg-blue-50 rounded-xl flex items-center justify-center border border-blue-100">
+              <i data-lucide="arrow-left-right" class="w-6 h-6 text-blue-600"></i>
             </div>
             <div class="flex-1">
-              <div class="text-lg font-extrabold text-slate-900">할인율 계산</div>
-              <div class="mt-1 text-sm text-slate-600 leading-relaxed">정가·할인가·할인율을 즉시 계산.</div>
-              <div class="mt-4 inline-flex items-center gap-1 text-sm font-semibold text-blue-700">
-                열기 <span class="transition group-hover:translate-x-0.5">→</span>
+              <div class="text-sm font-bold text-blue-600">계산 도구</div>
+              <div class="mt-1 text-xl font-bold text-slate-900">단위 변환</div>
+              <p class="mt-2 text-sm text-slate-600 leading-relaxed">길이·무게·온도 등 단위를 빠르게 변환합니다.</p>
+              <div class="mt-4 inline-flex items-center gap-2 text-sm font-bold text-slate-700 group-hover:text-blue-700">
+                바로 열기 <span class="transition-transform group-hover:translate-x-0.5">→</span>
               </div>
             </div>
           </div>
         </a>
-<a class="tool-card group rounded-3xl border border-slate-100 bg-white p-6 shadow-sm hover:shadow-md transition"
-           href="/ko/tools/unit-converter/" data-title="단위 변환 unit-converter">
-          <div class="flex items-start gap-4">
-            <div class="icon-wrap h-12 w-12 rounded-2xl bg-slate-50 flex items-center justify-center border border-slate-100">
-              <i data-lucide="arrow-left-right" class="h-6 w-6 text-slate-700"></i>
+
+        <a href="/ko/tools/image-tools/" class="group bg-white border border-slate-200 rounded-2xl p-5 shadow-sm hover:shadow-md transition-all">
+          <div class="flex items-start gap-3">
+            <div class="w-11 h-11 bg-blue-50 rounded-xl flex items-center justify-center border border-blue-100">
+              <i data-lucide="image-plus" class="w-6 h-6 text-blue-600"></i>
             </div>
             <div class="flex-1">
-              <div class="text-lg font-extrabold text-slate-900">단위 변환</div>
-              <div class="mt-1 text-sm text-slate-600 leading-relaxed">길이·무게·온도 변환.</div>
-              <div class="mt-4 inline-flex items-center gap-1 text-sm font-semibold text-blue-700">
-                열기 <span class="transition group-hover:translate-x-0.5">→</span>
+              <div class="text-sm font-bold text-blue-600">미디어 도구</div>
+              <div class="mt-1 text-xl font-bold text-slate-900">이미지 용량 줄이기</div>
+              <p class="mt-2 text-sm text-slate-600 leading-relaxed">이미지 압축·리사이즈 등 간단한 이미지 작업을 지원합니다.</p>
+              <div class="mt-4 inline-flex items-center gap-2 text-sm font-bold text-slate-700 group-hover:text-blue-700">
+                바로 열기 <span class="transition-transform group-hover:translate-x-0.5">→</span>
               </div>
             </div>
           </div>
         </a>
-<a class="tool-card group rounded-3xl border border-slate-100 bg-white p-6 shadow-sm hover:shadow-md transition"
-           href="/ko/tools/image-tools/" data-title="이미지 용량 줄이기 image-tools">
-          <div class="flex items-start gap-4">
-            <div class="icon-wrap h-12 w-12 rounded-2xl bg-slate-50 flex items-center justify-center border border-slate-100">
-              <i data-lucide="image-plus" class="h-6 w-6 text-slate-700"></i>
+
+        <a href="/ko/tools/color-converter/" class="group bg-white border border-slate-200 rounded-2xl p-5 shadow-sm hover:shadow-md transition-all">
+          <div class="flex items-start gap-3">
+            <div class="w-11 h-11 bg-blue-50 rounded-xl flex items-center justify-center border border-blue-100">
+              <i data-lucide="palette" class="w-6 h-6 text-blue-600"></i>
             </div>
             <div class="flex-1">
-              <div class="text-lg font-extrabold text-slate-900">이미지 용량 줄이기</div>
-              <div class="mt-1 text-sm text-slate-600 leading-relaxed">WebP 변환으로 용량 절감.</div>
-              <div class="mt-4 inline-flex items-center gap-1 text-sm font-semibold text-blue-700">
-                열기 <span class="transition group-hover:translate-x-0.5">→</span>
+              <div class="text-sm font-bold text-blue-600">미디어 도구</div>
+              <div class="mt-1 text-xl font-bold text-slate-900">색상 코드 변환기</div>
+              <p class="mt-2 text-sm text-slate-600 leading-relaxed">HEX/RGB/HSL 등 색상 값을 변환합니다.</p>
+              <div class="mt-4 inline-flex items-center gap-2 text-sm font-bold text-slate-700 group-hover:text-blue-700">
+                바로 열기 <span class="transition-transform group-hover:translate-x-0.5">→</span>
               </div>
             </div>
           </div>
         </a>
-<a class="tool-card group rounded-3xl border border-slate-100 bg-white p-6 shadow-sm hover:shadow-md transition"
-           href="/ko/tools/color-converter/" data-title="색상 코드 변환기 color-converter">
-          <div class="flex items-start gap-4">
-            <div class="icon-wrap h-12 w-12 rounded-2xl bg-slate-50 flex items-center justify-center border border-slate-100">
-              <i data-lucide="palette" class="h-6 w-6 text-slate-700"></i>
+
+        <a href="/ko/tools/stopwatch/" class="group bg-white border border-slate-200 rounded-2xl p-5 shadow-sm hover:shadow-md transition-all">
+          <div class="flex items-start gap-3">
+            <div class="w-11 h-11 bg-blue-50 rounded-xl flex items-center justify-center border border-blue-100">
+              <i data-lucide="timer" class="w-6 h-6 text-blue-600"></i>
             </div>
             <div class="flex-1">
-              <div class="text-lg font-extrabold text-slate-900">색상 코드 변환기</div>
-              <div class="mt-1 text-sm text-slate-600 leading-relaxed">HEX/RGB/HSL/CMYK 변환.</div>
-              <div class="mt-4 inline-flex items-center gap-1 text-sm font-semibold text-blue-700">
-                열기 <span class="transition group-hover:translate-x-0.5">→</span>
+              <div class="text-sm font-bold text-blue-600">시간 관리</div>
+              <div class="mt-1 text-xl font-bold text-slate-900">스톱워치</div>
+              <p class="mt-2 text-sm text-slate-600 leading-relaxed">간단하고 정확한 온라인 스톱워치.</p>
+              <div class="mt-4 inline-flex items-center gap-2 text-sm font-bold text-slate-700 group-hover:text-blue-700">
+                바로 열기 <span class="transition-transform group-hover:translate-x-0.5">→</span>
               </div>
             </div>
           </div>
         </a>
-<a class="tool-card group rounded-3xl border border-slate-100 bg-white p-6 shadow-sm hover:shadow-md transition"
-           href="/ko/tools/stopwatch/" data-title="스톱워치 stopwatch">
-          <div class="flex items-start gap-4">
-            <div class="icon-wrap h-12 w-12 rounded-2xl bg-slate-50 flex items-center justify-center border border-slate-100">
-              <i data-lucide="timer" class="h-6 w-6 text-slate-700"></i>
+
+        <a href="/ko/tools/pomodoro-timer/" class="group bg-white border border-slate-200 rounded-2xl p-5 shadow-sm hover:shadow-md transition-all">
+          <div class="flex items-start gap-3">
+            <div class="w-11 h-11 bg-blue-50 rounded-xl flex items-center justify-center border border-blue-100">
+              <i data-lucide="clock" class="w-6 h-6 text-blue-600"></i>
             </div>
             <div class="flex-1">
-              <div class="text-lg font-extrabold text-slate-900">스톱워치</div>
-              <div class="mt-1 text-sm text-slate-600 leading-relaxed">공부·운동·작업 시간 측정.</div>
-              <div class="mt-4 inline-flex items-center gap-1 text-sm font-semibold text-blue-700">
-                열기 <span class="transition group-hover:translate-x-0.5">→</span>
+              <div class="text-sm font-bold text-blue-600">시간 관리</div>
+              <div class="mt-1 text-xl font-bold text-slate-900">포모도로 타이머</div>
+              <p class="mt-2 text-sm text-slate-600 leading-relaxed">집중·휴식 사이클을 도와주는 포모도로 타이머.</p>
+              <div class="mt-4 inline-flex items-center gap-2 text-sm font-bold text-slate-700 group-hover:text-blue-700">
+                바로 열기 <span class="transition-transform group-hover:translate-x-0.5">→</span>
               </div>
             </div>
           </div>
         </a>
-<a class="tool-card group rounded-3xl border border-slate-100 bg-white p-6 shadow-sm hover:shadow-md transition"
-           href="/ko/tools/pomodoro-timer/" data-title="포모도로 타이머 pomodoro-timer">
-          <div class="flex items-start gap-4">
-            <div class="icon-wrap h-12 w-12 rounded-2xl bg-slate-50 flex items-center justify-center border border-slate-100">
-              <i data-lucide="clock" class="h-6 w-6 text-slate-700"></i>
+
+        <a href="/ko/tools/dday-calculator/" class="group bg-white border border-slate-200 rounded-2xl p-5 shadow-sm hover:shadow-md transition-all">
+          <div class="flex items-start gap-3">
+            <div class="w-11 h-11 bg-blue-50 rounded-xl flex items-center justify-center border border-blue-100">
+              <i data-lucide="calendar" class="w-6 h-6 text-blue-600"></i>
             </div>
             <div class="flex-1">
-              <div class="text-lg font-extrabold text-slate-900">포모도로 타이머</div>
-              <div class="mt-1 text-sm text-slate-600 leading-relaxed">집중·휴식 루틴으로 효율 업.</div>
-              <div class="mt-4 inline-flex items-center gap-1 text-sm font-semibold text-blue-700">
-                열기 <span class="transition group-hover:translate-x-0.5">→</span>
+              <div class="text-sm font-bold text-blue-600">시간 관리</div>
+              <div class="mt-1 text-xl font-bold text-slate-900">D-Day 계산기</div>
+              <p class="mt-2 text-sm text-slate-600 leading-relaxed">기준일과 목표일 사이 D-day를 계산합니다.</p>
+              <div class="mt-4 inline-flex items-center gap-2 text-sm font-bold text-slate-700 group-hover:text-blue-700">
+                바로 열기 <span class="transition-transform group-hover:translate-x-0.5">→</span>
               </div>
             </div>
           </div>
         </a>
-<a class="tool-card group rounded-3xl border border-slate-100 bg-white p-6 shadow-sm hover:shadow-md transition"
-           href="/ko/tools/dday-calculator/" data-title="d-day 계산기 dday-calculator">
-          <div class="flex items-start gap-4">
-            <div class="icon-wrap h-12 w-12 rounded-2xl bg-slate-50 flex items-center justify-center border border-slate-100">
-              <i data-lucide="calendar" class="h-6 w-6 text-slate-700"></i>
+
+        <a href="/ko/tools/password-generator/" class="group bg-white border border-slate-200 rounded-2xl p-5 shadow-sm hover:shadow-md transition-all">
+          <div class="flex items-start gap-3">
+            <div class="w-11 h-11 bg-blue-50 rounded-xl flex items-center justify-center border border-blue-100">
+              <i data-lucide="lock" class="w-6 h-6 text-blue-600"></i>
             </div>
             <div class="flex-1">
-              <div class="text-lg font-extrabold text-slate-900">D-Day 계산기</div>
-              <div class="mt-1 text-sm text-slate-600 leading-relaxed">남은 날/지난 날 바로 계산.</div>
-              <div class="mt-4 inline-flex items-center gap-1 text-sm font-semibold text-blue-700">
-                열기 <span class="transition group-hover:translate-x-0.5">→</span>
+              <div class="text-sm font-bold text-blue-600">보안</div>
+              <div class="mt-1 text-xl font-bold text-slate-900">비밀번호 생성</div>
+              <p class="mt-2 text-sm text-slate-600 leading-relaxed">안전한 랜덤 비밀번호를 생성합니다.</p>
+              <div class="mt-4 inline-flex items-center gap-2 text-sm font-bold text-slate-700 group-hover:text-blue-700">
+                바로 열기 <span class="transition-transform group-hover:translate-x-0.5">→</span>
               </div>
             </div>
           </div>
         </a>
-<a class="tool-card group rounded-3xl border border-slate-100 bg-white p-6 shadow-sm hover:shadow-md transition"
-           href="/ko/tools/password-generator/" data-title="비밀번호 생성 password-generator">
-          <div class="flex items-start gap-4">
-            <div class="icon-wrap h-12 w-12 rounded-2xl bg-slate-50 flex items-center justify-center border border-slate-100">
-              <i data-lucide="lock" class="h-6 w-6 text-slate-700"></i>
+
+        <a href="/ko/tools/bmi-calculator/" class="group bg-white border border-slate-200 rounded-2xl p-5 shadow-sm hover:shadow-md transition-all">
+          <div class="flex items-start gap-3">
+            <div class="w-11 h-11 bg-blue-50 rounded-xl flex items-center justify-center border border-blue-100">
+              <i data-lucide="activity" class="w-6 h-6 text-blue-600"></i>
             </div>
             <div class="flex-1">
-              <div class="text-lg font-extrabold text-slate-900">비밀번호 생성</div>
-              <div class="mt-1 text-sm text-slate-600 leading-relaxed">강력한 랜덤 비밀번호 생성.</div>
-              <div class="mt-4 inline-flex items-center gap-1 text-sm font-semibold text-blue-700">
-                열기 <span class="transition group-hover:translate-x-0.5">→</span>
+              <div class="text-sm font-bold text-blue-600">건강 관리</div>
+              <div class="mt-1 text-xl font-bold text-slate-900">BMI 비만도 계산</div>
+              <p class="mt-2 text-sm text-slate-600 leading-relaxed">키와 몸무게로 체질량지수(BMI)를 계산합니다.</p>
+              <div class="mt-4 inline-flex items-center gap-2 text-sm font-bold text-slate-700 group-hover:text-blue-700">
+                바로 열기 <span class="transition-transform group-hover:translate-x-0.5">→</span>
               </div>
             </div>
           </div>
         </a>
-<a class="tool-card group rounded-3xl border border-slate-100 bg-white p-6 shadow-sm hover:shadow-md transition"
-           href="/ko/tools/lotto-picker/" data-title="로또 번호 추첨 lotto-picker">
-          <div class="flex items-start gap-4">
-            <div class="icon-wrap h-12 w-12 rounded-2xl bg-slate-50 flex items-center justify-center border border-slate-100">
-              <i data-lucide="clover" class="h-6 w-6 text-slate-700"></i>
+
+        <a href="/ko/tools/lotto-picker/" class="group bg-white border border-slate-200 rounded-2xl p-5 shadow-sm hover:shadow-md transition-all">
+          <div class="flex items-start gap-3">
+            <div class="w-11 h-11 bg-blue-50 rounded-xl flex items-center justify-center border border-blue-100">
+              <i data-lucide="clover" class="w-6 h-6 text-blue-600"></i>
             </div>
             <div class="flex-1">
-              <div class="text-lg font-extrabold text-slate-900">로또 번호 추첨</div>
-              <div class="mt-1 text-sm text-slate-600 leading-relaxed">무작위로 로또 번호 생성.</div>
-              <div class="mt-4 inline-flex items-center gap-1 text-sm font-semibold text-blue-700">
-                열기 <span class="transition group-hover:translate-x-0.5">→</span>
+              <div class="text-sm font-bold text-blue-600">재미</div>
+              <div class="mt-1 text-xl font-bold text-slate-900">로또 번호 추첨</div>
+              <p class="mt-2 text-sm text-slate-600 leading-relaxed">랜덤 로또 번호를 생성합니다.</p>
+              <div class="mt-4 inline-flex items-center gap-2 text-sm font-bold text-slate-700 group-hover:text-blue-700">
+                바로 열기 <span class="transition-transform group-hover:translate-x-0.5">→</span>
               </div>
             </div>
           </div>
         </a>
           </div>
+
           <div id="noResults" class="hidden mt-10 text-center text-slate-500">
             검색 결과가 없습니다.
           </div>
-        </section>
 
-        <footer class="mt-14 text-center text-slate-500 text-sm">
-          각 도구는 고유 링크로 열립니다.
-        </footer>
+          <footer class="mt-12 text-center text-xs text-slate-400">
+            &copy; 2026 Utility Box. All tools run locally in your browser.
+          </footer>
+        </div>
       </div>
     </main>
   </div>
 
-  <script src="https://unpkg.com/lucide@latest"></script>
   <script>
+    // Mobile menu
+    const sidebar = document.getElementById('sidebar');
+    const backdrop = document.getElementById('backdrop');
+    const openMenu = document.getElementById('openMenu');
+
+    function openSidebar() {
+      sidebar.classList.remove('-translate-x-full');
+      backdrop.classList.remove('hidden');
+    }
+    function closeSidebar() {
+      sidebar.classList.add('-translate-x-full');
+      backdrop.classList.add('hidden');
+    }
+    if (openMenu) openMenu.addEventListener('click', openSidebar);
+    if (backdrop) backdrop.addEventListener('click', closeSidebar);
+
+    // Search filter
+    const input = document.getElementById('toolSearch');
+    const cards = Array.from(document.querySelectorAll('#cards > a'));
+    const noResults = document.getElementById('noResults');
+
+    function applyFilter() {
+      const q = (input.value || '').trim().toLowerCase();
+      let shown = 0;
+      for (const c of cards) {
+        const text = (c.innerText || '').toLowerCase();
+        const ok = q === '' || text.includes(q);
+        c.style.display = ok ? '' : 'none';
+        if (ok) shown++;
+      }
+      noResults.classList.toggle('hidden', shown !== 0);
+    }
+    if (input) input.addEventListener('input', applyFilter);
+  </script>
+
+  <script>
+    // Lucide icons
     if (window.lucide && window.lucide.createIcons) {
       window.lucide.createIcons();
     }
-
-    const input = document.getElementById("toolSearch");
-    const cards = Array.from(document.querySelectorAll(".tool-card"));
-    const noResults = document.getElementById("noResults");
-
-    function applyFilter() {
-      const q = (input.value || "").trim().toLowerCase();
-      let shown = 0;
-      for (const c of cards) {
-        const hay = (c.getAttribute("data-title") || "");
-        const ok = q === "" || hay.includes(q);
-        c.style.display = ok ? "" : "none";
-        if (ok) shown++;
-      }
-      noResults.classList.toggle("hidden", shown !== 0);
-    }
-
-    input.addEventListener("input", applyFilter);
   </script>
 </body>
 </html>
