@@ -3,7 +3,19 @@
 <head>
     <meta charset="UTF-8" />
     
-  <link rel="icon" href="/favicon.ico" />
+  
+<script>
+  (function () {
+    try {
+      var KEY = 'ubox_theme';
+      var saved = localStorage.getItem(KEY);
+      var prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+      var theme = saved || (prefersDark ? 'dark' : 'light');
+      if (theme === 'dark') document.documentElement.classList.add('dark');
+    } catch (e) {}
+  })();
+</script>
+<link rel="icon" href="/favicon.ico" />
   <link rel="icon" type="image/png" sizes="96x96" href="/favicon-96.png" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta name="description" content="Essential web tools. Find a tool and run it instantly." />
@@ -29,6 +41,7 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <script>
         tailwind.config = {
+            darkMode: 'class',
             theme: {
                 extend: {
                     fontFamily: {
@@ -77,6 +90,27 @@
         /* Hide Number Input Arrows */
         input[type=number]::-webkit-inner-spin-button, 
         input[type=number]::-webkit-outer-spin-button { -webkit-appearance: none; margin: 0; }
+    
+        /* Dark mode (class-based) */
+        html.dark body { background-color: #0b1220; color: #e5e7eb; }
+        html.dark .custom-scrollbar::-webkit-scrollbar-thumb { background: rgba(148,163,184,.5); }
+        html.dark aside { background: #0f172a !important; border-color: rgba(148,163,184,.25) !important; }
+        html.dark header { background: rgba(15,23,42,.75) !important; border-color: rgba(148,163,184,.25) !important; }
+        html.dark .bg-white { background-color: #0f172a !important; }
+        html.dark .bg-slate-50 { background-color: #0b1220 !important; }
+        html.dark .bg-slate-100 { background-color: rgba(148,163,184,.10) !important; }
+        html.dark .text-slate-900,
+        html.dark .text-slate-800,
+        html.dark .text-slate-700,
+        html.dark .text-slate-600,
+        html.dark .text-slate-500 { color: #e2e8f0 !important; }
+        html.dark .text-slate-400 { color: rgba(226,232,240,.65) !important; }
+        html.dark .border-slate-200,
+        html.dark .border-slate-100 { border-color: rgba(148,163,184,.25) !important; }
+        html.dark .hover\:bg-slate-100:hover { background-color: rgba(148,163,184,.12) !important; }
+        html.dark .hover\:bg-slate-50:hover { background-color: rgba(148,163,184,.08) !important; }
+        html.dark .shadow-sm { box-shadow: 0 1px 2px rgba(0,0,0,.35) !important; }
+
     </style>
 
 
@@ -231,7 +265,12 @@
       </nav>
 
       <div class="p-4 border-t border-slate-100">
-        <a href="/ko/" class="w-full flex items-center justify-center gap-2 py-2.5 rounded-xl border border-slate-200 text-sm font-bold text-slate-500 hover:bg-slate-50 hover:text-blue-600 transition-colors">
+        
+        <button type="button" data-theme-toggle="sidebar" class="w-full flex items-center justify-center gap-2 py-2.5 rounded-xl border border-slate-200 text-sm font-bold text-slate-500 hover:bg-slate-50 hover:text-blue-600 transition-colors mb-2">
+          <i data-theme-icon data-lucide="moon" class="w-4 h-4"></i>
+          <span data-theme-label>Dark mode</span>
+        </button>
+<a href="/ko/" class="w-full flex items-center justify-center gap-2 py-2.5 rounded-xl border border-slate-200 text-sm font-bold text-slate-500 hover:bg-slate-50 hover:text-blue-600 transition-colors">
           <i data-lucide="globe" class="w-4 h-4"></i>
           Language: English
         </a>
@@ -251,7 +290,11 @@
           <a href="/ko/" class="p-2 bg-slate-100 rounded-lg text-slate-600" aria-label="switch language">
             <i data-lucide="globe" class="w-5 h-5"></i>
           </a>
-          <button id="openMenu" class="p-2 bg-slate-100 rounded-lg text-slate-600" aria-label="open menu">
+          
+          <button type="button" data-theme-toggle="mobile" class="p-2 bg-slate-100 rounded-lg text-slate-600" aria-label="toggle theme">
+            <i data-theme-icon data-lucide="moon" class="w-5 h-5"></i>
+          </button>
+<button id="openMenu" class="p-2 bg-slate-100 rounded-lg text-slate-600" aria-label="open menu">
             <i data-lucide="menu" class="w-5 h-5"></i>
           </button>
         </div>
@@ -594,6 +637,47 @@
     }
     if (input) input.addEventListener('input', applyFilter);
   </script>
+
+  <script>
+    (function () {
+      var KEY = 'ubox_theme';
+      var root = document.documentElement;
+
+      function currentTheme() {
+        return root.classList.contains('dark') ? 'dark' : 'light';
+      }
+
+      function apply(theme) {
+        if (theme === 'dark') root.classList.add('dark');
+        else root.classList.remove('dark');
+        try { localStorage.setItem(KEY, theme); } catch (e) {}
+
+        var isDark = theme === 'dark';
+        var isKo = (document.documentElement.lang || '').toLowerCase().startsWith('ko');
+
+        var label = isKo ? (isDark ? '라이트 모드' : '다크 모드') : (isDark ? 'Light mode' : 'Dark mode');
+        document.querySelectorAll('[data-theme-label]').forEach(function (el) { el.textContent = label; });
+
+        document.querySelectorAll('[data-theme-icon]').forEach(function (el) {
+          el.setAttribute('data-lucide', isDark ? 'sun' : 'moon');
+        });
+
+        if (window.lucide && window.lucide.createIcons) window.lucide.createIcons();
+      }
+
+      function toggle() {
+        apply(currentTheme() === 'dark' ? 'light' : 'dark');
+      }
+
+      document.querySelectorAll('[data-theme-toggle]').forEach(function (btn) {
+        btn.addEventListener('click', toggle);
+      });
+
+      apply(currentTheme());
+      window.__uboxSetTheme = apply;
+    })();
+  </script>
+
 
   <script>
     // Lucide icons
