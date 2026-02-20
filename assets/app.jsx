@@ -134,6 +134,7 @@ const { useState, useEffect, useRef, useCallback, useMemo } = React;
                 dday: { label: "날짜 선택", guide: "기념일이나 목표일을 선택하세요", isToday: "🎉 오늘입니다!", daysLeft: "일 남음", daysPast: "일 지남" },
                 lotto: { btn: "번호 추첨하기", guide: "행운의 번호를 확인해보세요" },
                 tipsTitle: "활용 꿀팁",
+                theme: { dark: "다크 모드", light: "라이트 모드" },
                 ad: "광고 영역"
             },
             en: {
@@ -246,6 +247,7 @@ const { useState, useEffect, useRef, useCallback, useMemo } = React;
                 dday: { label: "Target Date", guide: "Select your target date", isToday: "🎉 It's Today!", daysLeft: "days left", daysPast: "days past" },
                 lotto: { btn: "Draw Numbers", guide: "Check your lucky numbers" },
                 tipsTitle: "Usage Tips",
+                theme: { dark: "Dark Mode", light: "Light Mode" },
                 ad: "Ad Space"
             }
         };
@@ -1120,6 +1122,21 @@ const Stopwatch = ({ t }) => {
             const [lang, setLang] = useState(initialRoute.lang);
             const [activeToolId, setActiveToolId] = useState(initialRoute.tool);
             const [menuOpen, setMenuOpen] = useState(false);
+const [theme, setTheme] = useState(() => {
+    try {
+        const saved = localStorage.getItem('ubox_theme');
+        if (saved === 'dark' || saved === 'light') return saved;
+    } catch (e) {}
+    try {
+        return (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) ? 'dark' : 'light';
+    } catch (e) {
+        return 'light';
+    }
+});
+
+const toggleTheme = useCallback(() => {
+    setTheme(prev => (prev === 'dark' ? 'light' : 'dark'));
+}, []);
 
             // --- SEO: BreadcrumbList JSON-LD (auto, per tool page) ---
             useEffect(() => {
@@ -1175,6 +1192,49 @@ const Stopwatch = ({ t }) => {
                 document.documentElement.lang = lang;
             }, [lang]);
 
+// --- Theme: Dark mode (class on <html> + small override CSS) ---
+useEffect(() => {
+    const id = 'ubox-theme-style';
+    if (!document.getElementById(id)) {
+        const style = document.createElement('style');
+        style.id = id;
+        style.textContent = `
+            html.dark, html.dark body { background: #0b1220; color: #e5e7eb; }
+            html.dark .bg-white { background-color: #0f172a !important; }
+            html.dark .bg-white\/80 { background-color: rgba(15, 23, 42, 0.80) !important; }
+            html.dark .bg-slate-50 { background-color: #0b1220 !important; }
+            html.dark .bg-slate-100 { background-color: #0f172a !important; }
+            html.dark .bg-blue-50 { background-color: rgba(37, 99, 235, 0.18) !important; }
+            html.dark .text-slate-900, 
+            html.dark .text-slate-800, 
+            html.dark .text-slate-700 { color: #f1f5f9 !important; }
+            html.dark .text-slate-600, 
+            html.dark .text-slate-500 { color: #cbd5e1 !important; }
+            html.dark .text-slate-400 { color: #94a3b8 !important; }
+            html.dark .border-slate-200, 
+            html.dark .border-slate-100 { border-color: rgba(148, 163, 184, 0.18) !important; }
+            html.dark .prose { color: #cbd5e1 !important; }
+            html.dark .prose h1, html.dark .prose h2, html.dark .prose h3, html.dark .prose h4 { color: #f1f5f9 !important; }
+            html.dark .prose a { color: #93c5fd !important; }
+            html.dark .shadow-blue-200 { box-shadow: 0 10px 15px -3px rgba(37,99,235,0.20), 0 4px 6px -4px rgba(37,99,235,0.20) !important; }
+            html.dark .shadow-emerald-200 { box-shadow: 0 10px 15px -3px rgba(16,185,129,0.16), 0 4px 6px -4px rgba(16,185,129,0.16) !important; }
+            html.dark .shadow-rose-200 { box-shadow: 0 10px 15px -3px rgba(244,63,94,0.16), 0 4px 6px -4px rgba(244,63,94,0.16) !important; }
+            html.dark .hover\:bg-slate-50:hover { background-color: rgba(148, 163, 184, 0.08) !important; }
+            html.dark .hover\:bg-slate-100:hover { background-color: rgba(148, 163, 184, 0.10) !important; }
+            html.dark .hover\:bg-slate-200:hover { background-color: rgba(148, 163, 184, 0.14) !important; }
+            html.dark .hover\:text-blue-600:hover { color: #93c5fd !important; }
+            html.dark .custom-scrollbar::-webkit-scrollbar-thumb { background-color: rgba(148, 163, 184, 0.25) !important; }
+            html.dark .custom-scrollbar::-webkit-scrollbar-track { background-color: rgba(148, 163, 184, 0.06) !important; }
+        `.trim();
+        document.head.appendChild(style);
+    }
+}, []);
+
+useEffect(() => {
+    document.documentElement.classList.toggle('dark', theme === 'dark');
+    try { localStorage.setItem('ubox_theme', theme); } catch (e) {}
+}, [theme]);
+
             const tools = [
                 { id: 'text', icon: 'type', cat: 'text', comp: WordCounter },
                 { id: 'case', icon: 'case-sensitive', cat: 'text', comp: CaseConverter },
@@ -1224,11 +1284,19 @@ const Stopwatch = ({ t }) => {
                                 </div>
                             ))}
                         </nav>
-                        <div className="p-4 border-t border-slate-100"><button onClick={() => { window.location.href = makePath(lang === 'ko' ? 'en' : 'ko', activeToolId); }} className="w-full flex items-center justify-center gap-2 py-2.5 rounded-xl border border-slate-200 text-sm font-bold text-slate-500 hover:bg-slate-50 hover:text-blue-600 transition-colors"><Icon name="globe" size={16} />{lang === 'ko' ? 'Language: 한국어' : 'Language: English'}</button></div>
+                        <div className="p-4 border-t border-slate-100 space-y-2">
+                            <button onClick={toggleTheme} className="w-full flex items-center justify-center gap-2 py-2.5 rounded-xl border border-slate-200 text-sm font-bold text-slate-500 hover:bg-slate-50 hover:text-blue-600 transition-colors">
+                                <Icon name={theme === 'dark' ? 'sun' : 'moon'} size={16} />
+                                {theme === 'dark' ? (t.theme?.light || (lang === 'ko' ? '라이트 모드' : 'Light Mode')) : (t.theme?.dark || (lang === 'ko' ? '다크 모드' : 'Dark Mode'))}
+                            </button>
+                            <button onClick={() => { window.location.href = makePath(lang === 'ko' ? 'en' : 'ko', activeToolId); }} className="w-full flex items-center justify-center gap-2 py-2.5 rounded-xl border border-slate-200 text-sm font-bold text-slate-500 hover:bg-slate-50 hover:text-blue-600 transition-colors">
+                                <Icon name="globe" size={16} />{lang === 'ko' ? 'Language: 한국어' : 'Language: English'}
+                            </button>
+                        </div>
                     </aside>
                     {menuOpen && <div className="fixed inset-0 bg-black/20 z-30 md:hidden backdrop-blur-sm" onClick={() => setMenuOpen(false)}></div>}
                     <main className="flex-1 flex flex-col h-full relative overflow-hidden">
-                        <header className="md:hidden bg-white/80 backdrop-blur-md border-b border-slate-200 p-4 flex justify-between items-center sticky top-0 z-20"><span className="font-bold text-lg flex items-center gap-2"><Icon name="box" size={20} className="text-blue-600"/> {t.title}</span><div className="flex gap-2"><button onClick={() => { window.location.href = `/${lang}/`; }} className="p-2 bg-slate-100 rounded-lg text-slate-600"><Icon name="home" size={20} /></button><button onClick={() => { window.location.href = makePath(lang === 'ko' ? 'en' : 'ko', activeToolId); }} className="p-2 bg-slate-100 rounded-lg text-slate-600"><Icon name="globe" size={20} /></button><button onClick={() => setMenuOpen(true)} className="p-2 bg-slate-100 rounded-lg text-slate-600"><Icon name="menu" size={20} /></button></div></header>
+                        <header className="md:hidden bg-white/80 backdrop-blur-md border-b border-slate-200 p-4 flex justify-between items-center sticky top-0 z-20"><span className="font-bold text-lg flex items-center gap-2"><Icon name="box" size={20} className="text-blue-600"/> {t.title}</span><div className="flex gap-2"><button onClick={() => { window.location.href = `/${lang}/`; }} className="p-2 bg-slate-100 rounded-lg text-slate-600"><Icon name="home" size={20} /></button><button onClick={() => { window.location.href = makePath(lang === 'ko' ? 'en' : 'ko', activeToolId); }} className="p-2 bg-slate-100 rounded-lg text-slate-600"><Icon name="globe" size={20} /></button><button onClick={toggleTheme} className="p-2 bg-slate-100 rounded-lg text-slate-600"><Icon name={theme === 'dark' ? 'sun' : 'moon'} size={20} /></button><button onClick={() => setMenuOpen(true)} className="p-2 bg-slate-100 rounded-lg text-slate-600"><Icon name="menu" size={20} /></button></div></header>
                         <div className="flex-1 overflow-y-auto p-4 md:p-8">
                             <div className="max-w-2xl mx-auto pb-20">
                                 <div className="mb-6 bg-slate-100 border-2 border-dashed border-slate-200 rounded-lg h-20 flex flex-col items-center justify-center text-slate-400 text-xs"><span className="font-bold">Google AdSense</span><span>Display Ad (Responsive)</span></div>
