@@ -11,6 +11,9 @@ const { useState, useEffect, useRef, useCallback, useMemo } = React;
                     case: "대소문자 변환",
                     percent: "만능 퍼센트 계산",
                     discount: "할인율 계산",
+                    compound: "복리 계산기",
+                    dca: "분할매수 평균단가",
+                    pnl: "손익/수익률 계산",
                     image: "이미지 용량 줄이기",
                     color: "색상 코드 변환기",
                     unit: "단위 변환",
@@ -57,6 +60,21 @@ const { useState, useEffect, useRef, useCallback, useMemo } = React;
                         desc: "쇼핑할 때 20%, 30% 세일이 적용되면 실제 가격은 얼마일까요? 할인율과 할인 금액, 그리고 최종 가격을 한눈에 확인하세요.", 
                         tags: ["#할인계산기", "#세일가격", "#할인금액", "#할인율"] 
                     },
+                    compound: {
+                        title: "📈 적립식까지 한 번에, 복리 계산기",
+                        desc: "원금, 월 적립, 연 수익률, 기간을 입력하면 복리로 불어나는 최종 금액과 총 납입·총 이자를 계산합니다. 주식·코인 적립식 투자 시뮬레이션에 유용합니다.",
+                        tags: ["#복리계산기", "#적립식", "#투자시뮬레이션", "#연수익률", "#월적립"]
+                    },
+                    dca: {
+                        title: "🪙 분할매수 평균단가 계산기 (DCA)",
+                        desc: "매수 내역을 추가해 평균단가, 총 수량, 총 투자금을 계산하고 현재가 기준 손익과 수익률까지 확인하세요. 코인·주식 분할매수에 딱 맞는 도구입니다.",
+                        tags: ["#분할매수", "#평균단가", "#DCA", "#코인", "#주식"]
+                    },
+                    pnl: {
+                        title: "💹 손익(P/L)·수익률 계산기",
+                        desc: "매수가, 현재가/매도가, 수량, 수수료를 입력하면 손익과 수익률, 손익분기점까지 빠르게 계산합니다. 포지션 손익을 간단히 정리해보세요.",
+                        tags: ["#손익계산", "#수익률계산", "#손익분기점", "#주식", "#코인"]
+                    },
                     unit: { 
                         title: "📏 만능 단위 변환기", 
                         desc: "길이(cm, inch), 무게(kg, lb), 온도(섭씨, 화씨) 등 헷갈리는 단위를 간편하게 변환하세요. 평수 계산, 인치 센티 변환, 화씨 섭씨 변환 등 실생활에 필요한 모든 단위를 지원합니다.", 
@@ -96,6 +114,9 @@ const { useState, useEffect, useRef, useCallback, useMemo } = React;
                 image: { drop: "이미지를 이곳에 드래그하거나 클릭하세요", converting: "변환 중...", download: "다운로드", quality: "화질 설정", original: "원본", converted: "변환됨" },
                 color: { hex: "HEX 코드", rgb: "RGB (R, G, B)", hsl: "HSL (H, S, L)", cmyk: "CMYK (C, M, Y, K)", hsv: "HSV (H, S, V)", picker: "색상 선택", copy: "복사", copied: "완료!" },
                 discount: { price: "원래 가격", rate: "할인율 (%)", saved: "할인 금액", final: "최종 가격" },
+                compound: { principal: "원금", monthly: "월 적립", rate: "연 수익률 (%)", years: "기간 (년)", final: "최종 금액", contrib: "총 납입", interest: "총 이자", table: "연도별 추이", year: "연도", balance: "잔액", totalContrib: "누적 납입" },
+                dca: { mode: "입력 방식", byAmount: "금액 기준", byQty: "수량 기준", add: "매수 추가", price: "가격", qty: "수량", amount: "금액", remove: "삭제", avg: "평균단가", totalQty: "총 수량", totalInvest: "총 투자금", currentPrice: "현재가", pnl: "손익", roi: "수익률" },
+                pnl: { buy: "매수가", sell: "현재가/매도가", qty: "수량", fee: "수수료 (%)", profit: "손익", roi: "수익률", breakeven: "손익분기점" },
                 unit: { 
                     input: "입력값", 
                     result: "변환값", 
@@ -119,7 +140,7 @@ const { useState, useEffect, useRef, useCallback, useMemo } = React;
                 title: "Utility Box",
                 subtitle: "Essential Web Tools",
                 categories: { text: "Text", math: "Math", media: "Media", time: "Time", security: "Security", fun: "Fun", health: "Health" },
-                tools: { text: "Word Counter", case: "Case Converter", percent: "Percent Calc", discount: "Discount Calc", image: "Image Converter", color: "Color Converter", unit: "Unit Converter", stopwatch: "Stopwatch", pomodoro: "Pomodoro", dday: "D-Day", password: "Password", lotto: "Lotto", bmi: "BMI Calculator" },
+                tools: { text: "Word Counter", case: "Case Converter", percent: "Percent Calc", discount: "Discount Calc", compound: "Compound Interest", dca: "DCA Avg Cost", pnl: "P/L Calculator", image: "Image Converter", color: "Color Converter", unit: "Unit Converter", stopwatch: "Stopwatch", pomodoro: "Pomodoro", dday: "D-Day", password: "Password", lotto: "Lotto", bmi: "BMI Calculator" },
                 seo: {
                     text: { 
                         title: "📝 Character & Word Counter", 
@@ -155,6 +176,21 @@ const { useState, useEffect, useRef, useCallback, useMemo } = React;
                         title: "🛍️ Discount & Sale Calculator", 
                         desc: "Calculate the final price after discount. Enter the original price and discount percentage to see how much you save during shopping sales.", 
                         tags: ["#discountcalculator", "#shopping", "#sale", "#pricecheck"] 
+                    },
+                    compound: {
+                        title: "📈 Compound Interest Calculator",
+                        desc: "Calculate compound growth with optional monthly contributions. Great for long-term investing simulations in stocks or crypto.",
+                        tags: ["#compoundinterest", "#investing", "#monthlycontribution", "#returns"]
+                    },
+                    dca: {
+                        title: "🪙 DCA Average Cost Calculator",
+                        desc: "Add your buys to get average cost, total quantity, total invested, and current profit/loss. Perfect for DCA plans.",
+                        tags: ["#DCA", "#averagecost", "#crypto", "#stocks"]
+                    },
+                    pnl: {
+                        title: "💹 Profit & Loss (P/L) Calculator",
+                        desc: "Enter buy price, current/sell price, quantity, and fees to calculate P/L, ROI, and break-even quickly.",
+                        tags: ["#profitloss", "#ROI", "#breakeven", "#trading"]
                     },
                     unit: { 
                         title: "📏 Universal Unit Converter", 
@@ -194,6 +230,9 @@ const { useState, useEffect, useRef, useCallback, useMemo } = React;
                 image: { drop: "Drag & Drop or Click", converting: "Converting...", download: "Download", quality: "Quality", original: "Original", converted: "Converted" },
                 color: { hex: "HEX Code", rgb: "RGB (R, G, B)", hsl: "HSL (H, S, L)", cmyk: "CMYK (C, M, Y, K)", hsv: "HSV (H, S, V)", picker: "Pick Color", copy: "Copy", copied: "Copied!" },
                 discount: { price: "Original Price", rate: "Discount (%)", saved: "You Save", final: "Final Price" },
+                compound: { principal: "Principal", monthly: "Monthly Add", rate: "Annual Return (%)", years: "Years", final: "Final Balance", contrib: "Total Contrib.", interest: "Total Interest", table: "Year-by-Year", year: "Year", balance: "Balance", totalContrib: "Contrib. Total" },
+                dca: { mode: "Input Mode", byAmount: "By Amount", byQty: "By Quantity", add: "Add Buy", price: "Price", qty: "Qty", amount: "Amount", remove: "Remove", avg: "Avg Cost", totalQty: "Total Qty", totalInvest: "Total Invested", currentPrice: "Current Price", pnl: "P/L", roi: "ROI" },
+                pnl: { buy: "Buy Price", sell: "Current/Sell Price", qty: "Quantity", fee: "Fee (%)", profit: "Profit/Loss", roi: "ROI", breakeven: "Break-even Price" },
                 unit: { 
                     input: "Input", result: "Result", types: { length: "Length", weight: "Weight", temp: "Temp" },
                     tempLabels: { Celsius: "Celsius (°C)", Fahrenheit: "Fahrenheit (°F)", Newton: "Newton (°N)", Delisle: "Delisle (°De)", Kelvin: "Kelvin (K)", Reaumur: "Réaumur (°R)", Rankine: "Rankine (°Ra)", Romer: "Rømer (°Rø)" }
@@ -592,7 +631,404 @@ const { useState, useEffect, useRef, useCallback, useMemo } = React;
             );
         };
 
-        const Stopwatch = ({ t }) => {
+        
+        // 📈 복리 계산기 (적립식 포함)
+        const CompoundInterestCalculator = ({ t }) => {
+            const n = (v) => {
+                const x = parseFloat(String(v).replace(/,/g, ""));
+                return Number.isFinite(x) ? x : 0;
+            };
+            const fmt = (v) => (Number.isFinite(v) ? v.toLocaleString(undefined, { maximumFractionDigits: 2 }) : "—");
+
+            const [principal, setPrincipal] = useState("1000000");
+            const [monthly, setMonthly] = useState("200000");
+            const [rate, setRate] = useState("10");
+            const [years, setYears] = useState("5");
+
+            const P = n(principal);
+            const M = n(monthly);
+            const R = n(rate) / 100;
+            const Y = Math.max(0, Math.min(200, Math.floor(n(years))));
+
+            const months = Y * 12;
+            let bal = P;
+            let contrib = P;
+            const rows = [];
+            for (let m = 1; m <= months; m++) {
+                bal = bal * (1 + R / 12) + M;
+                contrib += M;
+                if (m % 12 === 0) {
+                    rows.push({
+                        year: m / 12,
+                        balance: bal,
+                        contrib: contrib,
+                    });
+                }
+            }
+            const interest = bal - contrib;
+
+            const copySummary = async () => {
+                const text = [
+                    `${t.tools.compound}`,
+                    `${t.compound.principal}: ${fmt(P)}`,
+                    `${t.compound.monthly}: ${fmt(M)}`,
+                    `${t.compound.rate}: ${fmt(n(rate))}%`,
+                    `${t.compound.years}: ${Y}`,
+                    `${t.compound.final}: ${fmt(bal)}`,
+                    `${t.compound.contrib}: ${fmt(contrib)}`,
+                    `${t.compound.interest}: ${fmt(interest)}`,
+                ].join("\n");
+                try {
+                    await navigator.clipboard.writeText(text);
+                } catch (_) { }
+            };
+
+            return (
+                <div className="space-y-6">
+                    <div className="rounded-2xl border border-slate-200 bg-white p-6 shadow-sm">
+                        <h2 className="text-xl font-semibold text-slate-900">{t.tools.compound}</h2>
+                        <p className="mt-1 text-sm text-slate-600">{t.seo?.compound?.desc || ""}</p>
+
+                        <div className="mt-5 grid gap-4 md:grid-cols-2">
+                            <div>
+                                <label className="text-sm font-medium text-slate-700">{t.compound.principal}</label>
+                                <input className="mt-2 w-full rounded-xl border border-slate-200 bg-white p-3 text-slate-900 outline-none focus:border-slate-400"
+                                    value={principal} onChange={(e) => setPrincipal(e.target.value)} inputMode="decimal" />
+                            </div>
+                            <div>
+                                <label className="text-sm font-medium text-slate-700">{t.compound.monthly}</label>
+                                <input className="mt-2 w-full rounded-xl border border-slate-200 bg-white p-3 text-slate-900 outline-none focus:border-slate-400"
+                                    value={monthly} onChange={(e) => setMonthly(e.target.value)} inputMode="decimal" />
+                            </div>
+                            <div>
+                                <label className="text-sm font-medium text-slate-700">{t.compound.rate}</label>
+                                <input className="mt-2 w-full rounded-xl border border-slate-200 bg-white p-3 text-slate-900 outline-none focus:border-slate-400"
+                                    value={rate} onChange={(e) => setRate(e.target.value)} inputMode="decimal" />
+                            </div>
+                            <div>
+                                <label className="text-sm font-medium text-slate-700">{t.compound.years}</label>
+                                <input className="mt-2 w-full rounded-xl border border-slate-200 bg-white p-3 text-slate-900 outline-none focus:border-slate-400"
+                                    value={years} onChange={(e) => setYears(e.target.value)} inputMode="numeric" />
+                            </div>
+                        </div>
+
+                        <div className="mt-6 grid gap-3 md:grid-cols-3">
+                            <div className="rounded-2xl bg-slate-50 p-4">
+                                <div className="text-xs font-medium text-slate-600">{t.compound.final}</div>
+                                <div className="mt-1 text-2xl font-semibold text-slate-900">{fmt(bal)}</div>
+                            </div>
+                            <div className="rounded-2xl bg-slate-50 p-4">
+                                <div className="text-xs font-medium text-slate-600">{t.compound.contrib}</div>
+                                <div className="mt-1 text-2xl font-semibold text-slate-900">{fmt(contrib)}</div>
+                            </div>
+                            <div className="rounded-2xl bg-slate-50 p-4">
+                                <div className="text-xs font-medium text-slate-600">{t.compound.interest}</div>
+                                <div className="mt-1 text-2xl font-semibold text-slate-900">{fmt(interest)}</div>
+                            </div>
+                        </div>
+
+                        <div className="mt-4 flex flex-wrap items-center gap-2">
+                            <button onClick={copySummary}
+                                className="rounded-xl border border-slate-200 bg-white px-4 py-2 text-sm font-medium text-slate-800 shadow-sm hover:bg-slate-50">
+                                Copy
+                            </button>
+                            <span className="text-xs text-slate-500">{t.compound.table}</span>
+                        </div>
+
+                        <div className="mt-4 overflow-x-auto rounded-2xl border border-slate-200">
+                            <table className="min-w-full text-sm">
+                                <thead className="bg-slate-50 text-slate-700">
+                                    <tr>
+                                        <th className="px-4 py-3 text-left">{t.compound.year}</th>
+                                        <th className="px-4 py-3 text-right">{t.compound.totalContrib}</th>
+                                        <th className="px-4 py-3 text-right">{t.compound.balance}</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {rows.length === 0 ? (
+                                        <tr><td className="px-4 py-6 text-center text-slate-500" colSpan={3}>—</td></tr>
+                                    ) : rows.map((r) => (
+                                        <tr key={r.year} className="border-t border-slate-200">
+                                            <td className="px-4 py-3">{r.year}</td>
+                                            <td className="px-4 py-3 text-right">{fmt(r.contrib)}</td>
+                                            <td className="px-4 py-3 text-right font-medium text-slate-900">{fmt(r.balance)}</td>
+                                        </tr>
+                                    ))}
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            );
+        };
+
+        // 🪙 분할매수(DCA) 평균단가 계산기
+        const DCACalculator = ({ t }) => {
+            const n = (v) => {
+                const x = parseFloat(String(v).replace(/,/g, ""));
+                return Number.isFinite(x) ? x : 0;
+            };
+            const fmt = (v) => (Number.isFinite(v) ? v.toLocaleString(undefined, { maximumFractionDigits: 8 }) : "—");
+
+            const [mode, setMode] = useState("amount"); // amount | qty
+            const [rows, setRows] = useState([{ price: "100", qty: "1", amount: "100" }]);
+            const [currentPrice, setCurrentPrice] = useState("");
+
+            const addRow = () => setRows((r) => [...r, { price: "", qty: "", amount: "" }]);
+            const removeRow = (idx) => setRows((r) => r.filter((_, i) => i !== idx));
+            const updateRow = (idx, key, val) => setRows((r) => r.map((it, i) => (i === idx ? { ...it, [key]: val } : it)));
+
+            const parsed = rows
+                .map((r) => {
+                    const price = n(r.price);
+                    const qty = mode === "qty" ? n(r.qty) : (price > 0 ? n(r.amount) / price : 0);
+                    const amount = mode === "amount" ? n(r.amount) : price * qty;
+                    return { price, qty, amount };
+                })
+                .filter((r) => r.price > 0 && r.qty > 0 && r.amount > 0);
+
+            const totalQty = parsed.reduce((s, r) => s + r.qty, 0);
+            const totalInvest = parsed.reduce((s, r) => s + r.amount, 0);
+            const avgCost = totalQty > 0 ? totalInvest / totalQty : 0;
+
+            const cp = n(currentPrice);
+            const curValue = cp > 0 ? totalQty * cp : 0;
+            const pnl = cp > 0 ? curValue - totalInvest : 0;
+            const roi = totalInvest > 0 && cp > 0 ? (pnl / totalInvest) * 100 : 0;
+
+            const copySummary = async () => {
+                const text = [
+                    `${t.tools.dca}`,
+                    `${t.dca.totalInvest}: ${fmt(totalInvest)}`,
+                    `${t.dca.totalQty}: ${fmt(totalQty)}`,
+                    `${t.dca.avg}: ${fmt(avgCost)}`,
+                    cp > 0 ? `${t.dca.currentPrice}: ${fmt(cp)}` : "",
+                    cp > 0 ? `${t.dca.pnl}: ${fmt(pnl)}` : "",
+                    cp > 0 ? `${t.dca.roi}: ${fmt(roi)}%` : "",
+                ].filter(Boolean).join("\n");
+                try { await navigator.clipboard.writeText(text); } catch (_) { }
+            };
+
+            return (
+                <div className="space-y-6">
+                    <div className="rounded-2xl border border-slate-200 bg-white p-6 shadow-sm">
+                        <div className="flex flex-wrap items-start justify-between gap-3">
+                            <div>
+                                <h2 className="text-xl font-semibold text-slate-900">{t.tools.dca}</h2>
+                                <p className="mt-1 text-sm text-slate-600">{t.seo?.dca?.desc || ""}</p>
+                            </div>
+                            <button onClick={copySummary}
+                                className="rounded-xl border border-slate-200 bg-white px-4 py-2 text-sm font-medium text-slate-800 shadow-sm hover:bg-slate-50">
+                                Copy
+                            </button>
+                        </div>
+
+                        <div className="mt-5 flex flex-wrap items-center gap-2">
+                            <span className="text-sm font-medium text-slate-700">{t.dca.mode}</span>
+                            <button onClick={() => setMode("amount")}
+                                className={"rounded-xl px-3 py-2 text-sm font-medium " + (mode === "amount" ? "bg-slate-900 text-white" : "border border-slate-200 bg-white text-slate-800 hover:bg-slate-50")}>
+                                {t.dca.byAmount}
+                            </button>
+                            <button onClick={() => setMode("qty")}
+                                className={"rounded-xl px-3 py-2 text-sm font-medium " + (mode === "qty" ? "bg-slate-900 text-white" : "border border-slate-200 bg-white text-slate-800 hover:bg-slate-50")}>
+                                {t.dca.byQty}
+                            </button>
+                        </div>
+
+                        <div className="mt-4 space-y-3">
+                            {rows.map((r, idx) => (
+                                <div key={idx} className="grid gap-3 rounded-2xl border border-slate-200 p-4 md:grid-cols-12">
+                                    <div className="md:col-span-4">
+                                        <label className="text-xs font-medium text-slate-600">{t.dca.price}</label>
+                                        <input className="mt-1 w-full rounded-xl border border-slate-200 p-3 outline-none focus:border-slate-400"
+                                            value={r.price} onChange={(e) => updateRow(idx, "price", e.target.value)} inputMode="decimal" />
+                                    </div>
+
+                                    {mode === "qty" ? (
+                                        <div className="md:col-span-4">
+                                            <label className="text-xs font-medium text-slate-600">{t.dca.qty}</label>
+                                            <input className="mt-1 w-full rounded-xl border border-slate-200 p-3 outline-none focus:border-slate-400"
+                                                value={r.qty} onChange={(e) => updateRow(idx, "qty", e.target.value)} inputMode="decimal" />
+                                        </div>
+                                    ) : (
+                                        <div className="md:col-span-4">
+                                            <label className="text-xs font-medium text-slate-600">{t.dca.amount}</label>
+                                            <input className="mt-1 w-full rounded-xl border border-slate-200 p-3 outline-none focus:border-slate-400"
+                                                value={r.amount} onChange={(e) => updateRow(idx, "amount", e.target.value)} inputMode="decimal" />
+                                        </div>
+                                    )}
+
+                                    <div className="md:col-span-3">
+                                        <div className="text-xs font-medium text-slate-600">{mode === "qty" ? t.dca.amount : t.dca.qty}</div>
+                                        <div className="mt-3 text-sm font-semibold text-slate-900">
+                                            {(() => {
+                                                const price = n(r.price);
+                                                if (price <= 0) return "—";
+                                                if (mode === "qty") {
+                                                    const qty = n(r.qty);
+                                                    return fmt(price * qty);
+                                                } else {
+                                                    const amt = n(r.amount);
+                                                    return fmt(amt / price);
+                                                }
+                                            })()}
+                                        </div>
+                                    </div>
+
+                                    <div className="md:col-span-1 flex items-start justify-end">
+                                        <button onClick={() => removeRow(idx)} disabled={rows.length === 1}
+                                            className={"rounded-xl px-3 py-2 text-sm font-medium " + (rows.length === 1 ? "bg-slate-100 text-slate-400" : "border border-slate-200 bg-white text-slate-800 hover:bg-slate-50")}>
+                                            {t.dca.remove}
+                                        </button>
+                                    </div>
+                                </div>
+                            ))}
+                        </div>
+
+                        <div className="mt-4 flex flex-wrap gap-2">
+                            <button onClick={addRow}
+                                className="rounded-xl bg-slate-900 px-4 py-2 text-sm font-medium text-white hover:bg-slate-800">
+                                {t.dca.add}
+                            </button>
+                        </div>
+
+                        <div className="mt-6 grid gap-3 md:grid-cols-4">
+                            <div className="rounded-2xl bg-slate-50 p-4">
+                                <div className="text-xs font-medium text-slate-600">{t.dca.totalInvest}</div>
+                                <div className="mt-1 text-2xl font-semibold text-slate-900">{fmt(totalInvest)}</div>
+                            </div>
+                            <div className="rounded-2xl bg-slate-50 p-4">
+                                <div className="text-xs font-medium text-slate-600">{t.dca.totalQty}</div>
+                                <div className="mt-1 text-2xl font-semibold text-slate-900">{fmt(totalQty)}</div>
+                            </div>
+                            <div className="rounded-2xl bg-slate-50 p-4">
+                                <div className="text-xs font-medium text-slate-600">{t.dca.avg}</div>
+                                <div className="mt-1 text-2xl font-semibold text-slate-900">{fmt(avgCost)}</div>
+                            </div>
+                            <div className="rounded-2xl border border-slate-200 bg-white p-4">
+                                <label className="text-xs font-medium text-slate-600">{t.dca.currentPrice}</label>
+                                <input className="mt-2 w-full rounded-xl border border-slate-200 p-3 outline-none focus:border-slate-400"
+                                    value={currentPrice} onChange={(e) => setCurrentPrice(e.target.value)} inputMode="decimal" />
+                            </div>
+                        </div>
+
+                        {cp > 0 && (
+                            <div className="mt-3 grid gap-3 md:grid-cols-2">
+                                <div className="rounded-2xl bg-slate-50 p-4">
+                                    <div className="text-xs font-medium text-slate-600">{t.dca.pnl}</div>
+                                    <div className="mt-1 text-2xl font-semibold text-slate-900">{fmt(pnl)}</div>
+                                </div>
+                                <div className="rounded-2xl bg-slate-50 p-4">
+                                    <div className="text-xs font-medium text-slate-600">{t.dca.roi}</div>
+                                    <div className="mt-1 text-2xl font-semibold text-slate-900">{fmt(roi)}%</div>
+                                </div>
+                            </div>
+                        )}
+                    </div>
+                </div>
+            );
+        };
+
+        // 💹 손익/수익률 계산기 (수수료 포함)
+        const ProfitLossCalculator = ({ t }) => {
+            const n = (v) => {
+                const x = parseFloat(String(v).replace(/,/g, ""));
+                return Number.isFinite(x) ? x : 0;
+            };
+            const fmt = (v) => (Number.isFinite(v) ? v.toLocaleString(undefined, { maximumFractionDigits: 8 }) : "—");
+
+            const [buy, setBuy] = useState("100");
+            const [sell, setSell] = useState("120");
+            const [qty, setQty] = useState("1");
+            const [fee, setFee] = useState("0");
+
+            const B = n(buy);
+            const S = n(sell);
+            const Q = n(qty);
+            const F = Math.max(0, n(fee)) / 100;
+
+            const grossBuy = B * Q;
+            const grossSell = S * Q;
+            const feeCost = grossBuy * F + grossSell * F;
+            const profit = grossSell - grossBuy - feeCost;
+            const roi = grossBuy > 0 ? (profit / grossBuy) * 100 : 0;
+
+            const breakeven = (B > 0 && (1 - F) > 0) ? (B * (1 + F) / (1 - F)) : 0;
+
+            const copySummary = async () => {
+                const text = [
+                    `${t.tools.pnl}`,
+                    `${t.pnl.buy}: ${fmt(B)}`,
+                    `${t.pnl.sell}: ${fmt(S)}`,
+                    `${t.pnl.qty}: ${fmt(Q)}`,
+                    `${t.pnl.fee}: ${fmt(n(fee))}%`,
+                    `${t.pnl.profit}: ${fmt(profit)}`,
+                    `${t.pnl.roi}: ${fmt(roi)}%`,
+                    `${t.pnl.breakeven}: ${fmt(breakeven)}`,
+                ].join("\n");
+                try { await navigator.clipboard.writeText(text); } catch (_) { }
+            };
+
+            return (
+                <div className="space-y-6">
+                    <div className="rounded-2xl border border-slate-200 bg-white p-6 shadow-sm">
+                        <div className="flex flex-wrap items-start justify-between gap-3">
+                            <div>
+                                <h2 className="text-xl font-semibold text-slate-900">{t.tools.pnl}</h2>
+                                <p className="mt-1 text-sm text-slate-600">{t.seo?.pnl?.desc || ""}</p>
+                            </div>
+                            <button onClick={copySummary}
+                                className="rounded-xl border border-slate-200 bg-white px-4 py-2 text-sm font-medium text-slate-800 shadow-sm hover:bg-slate-50">
+                                Copy
+                            </button>
+                        </div>
+
+                        <div className="mt-5 grid gap-4 md:grid-cols-2">
+                            <div>
+                                <label className="text-sm font-medium text-slate-700">{t.pnl.buy}</label>
+                                <input className="mt-2 w-full rounded-xl border border-slate-200 p-3 outline-none focus:border-slate-400"
+                                    value={buy} onChange={(e) => setBuy(e.target.value)} inputMode="decimal" />
+                            </div>
+                            <div>
+                                <label className="text-sm font-medium text-slate-700">{t.pnl.sell}</label>
+                                <input className="mt-2 w-full rounded-xl border border-slate-200 p-3 outline-none focus:border-slate-400"
+                                    value={sell} onChange={(e) => setSell(e.target.value)} inputMode="decimal" />
+                            </div>
+                            <div>
+                                <label className="text-sm font-medium text-slate-700">{t.pnl.qty}</label>
+                                <input className="mt-2 w-full rounded-xl border border-slate-200 p-3 outline-none focus:border-slate-400"
+                                    value={qty} onChange={(e) => setQty(e.target.value)} inputMode="decimal" />
+                            </div>
+                            <div>
+                                <label className="text-sm font-medium text-slate-700">{t.pnl.fee}</label>
+                                <input className="mt-2 w-full rounded-xl border border-slate-200 p-3 outline-none focus:border-slate-400"
+                                    value={fee} onChange={(e) => setFee(e.target.value)} inputMode="decimal" />
+                            </div>
+                        </div>
+
+                        <div className="mt-6 grid gap-3 md:grid-cols-3">
+                            <div className="rounded-2xl bg-slate-50 p-4">
+                                <div className="text-xs font-medium text-slate-600">{t.pnl.profit}</div>
+                                <div className="mt-1 text-2xl font-semibold text-slate-900">{fmt(profit)}</div>
+                            </div>
+                            <div className="rounded-2xl bg-slate-50 p-4">
+                                <div className="text-xs font-medium text-slate-600">{t.pnl.roi}</div>
+                                <div className="mt-1 text-2xl font-semibold text-slate-900">{fmt(roi)}%</div>
+                            </div>
+                            <div className="rounded-2xl bg-slate-50 p-4">
+                                <div className="text-xs font-medium text-slate-600">{t.pnl.breakeven}</div>
+                                <div className="mt-1 text-2xl font-semibold text-slate-900">{fmt(breakeven)}</div>
+                            </div>
+                        </div>
+
+                        <div className="mt-3 text-xs text-slate-500">
+                            * {t.pnl.fee} {t.lang === "ko" ? "는 매수/매도 양쪽에 적용됩니다." : "is applied on both buy & sell."}
+                        </div>
+                    </div>
+                </div>
+            );
+        };
+const Stopwatch = ({ t }) => {
             const [time, setTime] = useState(0); const [run, setRun] = useState(false);
             useEffect(() => { let animationFrameId; let lastTime = Date.now(); const animate = () => { if (run) { const now = Date.now(); const delta = now - lastTime; lastTime = now; setTime(prev => prev + delta); animationFrameId = requestAnimationFrame(animate); } }; if (run) { lastTime = Date.now(); animationFrameId = requestAnimationFrame(animate); } else { cancelAnimationFrame(animationFrameId); } return () => cancelAnimationFrame(animationFrameId); }, [run]);
             const fmt = (ms) => { const m = Math.floor(ms / 60000).toString().padStart(2,'0'); const s = Math.floor((ms % 60000) / 1000).toString().padStart(2,'0'); const cs = Math.floor((ms % 1000) / 10).toString().padStart(2,'0'); return { m, s, cs }; }; const { m, s, cs } = fmt(time);
@@ -657,7 +1093,7 @@ const { useState, useEffect, useRef, useCallback, useMemo } = React;
         };
 
         // --- Path Routing Helpers (no #hash) ---
-        const TOOL_SLUG = {"text": "word-counter", "case": "case-converter", "percent": "universal-percent", "discount": "discount-calculator", "bmi": "bmi-calculator", "unit": "unit-converter", "image": "image-tools", "color": "color-converter", "stopwatch": "stopwatch", "pomodoro": "pomodoro-timer", "dday": "dday-calculator", "password": "password-generator", "lotto": "lotto-picker"};
+        const TOOL_SLUG = {"text": "word-counter", "case": "case-converter", "percent": "universal-percent", "discount": "discount-calculator", "bmi": "bmi-calculator", "unit": "unit-converter", "image": "image-tools", "color": "color-converter", "stopwatch": "stopwatch", "pomodoro": "pomodoro-timer", "dday": "dday-calculator", "password": "password-generator", "lotto": "lotto-picker", "compound": "compound-interest-calculator", "dca": "dca-calculator", "pnl": "profit-loss-calculator"};
         const SLUG_TOOL = Object.fromEntries(Object.entries(TOOL_SLUG).map(([k,v]) => [v,k]));
         const parseRouteFromPath = () => {
             const parts = window.location.pathname.split('/').filter(Boolean);
@@ -745,6 +1181,9 @@ const { useState, useEffect, useRef, useCallback, useMemo } = React;
                 { id: 'bmi', icon: 'activity', cat: 'health', comp: BMICalculator },
                 { id: 'percent', icon: 'calculator', cat: 'math', comp: PercentCalculator },
                 { id: 'discount', icon: 'percent', cat: 'math', comp: DiscountCalculator },
+                { id: 'compound', icon: 'line-chart', cat: 'math', comp: CompoundInterestCalculator },
+                { id: 'dca', icon: 'coins', cat: 'math', comp: DCACalculator },
+                { id: 'pnl', icon: 'trending-up', cat: 'math', comp: ProfitLossCalculator },
                 { id: 'unit', icon: 'arrow-left-right', cat: 'math', comp: UnitConverter },
                 { id: 'image', icon: 'image-plus', cat: 'media', comp: ImageTools },
                 { id: 'color', icon: 'palette', cat: 'media', comp: ColorConverter },
