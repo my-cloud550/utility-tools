@@ -2,6 +2,8 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8" />
+  <script src="/assets/theme.js"></script>
+
     
   <link rel="icon" href="/favicon.ico" />
   <link rel="icon" type="image/png" sizes="96x96" href="/favicon-96.png" />
@@ -29,6 +31,7 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <script>
         tailwind.config = {
+            darkMode: 'class',
             theme: {
                 extend: {
                     fontFamily: {
@@ -85,23 +88,23 @@
 </script>
 
 </head>
-<body class="bg-slate-50 text-slate-800">
-  <div class="flex h-screen bg-slate-50">
+<body class="bg-slate-50 text-slate-800 dark:bg-slate-950 dark:text-slate-100">
+  <div class="flex h-screen bg-slate-50 dark:bg-slate-950">
     <!-- Sidebar -->
-    <aside id="sidebar" class="fixed inset-y-0 left-0 z-40 w-72 bg-white border-r border-slate-200 transform transition-transform duration-300 md:static md:translate-x-0 -translate-x-full flex flex-col">
+    <aside id="sidebar" class="fixed inset-y-0 left-0 z-40 w-72 bg-white border-r border-slate-200 transform transition-transform duration-300 md:static md:translate-x-0 -translate-x-full flex flex-col dark:bg-slate-950 dark:border-slate-800">
       <div class="p-6">
-        <a href="/en/" class="text-2xl font-bold flex items-center gap-3 text-slate-800">
+        <a href="/en/" class="text-2xl font-bold flex items-center gap-3 text-slate-800 dark:text-slate-100">
           <div class="w-10 h-10 bg-blue-600 rounded-xl flex items-center justify-center text-white shadow-lg shadow-blue-200">
             <i data-lucide="box" class="w-6 h-6"></i>
           </div>
           UtilityBox
         </a>
-        <p class="text-xs text-slate-400 mt-2 ml-1">Smart tool collection</p>
+        <p class="text-xs text-slate-400 mt-2 ml-1 dark:text-slate-500">Smart tool collection</p>
       </div>
 
       <nav class="flex-1 px-4 py-2 space-y-8 overflow-y-auto custom-scrollbar">
         <div>
-          <h3 class="text-xs font-bold text-slate-400 uppercase tracking-wider mb-2 px-3">Home</h3>
+          <h3 class="text-xs font-bold text-slate-400 uppercase tracking-wider mb-2 px-3 dark:text-slate-500">Home</h3>
           <div class="space-y-1">
             <a href="/en/" class="flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-medium transition-all bg-slate-800 text-white shadow-md">
               <i data-lucide="layout-grid" class="w-[18px] h-[18px] text-blue-300"></i>
@@ -112,121 +115,121 @@
 
         
           <div>
-            <h3 class="text-xs font-bold text-slate-400 uppercase tracking-wider mb-2 px-3">Text</h3>
+            <h3 class="text-xs font-bold text-slate-400 uppercase tracking-wider mb-2 px-3 dark:text-slate-500">Text</h3>
             <div class="space-y-1">
               
-            <a href="/en/tools/word-counter/" class="flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-medium transition-all text-slate-600 hover:bg-slate-100">
-              <i data-lucide="type" class="w-[18px] h-[18px] text-slate-400"></i>
+            <a href="/en/tools/word-counter/" class="flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-medium transition-all text-slate-600 hover:bg-slate-100 dark:text-slate-300 dark:hover:bg-slate-800/60">
+              <i data-lucide="type" class="w-[18px] h-[18px] text-slate-400 dark:text-slate-500"></i>
               Word Counter
             </a>
-            <a href="/en/tools/case-converter/" class="flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-medium transition-all text-slate-600 hover:bg-slate-100">
-              <i data-lucide="case-sensitive" class="w-[18px] h-[18px] text-slate-400"></i>
+            <a href="/en/tools/case-converter/" class="flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-medium transition-all text-slate-600 hover:bg-slate-100 dark:text-slate-300 dark:hover:bg-slate-800/60">
+              <i data-lucide="case-sensitive" class="w-[18px] h-[18px] text-slate-400 dark:text-slate-500"></i>
               Case Converter
             </a>
             </div>
           </div>
 
           <div>
-            <h3 class="text-xs font-bold text-slate-400 uppercase tracking-wider mb-2 px-3">Math</h3>
+            <h3 class="text-xs font-bold text-slate-400 uppercase tracking-wider mb-2 px-3 dark:text-slate-500">Math</h3>
             <div class="space-y-1">
               
-            <a href="/en/tools/universal-percent/" class="flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-medium transition-all text-slate-600 hover:bg-slate-100">
-              <i data-lucide="calculator" class="w-[18px] h-[18px] text-slate-400"></i>
+            <a href="/en/tools/universal-percent/" class="flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-medium transition-all text-slate-600 hover:bg-slate-100 dark:text-slate-300 dark:hover:bg-slate-800/60">
+              <i data-lucide="calculator" class="w-[18px] h-[18px] text-slate-400 dark:text-slate-500"></i>
               Percent Calc
             </a>
-            <a href="/en/tools/discount-calculator/" class="flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-medium transition-all text-slate-600 hover:bg-slate-100">
-              <i data-lucide="percent" class="w-[18px] h-[18px] text-slate-400"></i>
+            <a href="/en/tools/discount-calculator/" class="flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-medium transition-all text-slate-600 hover:bg-slate-100 dark:text-slate-300 dark:hover:bg-slate-800/60">
+              <i data-lucide="percent" class="w-[18px] h-[18px] text-slate-400 dark:text-slate-500"></i>
               Discount Calc
             </a>
-            <a href="/en/tools/compound-interest-calculator/" class="flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-medium transition-all text-slate-600 hover:bg-slate-100">
-              <i data-lucide="line-chart" class="w-[18px] h-[18px] text-slate-400"></i>
+            <a href="/en/tools/compound-interest-calculator/" class="flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-medium transition-all text-slate-600 hover:bg-slate-100 dark:text-slate-300 dark:hover:bg-slate-800/60">
+              <i data-lucide="line-chart" class="w-[18px] h-[18px] text-slate-400 dark:text-slate-500"></i>
               Compound Interest
             </a>
-            <a href="/en/tools/dca-average-cost-calculator/" class="flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-medium transition-all text-slate-600 hover:bg-slate-100">
-              <i data-lucide="coins" class="w-[18px] h-[18px] text-slate-400"></i>
+            <a href="/en/tools/dca-average-cost-calculator/" class="flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-medium transition-all text-slate-600 hover:bg-slate-100 dark:text-slate-300 dark:hover:bg-slate-800/60">
+              <i data-lucide="coins" class="w-[18px] h-[18px] text-slate-400 dark:text-slate-500"></i>
               DCA Avg Cost
             </a>
-            <a href="/en/tools/profit-loss-calculator/" class="flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-medium transition-all text-slate-600 hover:bg-slate-100">
-              <i data-lucide="trending-up" class="w-[18px] h-[18px] text-slate-400"></i>
+            <a href="/en/tools/profit-loss-calculator/" class="flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-medium transition-all text-slate-600 hover:bg-slate-100 dark:text-slate-300 dark:hover:bg-slate-800/60">
+              <i data-lucide="trending-up" class="w-[18px] h-[18px] text-slate-400 dark:text-slate-500"></i>
               P/L Calculator
             </a>
-            <a href="/en/tools/unit-converter/" class="flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-medium transition-all text-slate-600 hover:bg-slate-100">
-              <i data-lucide="arrow-left-right" class="w-[18px] h-[18px] text-slate-400"></i>
+            <a href="/en/tools/unit-converter/" class="flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-medium transition-all text-slate-600 hover:bg-slate-100 dark:text-slate-300 dark:hover:bg-slate-800/60">
+              <i data-lucide="arrow-left-right" class="w-[18px] h-[18px] text-slate-400 dark:text-slate-500"></i>
               Unit Converter
             </a>
             </div>
           </div>
 
           <div>
-            <h3 class="text-xs font-bold text-slate-400 uppercase tracking-wider mb-2 px-3">Media</h3>
+            <h3 class="text-xs font-bold text-slate-400 uppercase tracking-wider mb-2 px-3 dark:text-slate-500">Media</h3>
             <div class="space-y-1">
               
-            <a href="/en/tools/image-tools/" class="flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-medium transition-all text-slate-600 hover:bg-slate-100">
-              <i data-lucide="image-plus" class="w-[18px] h-[18px] text-slate-400"></i>
+            <a href="/en/tools/image-tools/" class="flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-medium transition-all text-slate-600 hover:bg-slate-100 dark:text-slate-300 dark:hover:bg-slate-800/60">
+              <i data-lucide="image-plus" class="w-[18px] h-[18px] text-slate-400 dark:text-slate-500"></i>
               Image Converter
             </a>
-            <a href="/en/tools/color-converter/" class="flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-medium transition-all text-slate-600 hover:bg-slate-100">
-              <i data-lucide="palette" class="w-[18px] h-[18px] text-slate-400"></i>
+            <a href="/en/tools/color-converter/" class="flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-medium transition-all text-slate-600 hover:bg-slate-100 dark:text-slate-300 dark:hover:bg-slate-800/60">
+              <i data-lucide="palette" class="w-[18px] h-[18px] text-slate-400 dark:text-slate-500"></i>
               Color Converter
             </a>
             </div>
           </div>
 
           <div>
-            <h3 class="text-xs font-bold text-slate-400 uppercase tracking-wider mb-2 px-3">Time</h3>
+            <h3 class="text-xs font-bold text-slate-400 uppercase tracking-wider mb-2 px-3 dark:text-slate-500">Time</h3>
             <div class="space-y-1">
               
-            <a href="/en/tools/stopwatch/" class="flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-medium transition-all text-slate-600 hover:bg-slate-100">
-              <i data-lucide="timer" class="w-[18px] h-[18px] text-slate-400"></i>
+            <a href="/en/tools/stopwatch/" class="flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-medium transition-all text-slate-600 hover:bg-slate-100 dark:text-slate-300 dark:hover:bg-slate-800/60">
+              <i data-lucide="timer" class="w-[18px] h-[18px] text-slate-400 dark:text-slate-500"></i>
               Stopwatch
             </a>
-            <a href="/en/tools/pomodoro-timer/" class="flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-medium transition-all text-slate-600 hover:bg-slate-100">
-              <i data-lucide="clock" class="w-[18px] h-[18px] text-slate-400"></i>
+            <a href="/en/tools/pomodoro-timer/" class="flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-medium transition-all text-slate-600 hover:bg-slate-100 dark:text-slate-300 dark:hover:bg-slate-800/60">
+              <i data-lucide="clock" class="w-[18px] h-[18px] text-slate-400 dark:text-slate-500"></i>
               Pomodoro
             </a>
-            <a href="/en/tools/dday-calculator/" class="flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-medium transition-all text-slate-600 hover:bg-slate-100">
-              <i data-lucide="calendar" class="w-[18px] h-[18px] text-slate-400"></i>
+            <a href="/en/tools/dday-calculator/" class="flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-medium transition-all text-slate-600 hover:bg-slate-100 dark:text-slate-300 dark:hover:bg-slate-800/60">
+              <i data-lucide="calendar" class="w-[18px] h-[18px] text-slate-400 dark:text-slate-500"></i>
               D-Day
             </a>
             </div>
           </div>
 
           <div>
-            <h3 class="text-xs font-bold text-slate-400 uppercase tracking-wider mb-2 px-3">Security</h3>
+            <h3 class="text-xs font-bold text-slate-400 uppercase tracking-wider mb-2 px-3 dark:text-slate-500">Security</h3>
             <div class="space-y-1">
               
-            <a href="/en/tools/password-generator/" class="flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-medium transition-all text-slate-600 hover:bg-slate-100">
-              <i data-lucide="lock" class="w-[18px] h-[18px] text-slate-400"></i>
+            <a href="/en/tools/password-generator/" class="flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-medium transition-all text-slate-600 hover:bg-slate-100 dark:text-slate-300 dark:hover:bg-slate-800/60">
+              <i data-lucide="lock" class="w-[18px] h-[18px] text-slate-400 dark:text-slate-500"></i>
               Password
             </a>
             </div>
           </div>
 
           <div>
-            <h3 class="text-xs font-bold text-slate-400 uppercase tracking-wider mb-2 px-3">Fun</h3>
+            <h3 class="text-xs font-bold text-slate-400 uppercase tracking-wider mb-2 px-3 dark:text-slate-500">Fun</h3>
             <div class="space-y-1">
               
-            <a href="/en/tools/lotto-picker/" class="flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-medium transition-all text-slate-600 hover:bg-slate-100">
-              <i data-lucide="clover" class="w-[18px] h-[18px] text-slate-400"></i>
+            <a href="/en/tools/lotto-picker/" class="flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-medium transition-all text-slate-600 hover:bg-slate-100 dark:text-slate-300 dark:hover:bg-slate-800/60">
+              <i data-lucide="clover" class="w-[18px] h-[18px] text-slate-400 dark:text-slate-500"></i>
               Lotto
             </a>
             </div>
           </div>
 
           <div>
-            <h3 class="text-xs font-bold text-slate-400 uppercase tracking-wider mb-2 px-3">Health</h3>
+            <h3 class="text-xs font-bold text-slate-400 uppercase tracking-wider mb-2 px-3 dark:text-slate-500">Health</h3>
             <div class="space-y-1">
               
-            <a href="/en/tools/bmi-calculator/" class="flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-medium transition-all text-slate-600 hover:bg-slate-100">
-              <i data-lucide="activity" class="w-[18px] h-[18px] text-slate-400"></i>
+            <a href="/en/tools/bmi-calculator/" class="flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-medium transition-all text-slate-600 hover:bg-slate-100 dark:text-slate-300 dark:hover:bg-slate-800/60">
+              <i data-lucide="activity" class="w-[18px] h-[18px] text-slate-400 dark:text-slate-500"></i>
               BMI Calculator
             </a>
             </div>
           </div>
       </nav>
 
-      <div class="p-4 border-t border-slate-100">
-        <a href="/ko/" class="w-full flex items-center justify-center gap-2 py-2.5 rounded-xl border border-slate-200 text-sm font-bold text-slate-500 hover:bg-slate-50 hover:text-blue-600 transition-colors">
+      <div class="p-4 border-t border-slate-100 dark:border-slate-800">
+        <a href="/ko/" class="w-full flex items-center justify-center gap-2 py-2.5 rounded-xl border border-slate-200 text-sm font-bold text-slate-500 hover:bg-slate-50 hover:text-blue-600 transition-colors dark:bg-slate-950 dark:border-slate-800 dark:text-slate-300 dark:hover:bg-slate-800/60">
           <i data-lucide="globe" class="w-4 h-4"></i>
           Language: English
         </a>
@@ -238,15 +241,15 @@
 
     <!-- Main -->
     <main class="flex-1 flex flex-col h-full relative overflow-hidden">
-      <header class="md:hidden bg-white/80 backdrop-blur-md border-b border-slate-200 p-4 flex justify-between items-center sticky top-0 z-20">
+      <header class="md:hidden bg-white/80 backdrop-blur-md border-b border-slate-200 p-4 flex justify-between items-center sticky top-0 z-20 dark:bg-slate-950 dark:bg-slate-950/80 dark:border-slate-800">
         <span class="font-bold text-lg flex items-center gap-2">
           <i data-lucide="box" class="w-5 h-5 text-blue-600"></i> UtilityBox
         </span>
         <div class="flex gap-2">
-          <a href="/ko/" class="p-2 bg-slate-100 rounded-lg text-slate-600" aria-label="switch language">
+          <a href="/ko/" class="p-2 bg-slate-100 rounded-lg text-slate-600 dark:text-slate-300" aria-label="switch language">
             <i data-lucide="globe" class="w-5 h-5"></i>
           </a>
-          <button id="openMenu" class="p-2 bg-slate-100 rounded-lg text-slate-600" aria-label="open menu">
+          <button id="openMenu" class="p-2 bg-slate-100 rounded-lg text-slate-600 dark:text-slate-300" aria-label="open menu">
             <i data-lucide="menu" class="w-5 h-5"></i>
           </button>
         </div>
@@ -254,7 +257,7 @@
 
       <div class="flex-1 overflow-y-auto p-4 md:p-8">
         <div class="max-w-5xl mx-auto pb-20">
-          <div class="mb-6 bg-slate-100 border-2 border-dashed border-slate-200 rounded-lg h-20 flex flex-col items-center justify-center text-slate-400 text-xs">
+          <div class="mb-6 bg-slate-100 border-2 border-dashed border-slate-200 rounded-lg h-20 flex flex-col items-center justify-center text-slate-400 text-xs dark:border-slate-800 dark:text-slate-500">
             <span class="font-bold">Google AdSense</span>
             <span>Display Ad (Responsive)</span>
           </div>
@@ -265,18 +268,18 @@
                 Toolkit
               </span>
             </div>
-            <h1 class="text-3xl font-bold text-slate-900">Tools Hub</h1>
-            <p class="mt-2 text-slate-600">Search and run a tool instantly.</p>
+            <h1 class="text-3xl font-bold text-slate-900 dark:text-slate-100">Tools Hub</h1>
+            <p class="mt-2 text-slate-600 dark:text-slate-300">Search and run a tool instantly.</p>
 
             <div class="mt-5">
               <div class="relative">
-                <div class="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400">
+                <div class="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400 dark:text-slate-500">
                   <i data-lucide="search" class="w-4 h-4"></i>
                 </div>
                 <input id="toolSearch" type="text" placeholder="Search tools (e.g., word, discount, BMI)"
-                  class="w-full pl-11 pr-4 py-3 rounded-2xl border border-slate-200 bg-white focus:border-blue-500 outline-none" />
+                  class="w-full pl-11 pr-4 py-3 rounded-2xl border border-slate-200 bg-white focus:border-blue-500 outline-none dark:bg-slate-950 dark:border-slate-800" />
               </div>
-              <div class="mt-2 text-xs text-slate-400">
+              <div class="mt-2 text-xs text-slate-400 dark:text-slate-500">
                 Type to instantly filter cards.
               </div>
             </div>
@@ -284,112 +287,112 @@
 
           <div id="cards" class="grid sm:grid-cols-2 lg:grid-cols-3 gap-4">
             
-        <a href="/en/tools/word-counter/" class="group bg-white border border-slate-200 rounded-2xl p-5 shadow-sm hover:shadow-md transition-all">
+        <a href="/en/tools/word-counter/" class="group bg-white border border-slate-200 rounded-2xl p-5 shadow-sm hover:shadow-md transition-all dark:bg-slate-950 dark:border-slate-800">
           <div class="flex items-start gap-3">
             <div class="w-11 h-11 bg-blue-50 rounded-xl flex items-center justify-center border border-blue-100">
               <i data-lucide="type" class="w-6 h-6 text-blue-600"></i>
             </div>
             <div class="flex-1">
               <div class="text-sm font-bold text-blue-600">Text</div>
-              <div class="mt-1 text-xl font-bold text-slate-900">Word Counter</div>
-              <p class="mt-2 text-sm text-slate-600 leading-relaxed">Count characters, words, sentences, and more instantly.</p>
-              <div class="mt-4 inline-flex items-center gap-2 text-sm font-bold text-slate-700 group-hover:text-blue-700">
+              <div class="mt-1 text-xl font-bold text-slate-900 dark:text-slate-100">Word Counter</div>
+              <p class="mt-2 text-sm text-slate-600 leading-relaxed dark:text-slate-300">Count characters, words, sentences, and more instantly.</p>
+              <div class="mt-4 inline-flex items-center gap-2 text-sm font-bold text-slate-700 group-hover:text-blue-700 dark:text-slate-200">
                 Open <span class="transition-transform group-hover:translate-x-0.5">→</span>
               </div>
             </div>
           </div>
         </a>
 
-        <a href="/en/tools/case-converter/" class="group bg-white border border-slate-200 rounded-2xl p-5 shadow-sm hover:shadow-md transition-all">
+        <a href="/en/tools/case-converter/" class="group bg-white border border-slate-200 rounded-2xl p-5 shadow-sm hover:shadow-md transition-all dark:bg-slate-950 dark:border-slate-800">
           <div class="flex items-start gap-3">
             <div class="w-11 h-11 bg-blue-50 rounded-xl flex items-center justify-center border border-blue-100">
               <i data-lucide="case-sensitive" class="w-6 h-6 text-blue-600"></i>
             </div>
             <div class="flex-1">
               <div class="text-sm font-bold text-blue-600">Text</div>
-              <div class="mt-1 text-xl font-bold text-slate-900">Case Converter</div>
-              <p class="mt-2 text-sm text-slate-600 leading-relaxed">Convert text between upper/lower/title/snake and more.</p>
-              <div class="mt-4 inline-flex items-center gap-2 text-sm font-bold text-slate-700 group-hover:text-blue-700">
+              <div class="mt-1 text-xl font-bold text-slate-900 dark:text-slate-100">Case Converter</div>
+              <p class="mt-2 text-sm text-slate-600 leading-relaxed dark:text-slate-300">Convert text between upper/lower/title/snake and more.</p>
+              <div class="mt-4 inline-flex items-center gap-2 text-sm font-bold text-slate-700 group-hover:text-blue-700 dark:text-slate-200">
                 Open <span class="transition-transform group-hover:translate-x-0.5">→</span>
               </div>
             </div>
           </div>
         </a>
 
-        <a href="/en/tools/universal-percent/" class="group bg-white border border-slate-200 rounded-2xl p-5 shadow-sm hover:shadow-md transition-all">
+        <a href="/en/tools/universal-percent/" class="group bg-white border border-slate-200 rounded-2xl p-5 shadow-sm hover:shadow-md transition-all dark:bg-slate-950 dark:border-slate-800">
           <div class="flex items-start gap-3">
             <div class="w-11 h-11 bg-blue-50 rounded-xl flex items-center justify-center border border-blue-100">
               <i data-lucide="calculator" class="w-6 h-6 text-blue-600"></i>
             </div>
             <div class="flex-1">
               <div class="text-sm font-bold text-blue-600">Math</div>
-              <div class="mt-1 text-xl font-bold text-slate-900">Percent Calc</div>
-              <p class="mt-2 text-sm text-slate-600 leading-relaxed">Calculate percent change, ratios, and percent-of easily.</p>
-              <div class="mt-4 inline-flex items-center gap-2 text-sm font-bold text-slate-700 group-hover:text-blue-700">
+              <div class="mt-1 text-xl font-bold text-slate-900 dark:text-slate-100">Percent Calc</div>
+              <p class="mt-2 text-sm text-slate-600 leading-relaxed dark:text-slate-300">Calculate percent change, ratios, and percent-of easily.</p>
+              <div class="mt-4 inline-flex items-center gap-2 text-sm font-bold text-slate-700 group-hover:text-blue-700 dark:text-slate-200">
                 Open <span class="transition-transform group-hover:translate-x-0.5">→</span>
               </div>
             </div>
           </div>
         </a>
 
-        <a href="/en/tools/discount-calculator/" class="group bg-white border border-slate-200 rounded-2xl p-5 shadow-sm hover:shadow-md transition-all">
+        <a href="/en/tools/discount-calculator/" class="group bg-white border border-slate-200 rounded-2xl p-5 shadow-sm hover:shadow-md transition-all dark:bg-slate-950 dark:border-slate-800">
           <div class="flex items-start gap-3">
             <div class="w-11 h-11 bg-blue-50 rounded-xl flex items-center justify-center border border-blue-100">
               <i data-lucide="percent" class="w-6 h-6 text-blue-600"></i>
             </div>
             <div class="flex-1">
               <div class="text-sm font-bold text-blue-600">Math</div>
-              <div class="mt-1 text-xl font-bold text-slate-900">Discount Calc</div>
-              <p class="mt-2 text-sm text-slate-600 leading-relaxed">Compute discount rate and savings from original and sale price.</p>
-              <div class="mt-4 inline-flex items-center gap-2 text-sm font-bold text-slate-700 group-hover:text-blue-700">
+              <div class="mt-1 text-xl font-bold text-slate-900 dark:text-slate-100">Discount Calc</div>
+              <p class="mt-2 text-sm text-slate-600 leading-relaxed dark:text-slate-300">Compute discount rate and savings from original and sale price.</p>
+              <div class="mt-4 inline-flex items-center gap-2 text-sm font-bold text-slate-700 group-hover:text-blue-700 dark:text-slate-200">
                 Open <span class="transition-transform group-hover:translate-x-0.5">→</span>
               </div>
             </div>
           </div>
         </a>
 
-<a href="/en/tools/compound-interest-calculator/" class="group bg-white border border-slate-200 rounded-2xl p-5 shadow-sm hover:shadow-md transition-all">
+<a href="/en/tools/compound-interest-calculator/" class="group bg-white border border-slate-200 rounded-2xl p-5 shadow-sm hover:shadow-md transition-all dark:bg-slate-950 dark:border-slate-800">
           <div class="flex items-start gap-3">
             <div class="w-11 h-11 bg-blue-50 rounded-xl flex items-center justify-center border border-blue-100">
               <i data-lucide="line-chart" class="w-6 h-6 text-blue-600"></i>
             </div>
             <div class="flex-1">
               <div class="text-sm font-bold text-blue-600">Calculators</div>
-              <div class="mt-1 text-xl font-bold text-slate-900">Compound Interest</div>
-              <p class="mt-2 text-sm text-slate-600 leading-relaxed">Final balance with optional monthly contributions and total interest.</p>
-              <div class="mt-4 inline-flex items-center gap-2 text-sm font-bold text-slate-700 group-hover:text-blue-700">
+              <div class="mt-1 text-xl font-bold text-slate-900 dark:text-slate-100">Compound Interest</div>
+              <p class="mt-2 text-sm text-slate-600 leading-relaxed dark:text-slate-300">Final balance with optional monthly contributions and total interest.</p>
+              <div class="mt-4 inline-flex items-center gap-2 text-sm font-bold text-slate-700 group-hover:text-blue-700 dark:text-slate-200">
                 Open <span class="transition-transform group-hover:translate-x-0.5">→</span>
               </div>
             </div>
           </div>
         </a>
 
-        <a href="/en/tools/dca-average-cost-calculator/" class="group bg-white border border-slate-200 rounded-2xl p-5 shadow-sm hover:shadow-md transition-all">
+        <a href="/en/tools/dca-average-cost-calculator/" class="group bg-white border border-slate-200 rounded-2xl p-5 shadow-sm hover:shadow-md transition-all dark:bg-slate-950 dark:border-slate-800">
           <div class="flex items-start gap-3">
             <div class="w-11 h-11 bg-blue-50 rounded-xl flex items-center justify-center border border-blue-100">
               <i data-lucide="coins" class="w-6 h-6 text-blue-600"></i>
             </div>
             <div class="flex-1">
               <div class="text-sm font-bold text-blue-600">Calculators</div>
-              <div class="mt-1 text-xl font-bold text-slate-900">DCA Avg Cost</div>
-              <p class="mt-2 text-sm text-slate-600 leading-relaxed">Add buys to calculate average cost, total invested, and P/L.</p>
-              <div class="mt-4 inline-flex items-center gap-2 text-sm font-bold text-slate-700 group-hover:text-blue-700">
+              <div class="mt-1 text-xl font-bold text-slate-900 dark:text-slate-100">DCA Avg Cost</div>
+              <p class="mt-2 text-sm text-slate-600 leading-relaxed dark:text-slate-300">Add buys to calculate average cost, total invested, and P/L.</p>
+              <div class="mt-4 inline-flex items-center gap-2 text-sm font-bold text-slate-700 group-hover:text-blue-700 dark:text-slate-200">
                 Open <span class="transition-transform group-hover:translate-x-0.5">→</span>
               </div>
             </div>
           </div>
         </a>
 
-        <a href="/en/tools/profit-loss-calculator/" class="group bg-white border border-slate-200 rounded-2xl p-5 shadow-sm hover:shadow-md transition-all">
+        <a href="/en/tools/profit-loss-calculator/" class="group bg-white border border-slate-200 rounded-2xl p-5 shadow-sm hover:shadow-md transition-all dark:bg-slate-950 dark:border-slate-800">
           <div class="flex items-start gap-3">
             <div class="w-11 h-11 bg-blue-50 rounded-xl flex items-center justify-center border border-blue-100">
               <i data-lucide="trending-up" class="w-6 h-6 text-blue-600"></i>
             </div>
             <div class="flex-1">
               <div class="text-sm font-bold text-blue-600">Calculators</div>
-              <div class="mt-1 text-xl font-bold text-slate-900">Profit & Loss</div>
-              <p class="mt-2 text-sm text-slate-600 leading-relaxed">ROI, fees, and break-even in one quick calculator.</p>
-              <div class="mt-4 inline-flex items-center gap-2 text-sm font-bold text-slate-700 group-hover:text-blue-700">
+              <div class="mt-1 text-xl font-bold text-slate-900 dark:text-slate-100">Profit & Loss</div>
+              <p class="mt-2 text-sm text-slate-600 leading-relaxed dark:text-slate-300">ROI, fees, and break-even in one quick calculator.</p>
+              <div class="mt-4 inline-flex items-center gap-2 text-sm font-bold text-slate-700 group-hover:text-blue-700 dark:text-slate-200">
                 Open <span class="transition-transform group-hover:translate-x-0.5">→</span>
               </div>
             </div>
@@ -397,144 +400,144 @@
         </a>
 
 
-        <a href="/en/tools/unit-converter/" class="group bg-white border border-slate-200 rounded-2xl p-5 shadow-sm hover:shadow-md transition-all">
+        <a href="/en/tools/unit-converter/" class="group bg-white border border-slate-200 rounded-2xl p-5 shadow-sm hover:shadow-md transition-all dark:bg-slate-950 dark:border-slate-800">
           <div class="flex items-start gap-3">
             <div class="w-11 h-11 bg-blue-50 rounded-xl flex items-center justify-center border border-blue-100">
               <i data-lucide="arrow-left-right" class="w-6 h-6 text-blue-600"></i>
             </div>
             <div class="flex-1">
               <div class="text-sm font-bold text-blue-600">Math</div>
-              <div class="mt-1 text-xl font-bold text-slate-900">Unit Converter</div>
-              <p class="mt-2 text-sm text-slate-600 leading-relaxed">Convert common units like length, weight, temperature, and more.</p>
-              <div class="mt-4 inline-flex items-center gap-2 text-sm font-bold text-slate-700 group-hover:text-blue-700">
+              <div class="mt-1 text-xl font-bold text-slate-900 dark:text-slate-100">Unit Converter</div>
+              <p class="mt-2 text-sm text-slate-600 leading-relaxed dark:text-slate-300">Convert common units like length, weight, temperature, and more.</p>
+              <div class="mt-4 inline-flex items-center gap-2 text-sm font-bold text-slate-700 group-hover:text-blue-700 dark:text-slate-200">
                 Open <span class="transition-transform group-hover:translate-x-0.5">→</span>
               </div>
             </div>
           </div>
         </a>
 
-        <a href="/en/tools/image-tools/" class="group bg-white border border-slate-200 rounded-2xl p-5 shadow-sm hover:shadow-md transition-all">
+        <a href="/en/tools/image-tools/" class="group bg-white border border-slate-200 rounded-2xl p-5 shadow-sm hover:shadow-md transition-all dark:bg-slate-950 dark:border-slate-800">
           <div class="flex items-start gap-3">
             <div class="w-11 h-11 bg-blue-50 rounded-xl flex items-center justify-center border border-blue-100">
               <i data-lucide="image-plus" class="w-6 h-6 text-blue-600"></i>
             </div>
             <div class="flex-1">
               <div class="text-sm font-bold text-blue-600">Media</div>
-              <div class="mt-1 text-xl font-bold text-slate-900">Image Converter</div>
-              <p class="mt-2 text-sm text-slate-600 leading-relaxed">Simple image utilities like compress and resize.</p>
-              <div class="mt-4 inline-flex items-center gap-2 text-sm font-bold text-slate-700 group-hover:text-blue-700">
+              <div class="mt-1 text-xl font-bold text-slate-900 dark:text-slate-100">Image Converter</div>
+              <p class="mt-2 text-sm text-slate-600 leading-relaxed dark:text-slate-300">Simple image utilities like compress and resize.</p>
+              <div class="mt-4 inline-flex items-center gap-2 text-sm font-bold text-slate-700 group-hover:text-blue-700 dark:text-slate-200">
                 Open <span class="transition-transform group-hover:translate-x-0.5">→</span>
               </div>
             </div>
           </div>
         </a>
 
-        <a href="/en/tools/color-converter/" class="group bg-white border border-slate-200 rounded-2xl p-5 shadow-sm hover:shadow-md transition-all">
+        <a href="/en/tools/color-converter/" class="group bg-white border border-slate-200 rounded-2xl p-5 shadow-sm hover:shadow-md transition-all dark:bg-slate-950 dark:border-slate-800">
           <div class="flex items-start gap-3">
             <div class="w-11 h-11 bg-blue-50 rounded-xl flex items-center justify-center border border-blue-100">
               <i data-lucide="palette" class="w-6 h-6 text-blue-600"></i>
             </div>
             <div class="flex-1">
               <div class="text-sm font-bold text-blue-600">Media</div>
-              <div class="mt-1 text-xl font-bold text-slate-900">Color Converter</div>
-              <p class="mt-2 text-sm text-slate-600 leading-relaxed">Convert color values between HEX/RGB/HSL and more.</p>
-              <div class="mt-4 inline-flex items-center gap-2 text-sm font-bold text-slate-700 group-hover:text-blue-700">
+              <div class="mt-1 text-xl font-bold text-slate-900 dark:text-slate-100">Color Converter</div>
+              <p class="mt-2 text-sm text-slate-600 leading-relaxed dark:text-slate-300">Convert color values between HEX/RGB/HSL and more.</p>
+              <div class="mt-4 inline-flex items-center gap-2 text-sm font-bold text-slate-700 group-hover:text-blue-700 dark:text-slate-200">
                 Open <span class="transition-transform group-hover:translate-x-0.5">→</span>
               </div>
             </div>
           </div>
         </a>
 
-        <a href="/en/tools/stopwatch/" class="group bg-white border border-slate-200 rounded-2xl p-5 shadow-sm hover:shadow-md transition-all">
+        <a href="/en/tools/stopwatch/" class="group bg-white border border-slate-200 rounded-2xl p-5 shadow-sm hover:shadow-md transition-all dark:bg-slate-950 dark:border-slate-800">
           <div class="flex items-start gap-3">
             <div class="w-11 h-11 bg-blue-50 rounded-xl flex items-center justify-center border border-blue-100">
               <i data-lucide="timer" class="w-6 h-6 text-blue-600"></i>
             </div>
             <div class="flex-1">
               <div class="text-sm font-bold text-blue-600">Time</div>
-              <div class="mt-1 text-xl font-bold text-slate-900">Stopwatch</div>
-              <p class="mt-2 text-sm text-slate-600 leading-relaxed">A simple, accurate online stopwatch.</p>
-              <div class="mt-4 inline-flex items-center gap-2 text-sm font-bold text-slate-700 group-hover:text-blue-700">
+              <div class="mt-1 text-xl font-bold text-slate-900 dark:text-slate-100">Stopwatch</div>
+              <p class="mt-2 text-sm text-slate-600 leading-relaxed dark:text-slate-300">A simple, accurate online stopwatch.</p>
+              <div class="mt-4 inline-flex items-center gap-2 text-sm font-bold text-slate-700 group-hover:text-blue-700 dark:text-slate-200">
                 Open <span class="transition-transform group-hover:translate-x-0.5">→</span>
               </div>
             </div>
           </div>
         </a>
 
-        <a href="/en/tools/pomodoro-timer/" class="group bg-white border border-slate-200 rounded-2xl p-5 shadow-sm hover:shadow-md transition-all">
+        <a href="/en/tools/pomodoro-timer/" class="group bg-white border border-slate-200 rounded-2xl p-5 shadow-sm hover:shadow-md transition-all dark:bg-slate-950 dark:border-slate-800">
           <div class="flex items-start gap-3">
             <div class="w-11 h-11 bg-blue-50 rounded-xl flex items-center justify-center border border-blue-100">
               <i data-lucide="clock" class="w-6 h-6 text-blue-600"></i>
             </div>
             <div class="flex-1">
               <div class="text-sm font-bold text-blue-600">Time</div>
-              <div class="mt-1 text-xl font-bold text-slate-900">Pomodoro</div>
-              <p class="mt-2 text-sm text-slate-600 leading-relaxed">A pomodoro timer for focus and break cycles.</p>
-              <div class="mt-4 inline-flex items-center gap-2 text-sm font-bold text-slate-700 group-hover:text-blue-700">
+              <div class="mt-1 text-xl font-bold text-slate-900 dark:text-slate-100">Pomodoro</div>
+              <p class="mt-2 text-sm text-slate-600 leading-relaxed dark:text-slate-300">A pomodoro timer for focus and break cycles.</p>
+              <div class="mt-4 inline-flex items-center gap-2 text-sm font-bold text-slate-700 group-hover:text-blue-700 dark:text-slate-200">
                 Open <span class="transition-transform group-hover:translate-x-0.5">→</span>
               </div>
             </div>
           </div>
         </a>
 
-        <a href="/en/tools/dday-calculator/" class="group bg-white border border-slate-200 rounded-2xl p-5 shadow-sm hover:shadow-md transition-all">
+        <a href="/en/tools/dday-calculator/" class="group bg-white border border-slate-200 rounded-2xl p-5 shadow-sm hover:shadow-md transition-all dark:bg-slate-950 dark:border-slate-800">
           <div class="flex items-start gap-3">
             <div class="w-11 h-11 bg-blue-50 rounded-xl flex items-center justify-center border border-blue-100">
               <i data-lucide="calendar" class="w-6 h-6 text-blue-600"></i>
             </div>
             <div class="flex-1">
               <div class="text-sm font-bold text-blue-600">Time</div>
-              <div class="mt-1 text-xl font-bold text-slate-900">D-Day</div>
-              <p class="mt-2 text-sm text-slate-600 leading-relaxed">Calculate days between dates and D-day.</p>
-              <div class="mt-4 inline-flex items-center gap-2 text-sm font-bold text-slate-700 group-hover:text-blue-700">
+              <div class="mt-1 text-xl font-bold text-slate-900 dark:text-slate-100">D-Day</div>
+              <p class="mt-2 text-sm text-slate-600 leading-relaxed dark:text-slate-300">Calculate days between dates and D-day.</p>
+              <div class="mt-4 inline-flex items-center gap-2 text-sm font-bold text-slate-700 group-hover:text-blue-700 dark:text-slate-200">
                 Open <span class="transition-transform group-hover:translate-x-0.5">→</span>
               </div>
             </div>
           </div>
         </a>
 
-        <a href="/en/tools/password-generator/" class="group bg-white border border-slate-200 rounded-2xl p-5 shadow-sm hover:shadow-md transition-all">
+        <a href="/en/tools/password-generator/" class="group bg-white border border-slate-200 rounded-2xl p-5 shadow-sm hover:shadow-md transition-all dark:bg-slate-950 dark:border-slate-800">
           <div class="flex items-start gap-3">
             <div class="w-11 h-11 bg-blue-50 rounded-xl flex items-center justify-center border border-blue-100">
               <i data-lucide="lock" class="w-6 h-6 text-blue-600"></i>
             </div>
             <div class="flex-1">
               <div class="text-sm font-bold text-blue-600">Security</div>
-              <div class="mt-1 text-xl font-bold text-slate-900">Password</div>
-              <p class="mt-2 text-sm text-slate-600 leading-relaxed">Generate strong random passwords.</p>
-              <div class="mt-4 inline-flex items-center gap-2 text-sm font-bold text-slate-700 group-hover:text-blue-700">
+              <div class="mt-1 text-xl font-bold text-slate-900 dark:text-slate-100">Password</div>
+              <p class="mt-2 text-sm text-slate-600 leading-relaxed dark:text-slate-300">Generate strong random passwords.</p>
+              <div class="mt-4 inline-flex items-center gap-2 text-sm font-bold text-slate-700 group-hover:text-blue-700 dark:text-slate-200">
                 Open <span class="transition-transform group-hover:translate-x-0.5">→</span>
               </div>
             </div>
           </div>
         </a>
 
-        <a href="/en/tools/bmi-calculator/" class="group bg-white border border-slate-200 rounded-2xl p-5 shadow-sm hover:shadow-md transition-all">
+        <a href="/en/tools/bmi-calculator/" class="group bg-white border border-slate-200 rounded-2xl p-5 shadow-sm hover:shadow-md transition-all dark:bg-slate-950 dark:border-slate-800">
           <div class="flex items-start gap-3">
             <div class="w-11 h-11 bg-blue-50 rounded-xl flex items-center justify-center border border-blue-100">
               <i data-lucide="activity" class="w-6 h-6 text-blue-600"></i>
             </div>
             <div class="flex-1">
               <div class="text-sm font-bold text-blue-600">Health</div>
-              <div class="mt-1 text-xl font-bold text-slate-900">BMI Calculator</div>
-              <p class="mt-2 text-sm text-slate-600 leading-relaxed">Calculate body mass index from height and weight.</p>
-              <div class="mt-4 inline-flex items-center gap-2 text-sm font-bold text-slate-700 group-hover:text-blue-700">
+              <div class="mt-1 text-xl font-bold text-slate-900 dark:text-slate-100">BMI Calculator</div>
+              <p class="mt-2 text-sm text-slate-600 leading-relaxed dark:text-slate-300">Calculate body mass index from height and weight.</p>
+              <div class="mt-4 inline-flex items-center gap-2 text-sm font-bold text-slate-700 group-hover:text-blue-700 dark:text-slate-200">
                 Open <span class="transition-transform group-hover:translate-x-0.5">→</span>
               </div>
             </div>
           </div>
         </a>
 
-        <a href="/en/tools/lotto-picker/" class="group bg-white border border-slate-200 rounded-2xl p-5 shadow-sm hover:shadow-md transition-all">
+        <a href="/en/tools/lotto-picker/" class="group bg-white border border-slate-200 rounded-2xl p-5 shadow-sm hover:shadow-md transition-all dark:bg-slate-950 dark:border-slate-800">
           <div class="flex items-start gap-3">
             <div class="w-11 h-11 bg-blue-50 rounded-xl flex items-center justify-center border border-blue-100">
               <i data-lucide="clover" class="w-6 h-6 text-blue-600"></i>
             </div>
             <div class="flex-1">
               <div class="text-sm font-bold text-blue-600">Fun</div>
-              <div class="mt-1 text-xl font-bold text-slate-900">Lotto</div>
-              <p class="mt-2 text-sm text-slate-600 leading-relaxed">Generate random lotto number sets.</p>
-              <div class="mt-4 inline-flex items-center gap-2 text-sm font-bold text-slate-700 group-hover:text-blue-700">
+              <div class="mt-1 text-xl font-bold text-slate-900 dark:text-slate-100">Lotto</div>
+              <p class="mt-2 text-sm text-slate-600 leading-relaxed dark:text-slate-300">Generate random lotto number sets.</p>
+              <div class="mt-4 inline-flex items-center gap-2 text-sm font-bold text-slate-700 group-hover:text-blue-700 dark:text-slate-200">
                 Open <span class="transition-transform group-hover:translate-x-0.5">→</span>
               </div>
             </div>
@@ -542,11 +545,11 @@
         </a>
           </div>
 
-          <div id="noResults" class="hidden mt-10 text-center text-slate-500">
+          <div id="noResults" class="hidden mt-10 text-center text-slate-500 dark:text-slate-300">
             No matching tools.
           </div>
 
-          <footer class="mt-12 text-center text-xs text-slate-400">
+          <footer class="mt-12 text-center text-xs text-slate-400 dark:text-slate-500">
             &copy; 2026 Utility Box. All tools run locally in your browser.
           </footer>
         </div>
@@ -596,5 +599,29 @@
       window.lucide.createIcons();
     }
   </script>
+
+  <!-- Theme toggle -->
+  <button id="uboxThemeToggle" type="button"
+    class="fixed bottom-4 right-4 z-[9999] rounded-full border border-slate-200 bg-white/90 backdrop-blur px-4 py-2 text-sm font-bold text-slate-700 shadow-lg hover:bg-slate-50 hover:text-blue-600 transition
+           dark:border-slate-700 dark:bg-slate-900/90 dark:text-slate-200 dark:hover:bg-slate-800/70 dark:hover:text-blue-300">
+    <span id="uboxThemeToggleIcon" class="mr-1">☾</span><span id="uboxThemeToggleLabel">Dark</span>
+  </button>
+  <script>
+    (function () {
+      function refresh() {
+        var isDark = document.documentElement.classList.contains('dark');
+        var icon = document.getElementById('uboxThemeToggleIcon');
+        var label = document.getElementById('uboxThemeToggleLabel');
+        if (!icon || !label) return;
+        if (isDark) { icon.textContent = '☀'; label.textContent = 'Light'; }
+        else { icon.textContent = '☾'; label.textContent = 'Dark'; }
+      }
+      var btn = document.getElementById('uboxThemeToggle');
+      if (btn) btn.addEventListener('click', function () { if (window.UboxTheme) window.UboxTheme.toggle(); refresh(); });
+      window.addEventListener('ubox:theme', refresh);
+      refresh();
+    })();
+  </script>
+
 </body>
 </html>
