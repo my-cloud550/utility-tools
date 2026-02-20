@@ -1293,7 +1293,42 @@ const Stopwatch = ({ t }) => {
                     </aside>
                     {menuOpen && <div className="fixed inset-0 bg-black/20 z-30 md:hidden backdrop-blur-sm" onClick={() => setMenuOpen(false)}></div>}
                     <main className="flex-1 flex flex-col h-full relative overflow-hidden">
-                        <header className={`md:hidden backdrop-blur-md border-b p-4 flex justify-between items-center sticky top-0 z-20 ${theme === 'dark' ? 'bg-slate-900/70 border-slate-700' : 'bg-white/80 border-slate-200'} `}><span className="font-bold text-lg flex items-center gap-2"><Icon name="box" size={20} className="text-blue-600"/> {t.title}</span><div className="flex gap-2"><button onClick={() => { window.location.href = `/${lang}/`; }} className={`p-2 rounded-lg ${theme === \'dark\' ? \'bg-slate-800 text-slate-200\' : \'bg-slate-100 text-slate-600\'}`}><Icon name="home" size={20} /></button><button onClick={() => { window.location.href = makePath(lang === 'ko' ? 'en' : 'ko', activeToolId); }} className={`p-2 rounded-lg ${theme === \'dark\' ? \'bg-slate-800 text-slate-200\' : \'bg-slate-100 text-slate-600\'}`}><Icon name="globe" size={20} /></button><button onClick={toggleTheme} className={`p-2 rounded-lg ${theme === \'dark\' ? \'bg-slate-800 text-slate-200\' : \'bg-slate-100 text-slate-600\'}`} aria-label="toggle theme"><Icon name={theme === 'dark' ? 'sun' : 'moon'} size={20} /></button><button onClick={() => setMenuOpen(true)} className={`p-2 rounded-lg ${theme === \'dark\' ? \'bg-slate-800 text-slate-200\' : \'bg-slate-100 text-slate-600\'}`}><Icon name="menu" size={20} /></button></div></header>
+                        <header
+                            className={`md:hidden backdrop-blur-md border-b p-4 flex justify-between items-center sticky top-0 z-20 ${
+                                theme === 'dark' ? 'bg-slate-900/70 border-slate-700' : 'bg-white/80 border-slate-200'
+                            }`}
+                        >
+                            <span className="font-bold text-lg flex items-center gap-2">
+                                <Icon name="box" size={20} className="text-blue-600" /> {t.title}
+                            </span>
+                            <div className="flex gap-2">
+                                <button
+                                    onClick={() => { window.location.href = `/${lang}/`; }}
+                                    className={`p-2 rounded-lg ${theme === 'dark' ? 'bg-slate-800 text-slate-200' : 'bg-slate-100 text-slate-600'}`}
+                                >
+                                    <Icon name="home" size={20} />
+                                </button>
+                                <button
+                                    onClick={() => { window.location.href = makePath(lang === 'ko' ? 'en' : 'ko', activeToolId); }}
+                                    className={`p-2 rounded-lg ${theme === 'dark' ? 'bg-slate-800 text-slate-200' : 'bg-slate-100 text-slate-600'}`}
+                                >
+                                    <Icon name="globe" size={20} />
+                                </button>
+                                <button
+                                    onClick={toggleTheme}
+                                    className={`p-2 rounded-lg ${theme === 'dark' ? 'bg-slate-800 text-slate-200' : 'bg-slate-100 text-slate-600'}`}
+                                    aria-label="toggle theme"
+                                >
+                                    <Icon name={theme === 'dark' ? 'sun' : 'moon'} size={20} />
+                                </button>
+                                <button
+                                    onClick={() => setMenuOpen(true)}
+                                    className={`p-2 rounded-lg ${theme === 'dark' ? 'bg-slate-800 text-slate-200' : 'bg-slate-100 text-slate-600'}`}
+                                >
+                                    <Icon name="menu" size={20} />
+                                </button>
+                            </div>
+                        </header>
                         <div className="flex-1 overflow-y-auto p-4 md:p-8">
                             <div className="max-w-2xl mx-auto pb-20">
                                 <div className="mb-6 bg-slate-100 border-2 border-dashed border-slate-200 rounded-lg h-20 flex flex-col items-center justify-center text-slate-400 text-xs"><span className="font-bold">Google AdSense</span><span>Display Ad (Responsive)</span></div>
