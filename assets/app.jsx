@@ -1255,15 +1255,15 @@ const Stopwatch = ({ t }) => {
             const seo = t.seo[activeTool.id] || { title: activeTool.id, desc: "Tool description", tags: [] };
 
             return (
-                <div className="flex h-screen bg-slate-50">
-                    <aside className={`fixed inset-y-0 left-0 z-40 w-72 bg-white border-r border-slate-200 transform transition-transform duration-300 md:static md:translate-x-0 ${menuOpen ? 'translate-x-0' : '-translate-x-full'} flex flex-col`}>
+                <div className="flex h-screen bg-slate-50 dark:bg-slate-950">
+                    <aside className={`fixed inset-y-0 left-0 z-40 w-72 bg-white border-r border-slate-200 dark:bg-slate-900 dark:border-slate-800 transform transition-transform duration-300 md:static md:translate-x-0 ${menuOpen ? 'translate-x-0' : '-translate-x-full'} flex flex-col`}>
                         <div className="p-6"><a href={`/${lang}/`} className="group inline-flex flex-col"><h1 className="text-2xl font-bold flex items-center gap-3 text-slate-800 group-hover:text-slate-900"><div className="w-10 h-10 bg-blue-600 rounded-xl flex items-center justify-center text-white shadow-lg shadow-blue-200 group-hover:shadow-blue-300 transition"><Icon name="box" size={24} /></div>UtilityBox</h1><p className="text-xs text-slate-400 mt-2 ml-1 group-hover:text-slate-500 transition">스마트 툴 모음</p></a></div>
                         <nav className="flex-1 px-4 py-2 space-y-8 overflow-y-auto custom-scrollbar">
                             <div>
                                 <h3 className="text-xs font-bold text-slate-400 uppercase tracking-wider mb-2 px-3">{lang === 'ko' ? '홈' : 'Home'}</h3>
                                 <div className="space-y-1">
-                                    <a href={`/${lang}/`} className="flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-medium transition-all hover:bg-slate-100 text-slate-700">
-                                        <Icon name="layout-grid" size={18} className="text-slate-400" />
+                                    <a href={`/${lang}/`} className="group flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-medium transition-all hover:bg-slate-100 text-slate-700 dark:text-slate-200 dark:hover:bg-slate-800/60 dark:hover:text-white">
+                                        <Icon name="layout-grid" size={18} className="text-slate-400 dark:text-slate-500 transition-colors group-hover:text-slate-500 dark:group-hover:text-slate-100" />
                                         {lang === 'ko' ? '도구 모음' : 'Tool Directory'}
                                     </a>
                                 </div>
@@ -1274,18 +1274,37 @@ const Stopwatch = ({ t }) => {
                                     <h3 className="text-xs font-bold text-slate-400 uppercase tracking-wider mb-2 px-3">{t.categories[cat]}</h3>
                                     <div className="space-y-1">
                                         {tools.filter(x => x.cat === cat).map(item => (
-                                            <a key={item.id} href={makePath(lang, item.id)} className={`flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-medium transition-all ${activeToolId === item.id ? 'bg-slate-800 text-white shadow-md' : 'text-slate-600 hover:bg-slate-100'}`}><Icon name={item.icon} size={18} className={activeToolId === item.id ? 'text-blue-300' : 'text-slate-400'} />{t.tools[item.id]}</a>
+                                            <a
+                                                key={item.id}
+                                                href={makePath(lang, item.id)}
+                                                className={`group flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-medium transition-all ${
+                                                    activeToolId === item.id
+                                                        ? 'bg-slate-800 text-white shadow-md dark:bg-slate-950/60'
+                                                        : 'text-slate-600 hover:bg-slate-100 dark:text-slate-300 dark:hover:bg-slate-800/60 dark:hover:text-white'
+                                                }`}
+                                            >
+                                                <Icon
+                                                    name={item.icon}
+                                                    size={18}
+                                                    className={
+                                                        activeToolId === item.id
+                                                            ? 'text-blue-300'
+                                                            : 'text-slate-400 dark:text-slate-500 transition-colors group-hover:text-slate-500 dark:group-hover:text-slate-100'
+                                                    }
+                                                />
+                                                {t.tools[item.id]}
+                                            </a>
                                         ))}
                                     </div>
                                 </div>
                             ))}
                         </nav>
-                        <div className="p-4 border-t border-slate-100 space-y-2">
-                          <button onClick={toggleTheme} className="w-full flex items-center justify-center gap-2 py-2.5 rounded-xl border border-slate-200 text-sm font-bold text-slate-500 hover:bg-slate-50 hover:text-blue-600 transition-colors">
+                        <div className="p-4 border-t border-slate-100 dark:border-slate-800 space-y-2">
+                          <button onClick={toggleTheme} className="w-full flex items-center justify-center gap-2 py-2.5 rounded-xl border border-slate-200 dark:border-slate-700 text-sm font-bold text-slate-500 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-800 hover:text-blue-600 dark:hover:text-white transition-colors">
                             <Icon name={theme === 'dark' ? 'sun' : 'moon'} size={16} />
                             {lang === 'ko' ? (theme === 'dark' ? '라이트 모드' : '다크 모드') : (theme === 'dark' ? 'Light mode' : 'Dark mode')}
                           </button>
-                          <button onClick={() => { window.location.href = makePath(lang === 'ko' ? 'en' : 'ko', activeToolId); }} className="w-full flex items-center justify-center gap-2 py-2.5 rounded-xl border border-slate-200 text-sm font-bold text-slate-500 hover:bg-slate-50 hover:text-blue-600 transition-colors">
+                          <button onClick={() => { window.location.href = makePath(lang === 'ko' ? 'en' : 'ko', activeToolId); }} className="w-full flex items-center justify-center gap-2 py-2.5 rounded-xl border border-slate-200 dark:border-slate-700 text-sm font-bold text-slate-500 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-800 hover:text-blue-600 dark:hover:text-white transition-colors">
                             <Icon name="globe" size={16} />
                             {lang === 'ko' ? 'Language: 한국어' : 'Language: English'}
                           </button>
