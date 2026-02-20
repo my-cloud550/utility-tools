@@ -1093,7 +1093,7 @@ const Stopwatch = ({ t }) => {
         };
 
         // --- Path Routing Helpers (no #hash) ---
-        const TOOL_SLUG = {"text": "word-counter", "case": "case-converter", "percent": "universal-percent", "discount": "discount-calculator", "bmi": "bmi-calculator", "unit": "unit-converter", "image": "image-tools", "color": "color-converter", "stopwatch": "stopwatch", "pomodoro": "pomodoro-timer", "dday": "dday-calculator", "password": "password-generator", "lotto": "lotto-picker", "compound": "compound-interest-calculator", "dca": "dca-calculator", "pnl": "profit-loss-calculator"};
+        const TOOL_SLUG = {"text": "word-counter", "case": "case-converter", "percent": "universal-percent", "discount": "discount-calculator", "bmi": "bmi-calculator", "unit": "unit-converter", "image": "image-tools", "color": "color-converter", "stopwatch": "stopwatch", "pomodoro": "pomodoro-timer", "dday": "dday-calculator", "password": "password-generator", "lotto": "lotto-picker", "compound": "compound-interest-calculator", "dca": "dca-average-cost-calculator", "pnl": "profit-loss-calculator"};
         const SLUG_TOOL = Object.fromEntries(Object.entries(TOOL_SLUG).map(([k,v]) => [v,k]));
         const parseRouteFromPath = () => {
             const parts = window.location.pathname.split('/').filter(Boolean);
