@@ -29,7 +29,6 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <script>
         tailwind.config = {
-            darkMode: 'class',
             theme: {
                 extend: {
                     fontFamily: {
@@ -90,6 +89,15 @@
   gtag('js', new Date());
   gtag('config', 'G-TCGYQ9YDD8');
 </script>
+
+
+    <script>
+        if (localStorage.theme === 'dark' || (!('theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+            document.documentElement.classList.add('dark');
+        } else {
+            document.documentElement.classList.remove('dark');
+        }
+    </script>
 
 </head>
 <body class="bg-slate-50 text-slate-800">
