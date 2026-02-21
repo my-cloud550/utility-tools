@@ -2,10 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8" />
-  <script src="/assets/theme.js"></script>
-
-    
-  <link rel="icon" href="/favicon.ico" />
+<link rel="icon" href="/favicon.ico" />
   <link rel="icon" type="image/png" sizes="96x96" href="/favicon-96.png" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta name="description" content="Essential web tools. Find a tool and run it instantly." />
@@ -87,6 +84,26 @@
   gtag('config', 'G-TCGYQ9YDD8');
 </script>
 
+    <style>
+        /* Inline theme styles (replaces theme.js injection) */
+        html.dark body { background-color: #0b1020 !important; }
+        html.dark body { background-image: radial-gradient(1100px 600px at 20% 0%, rgba(59,130,246,0.18), rgba(11,16,32,0) 60%), radial-gradient(900px 520px at 80% 10%, rgba(99,102,241,0.14), rgba(11,16,32,0) 55%); }
+        html.dark .ubox-page-bg { background: transparent !important; }
+        html.dark input, html.dark textarea, html.dark select { background-color: #0f172a !important; color: #e5e7eb !important; border-color: #334155 !important; }
+        html.dark input::placeholder, html.dark textarea::placeholder { color: #64748b !important; }
+        html.dark input:focus, html.dark textarea:focus, html.dark select:focus { outline: none !important; border-color: #60a5fa !important; box-shadow: 0 0 0 3px rgba(96,165,250,0.25) !important; }
+    </style>
+
+    <script>
+      // Theme init to prevent flash
+      try {
+        const stored = localStorage.getItem('theme');
+        const prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+        const isDark = stored === 'dark' || (!stored && prefersDark);
+        document.documentElement.classList.toggle('dark', isDark);
+      } catch (e) {}
+    </script>
+    
 </head>
 <body class="bg-slate-50 text-slate-800 dark:bg-slate-950 dark:text-slate-100">
   <div class="flex h-screen bg-slate-50 dark:bg-slate-950">
@@ -228,13 +245,22 @@
           </div>
       </nav>
 
-      <div class="p-4 border-t border-slate-100 dark:border-slate-800">
+            <div class="p-4 border-t border-slate-100 dark:border-slate-800 flex flex-col gap-2">
+        <button id="themeToggle" class="w-full flex items-center justify-between py-2.5 px-4 rounded-xl border border-slate-200 text-sm font-bold text-slate-500 hover:bg-slate-50 hover:text-blue-600 transition-colors dark:bg-slate-950 dark:border-slate-800 dark:text-slate-300 dark:hover:bg-slate-800/60" type="button">
+          <div class="flex items-center gap-2">
+            <i id="themeIcon" data-lucide="moon" class="w-4 h-4"></i>
+            <span id="themeText">Dark mode</span>
+          </div>
+          <span id="themeHint" class="text-xs font-normal text-slate-400">Dim screen</span>
+        </button>
+
         <a href="/ko/" class="w-full flex items-center justify-center gap-2 py-2.5 rounded-xl border border-slate-200 text-sm font-bold text-slate-500 hover:bg-slate-50 hover:text-blue-600 transition-colors dark:bg-slate-950 dark:border-slate-800 dark:text-slate-300 dark:hover:bg-slate-800/60">
           <i data-lucide="globe" class="w-4 h-4"></i>
           Language: English
         </a>
       </div>
-    </aside>
+        
+</aside>
 
     <!-- Backdrop (mobile) -->
     <div id="backdrop" class="fixed inset-0 bg-black/20 z-30 md:hidden backdrop-blur-sm hidden"></div>
@@ -599,5 +625,71 @@
       window.lucide.createIcons();
     }
   </script>
+
+  <!-- Theme toggle -->
+  <button id="uboxThemeToggle" type="button"
+    class="fixed bottom-4 right-4 z-[9999] rounded-full border border-slate-200 bg-white/90 backdrop-blur px-4 py-2 text-sm font-bold text-slate-700 shadow-lg hover:bg-slate-50 hover:text-blue-600 transition
+           dark:border-slate-700 dark:bg-slate-900/90 dark:text-slate-200 dark:hover:bg-slate-800/70 dark:hover:text-blue-300">
+    <span id="uboxThemeToggleIcon" class="mr-1">☾</span><span id="uboxThemeToggleLabel">Dark</span>
+  </button>
+  <script>
+    (function () {
+      function refresh() {
+        var isDark = document.documentElement.classList.contains('dark');
+        var icon = document.getElementById('uboxThemeToggleIcon');
+        var label = document.getElementById('uboxThemeToggleLabel');
+        if (!icon || !label) return;
+        if (isDark) { icon.textContent = '☀'; label.textContent = 'Light'; }
+        else { icon.textContent = '☾'; label.textContent = 'Dark'; }
+      }
+      var btn = document.getElementById('uboxThemeToggle');
+      if (btn) btn.addEventListener('click', function () { if (window.UboxTheme) window.UboxTheme.toggle(); refresh(); });
+      window.addEventListener('ubox:theme', refresh);
+      refresh();
+    })();
+  </script>
+
+  <script>
+    // Theme toggle behavior
+    const themeToggleBtn = document.getElementById('themeToggle');
+    const themeIcon = document.getElementById('themeIcon');
+    const themeText = document.getElementById('themeText');
+    const themeHint = document.getElementById('themeHint');
+    const htmlEl = document.documentElement;
+
+    function updateThemeUI(isDark) {
+      if (!themeIcon || !themeText || !themeHint) return;
+      if (isDark) {
+        themeIcon.setAttribute('data-lucide', 'sun');
+        themeText.textContent = 'Light mode';
+        themeHint.textContent = 'Bright screen';
+      } else {
+        themeIcon.setAttribute('data-lucide', 'moon');
+        themeText.textContent = 'Dark mode';
+        themeHint.textContent = 'Dim screen';
+      }
+      if (window.lucide && window.lucide.createIcons) {
+        window.lucide.createIcons();
+      }
+    }
+
+    updateThemeUI(htmlEl.classList.contains('dark'));
+
+    if (themeToggleBtn) {
+      themeToggleBtn.addEventListener('click', () => {
+        const isDark = htmlEl.classList.contains('dark');
+        if (isDark) {
+          htmlEl.classList.remove('dark');
+          try { localStorage.setItem('theme', 'light'); } catch(e) {}
+          updateThemeUI(false);
+        } else {
+          htmlEl.classList.add('dark');
+          try { localStorage.setItem('theme', 'dark'); } catch(e) {}
+          updateThemeUI(true);
+        }
+      });
+    }
+  </script>
+    
 </body>
 </html>
