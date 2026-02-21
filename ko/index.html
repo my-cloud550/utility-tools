@@ -29,6 +29,7 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <script>
         tailwind.config = {
+            darkMode: 'class',
             theme: {
                 extend: {
                     fontFamily: {
@@ -85,10 +86,6 @@
 </script>
 
 
-    <script crossorigin src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
-    <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
-
-
     <script>
         if (localStorage.theme === 'dark' || (!('theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
             document.documentElement.classList.add('dark');
@@ -96,13 +93,12 @@
             document.documentElement.classList.remove('dark');
         }
     </script>
-
 </head>
 <body class="bg-slate-50 text-slate-800 dark:bg-slate-950 dark:text-slate-100">
     <div id="root"></div>
     <script>
       window.__UBOX_PAGE__ = { lang: "ko", tool: "home" };
     </script>
-    <script src="/assets/app.bundle.js"></script>
+    <script src="/assets/app.bundle.js?v=1771655002"></script>
 </body>
 </html>
