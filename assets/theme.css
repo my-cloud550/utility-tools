@@ -20,4 +20,6 @@ body {
   margin: 0;
   background-color: var(--ubox-bg);
   color: var(--ubox-text);
+  text-rendering: optimizeLegibility;
 }
+
