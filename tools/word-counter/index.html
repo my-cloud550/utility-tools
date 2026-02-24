@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="ko">
 <head>
     <meta charset="UTF-8" />
     
@@ -8,25 +8,25 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <link rel="stylesheet" href="/assets/theme.css" />
     <script src="/assets/theme.js"></script>
-    <meta name="description" content="Essential web tools. Find a tool and run it instantly." />
+    <meta name="description" content="공백 포함/제외 글자수, 단어수, 문장수 등을 바로 계산합니다." />
     <meta name="keywords" content="utility box, tools, word counter, case converter, percent calculator, 온라인 도구" />
-    <title>UtilityBox | Online Utility Toolkit</title>
+    <title>글자 수 세기 | 공백 포함/제외 | UtilityBox</title>
 
-    <link rel="canonical" href="https://uboxtools.com/en/" />
+    <link rel="canonical" href="https://uboxtools.com/tools/word-counter/" />
     <link rel="alternate" hreflang="x-default" href="https://uboxtools.com/" />
-    <link rel="alternate" hreflang="ko" href="https://uboxtools.com/" />
-    <link rel="alternate" hreflang="en" href="https://uboxtools.com/en/" />
+    <link rel="alternate" hreflang="ko" href="https://uboxtools.com/tools/word-counter/" />
+    <link rel="alternate" hreflang="en" href="https://uboxtools.com/en/tools/word-counter/" />
 
     <meta property="og:type" content="website" />
     <meta property="og:site_name" content="UtilityBox" />
-    <meta property="og:locale" content="en_US" />
-    <meta property="og:title" content="UtilityBox | Online Utility Toolkit" />
-    <meta property="og:description" content="Essential web tools. Find a tool and run it instantly." />
-    <meta property="og:url" content="https://uboxtools.com/en/" />
+    <meta property="og:locale" content="ko_KR" />
+    <meta property="og:title" content="글자 수 세기 | 공백 포함/제외 | UtilityBox" />
+    <meta property="og:description" content="공백 포함/제외 글자수, 단어수, 문장수 등을 바로 계산합니다." />
+    <meta property="og:url" content="https://uboxtools.com/tools/word-counter/" />
 
     <meta name="twitter:card" content="summary" />
-    <meta name="twitter:title" content="UtilityBox | Online Utility Toolkit" />
-    <meta name="twitter:description" content="Essential web tools. Find a tool and run it instantly." />
+    <meta name="twitter:title" content="글자 수 세기 | 공백 포함/제외 | UtilityBox" />
+    <meta name="twitter:description" content="공백 포함/제외 글자수, 단어수, 문장수 등을 바로 계산합니다." />
 <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
     <script>
@@ -55,9 +55,11 @@
             }
         }
     </script>
-<!-- Icons (Lucide) -->
+
+    <!-- React Libraries -->
     <script crossorigin src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
     <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
+    <!-- Icons (Lucide) -->
     <script src="https://unpkg.com/lucide@latest"></script>
 
     <style>
@@ -80,6 +82,8 @@
     </style>
 
 
+    <script id="ubox-breadcrumb-jsonld" type="application/ld+json">{"@context": "https://schema.org", "@type": "BreadcrumbList", "itemListElement": [{"@type": "ListItem", "position": 1, "name": "도구 모음", "item": "https://uboxtools.com/"}, {"@type": "ListItem", "position": 2, "name": "글자 수 세기", "item": "https://uboxtools.com/tools/word-counter/"}]}</script>
+
 <!-- Google tag (gtag.js) -->
 <script async src="https://www.googletagmanager.com/gtag/js?id=G-TCGYQ9YDD8"></script>
 <script>
@@ -88,20 +92,12 @@
   gtag('js', new Date());
   gtag('config', 'G-TCGYQ9YDD8');
 </script>
-  <script type="application/ld+json">
-    {
-      "@context": "https://schema.org",
-      "@type": "WebSite",
-      "name": "UtilityBox",
-      "url": "https://uboxtools.com/",
-      "inLanguage": "en"
-    }
-  </script>
 </head>
-<body class="bg-slate-50 text-slate-800 dark:bg-slate-950 dark:text-slate-100">
+<body class="bg-slate-50 text-slate-800">
     <div id="root"></div>
+
     <script>
-      window.__UBOX_PAGE__ = { lang: "en", tool: "home" };
+      window.__UBOX_PAGE__ = { lang: "ko", tool: "text" };
     </script>
     <script src="/assets/app.bundle.js?v=1771655002"></script>
 </body>

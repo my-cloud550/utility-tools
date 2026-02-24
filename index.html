@@ -1,35 +1,84 @@
-<!doctype html>
-<html lang="en">
+<!DOCTYPE html>
+<html lang="ko">
 <head>
-  <meta charset="UTF-8" />
-  
-  
-<link rel="icon" href="/favicon.ico" />
+    <meta charset="UTF-8" />
+    
+  <link rel="icon" href="/favicon.ico" />
   <link rel="icon" type="image/png" sizes="96x96" href="/favicon-96.png" />
-<meta name="viewport" content="width=device-width,initial-scale=1" />
-  <link rel="stylesheet" href="/assets/theme.css" />
-  <script src="/assets/theme.js"></script>
-  <title>UtilityBox</title>
-  <meta name="description" content="UtilityBox language selection. Choose 한국어 or English." />
-  <link rel="canonical" href="https://uboxtools.com/" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="/assets/theme.css" />
+    <script src="/assets/theme.js"></script>
+    <meta name="description" content="생활 필수 웹 도구 모음. 원하는 도구를 찾아 바로 실행하세요." />
+    <meta name="keywords" content="utility box, tools, word counter, case converter, percent calculator, 온라인 도구" />
+    <title>UtilityBox | 온라인 만능 도구 모음</title>
 
-  <!-- hreflang -->
-  <link rel="alternate" hreflang="ko" href="https://uboxtools.com/ko/" />
-  <link rel="alternate" hreflang="en" href="https://uboxtools.com/en/" />
-  <link rel="alternate" hreflang="x-default" href="https://uboxtools.com/" />
-<script src="https://cdn.tailwindcss.com"></script>
-  <script>
-    tailwind.config = {
+    <link rel="canonical" href="https://uboxtools.com/" />
+    <link rel="alternate" hreflang="x-default" href="https://uboxtools.com/" />
+    <link rel="alternate" hreflang="ko" href="https://uboxtools.com/" />
+    <link rel="alternate" hreflang="en" href="https://uboxtools.com/en/" />
+
+    <meta property="og:type" content="website" />
+    <meta property="og:site_name" content="UtilityBox" />
+    <meta property="og:locale" content="ko_KR" />
+    <meta property="og:title" content="UtilityBox | 온라인 만능 도구 모음" />
+    <meta property="og:description" content="생활 필수 웹 도구 모음. 원하는 도구를 찾아 바로 실행하세요." />
+    <meta property="og:url" content="https://uboxtools.com/" />
+
+    <meta name="twitter:card" content="summary" />
+    <meta name="twitter:title" content="UtilityBox | 온라인 만능 도구 모음" />
+    <meta name="twitter:description" content="생활 필수 웹 도구 모음. 원하는 도구를 찾아 바로 실행하세요." />
+<!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
             darkMode: 'class',
-      theme: {
-        extend: {
-          fontFamily: {
-            sans: ['Pretendard','Inter','Noto Sans KR','system-ui','-apple-system','Segoe UI','Roboto','sans-serif'],
-          }
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Pretendard', 'Inter', 'Noto Sans KR', 'sans-serif'],
+                        mono: ['JetBrains Mono', 'monospace'],
+                    },
+                    colors: {
+                        brand: { 50: '#eff6ff', 100: '#dbeafe', 500: '#3b82f6', 600: '#2563eb', 900: '#1e3a8a' },
+                    },
+                    animation: {
+                        'fade-in': 'fadeIn 0.3s ease-out',
+                        'slide-up': 'slideUp 0.4s ease-out',
+                        'bounce-short': 'bounceShort 0.5s ease-in-out 1',
+                    },
+                    keyframes: {
+                        fadeIn: { '0%': { opacity: '0' }, '100%': { opacity: '1' } },
+                        slideUp: { '0%': { transform: 'translateY(10px)', opacity: '0' }, '100%': { transform: 'translateY(0)', opacity: '1' } },
+                        bounceShort: { '0%, 100%': { transform: 'translateY(0)' }, '50%': { transform: 'translateY(-10px)' } }
+                    }
+                }
+            }
         }
-      }
-    };
-  </script>
+    </script>
+<!-- Icons (Lucide) -->
+    <script crossorigin src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
+    <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
+<script src="https://unpkg.com/lucide@latest"></script>
+
+    <style>
+        @import url('https://cdn.jsdelivr.net/gh/orioncactus/pretendard/dist/web/static/pretendard.css');
+        
+        body { 
+            font-family: 'Pretendard', -apple-system, BlinkMacSystemFont, system-ui, Roboto, sans-serif;
+            background-color: #f8fafc;
+            -webkit-tap-highlight-color: transparent;
+        }
+        
+        /* Custom Scrollbar */
+        .custom-scrollbar::-webkit-scrollbar { width: 5px; }
+        .custom-scrollbar::-webkit-scrollbar-track { background: transparent; }
+        .custom-scrollbar::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 3px; }
+
+        /* Hide Number Input Arrows */
+        input[type=number]::-webkit-inner-spin-button, 
+        input[type=number]::-webkit-outer-spin-button { -webkit-appearance: none; margin: 0; }
+    </style>
+
 
 <!-- Google tag (gtag.js) -->
 <script async src="https://www.googletagmanager.com/gtag/js?id=G-TCGYQ9YDD8"></script>
@@ -39,69 +88,22 @@
   gtag('js', new Date());
   gtag('config', 'G-TCGYQ9YDD8');
 </script>
+  <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "WebSite",
+      "name": "UtilityBox",
+      "alternateName": "유틸리티박스",
+      "url": "https://uboxtools.com/",
+      "inLanguage": "ko"
+    }
+  </script>
 </head>
-<body class="bg-slate-50 text-slate-900 dark:bg-slate-950 dark:text-slate-100">
-  <main class="min-h-screen flex items-center justify-center px-5">
-    <div class="w-full max-w-lg">
-      <div class="bg-white border border-slate-100 shadow-sm rounded-3xl p-7 md:p-9 dark:bg-slate-900 dark:border-slate-700/40 relative">
-        <button type="button" data-theme-toggle="root" class="absolute top-5 right-5 h-10 w-10 rounded-xl border border-slate-200 bg-white/80 backdrop-blur flex items-center justify-center text-slate-600 hover:bg-slate-50 transition-colors dark:bg-slate-900/70 dark:border-slate-700/50 dark:text-slate-200" aria-label="toggle theme">
-            <span class="sr-only">Toggle theme</span>
-            <svg class="dark:hidden" width="20" height="20" viewBox="0 0 24 24" fill="none" aria-hidden="true">
-              <path d="M21 12.8A8.5 8.5 0 0 1 11.2 3a7 7 0 1 0 9.8 9.8Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-            </svg>
-            <svg class="hidden dark:block" width="20" height="20" viewBox="0 0 24 24" fill="none" aria-hidden="true">
-              <path d="M12 3v2M12 19v2M4.22 4.22l1.42 1.42M18.36 18.36l1.42 1.42M3 12h2M19 12h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42M12 7a5 5 0 1 0 0 10a5 5 0 0 0 0-10Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-            </svg>
-          </button>
-
-        <div class="flex items-center gap-4">
-          <!-- Blue box with cube icon -->
-          <div class="h-12 w-12 rounded-2xl bg-blue-600 flex items-center justify-center shadow-sm">
-            <svg width="26" height="26" viewBox="0 0 24 24" fill="none" aria-hidden="true">
-              <path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16Z" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-              <path d="M3.3 7l8.7 5 8.7-5" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-              <path d="M12 22V12" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-            </svg>
-          </div>
-          <div>
-            <div class="text-2xl font-extrabold leading-none">UtilityBox</div>
-            <div class="text-sm text-slate-500 dark:text-slate-300/70 mt-1 leading-snug">
-              <div>Online utility toolkit</div>
-              <div>온라인 유틸리티 툴킷</div>
-            </div>
-          </div>
-        </div>
-
-        <div class="mt-7">
-          <div class="text-sm text-slate-600 leading-snug">
-            <div>Select language</div>
-            <div>언어를 선택하세요</div>
-          </div>
-
-          <div class="mt-4 grid grid-cols-1 gap-3">
-            <a href="/ko/" class="w-full px-4 py-4 rounded-2xl bg-slate-900 text-white font-bold text-center hover:bg-slate-800 transition dark:bg-blue-600 dark:hover:bg-blue-500">
-              한국어로 시작하기
-            </a>
-            <a href="/en/" class="w-full px-4 py-4 rounded-2xl bg-white border border-slate-200 text-slate-900 font-bold text-center hover:bg-slate-50 transition dark:bg-slate-800 dark:border-slate-700 dark:text-slate-100 dark:hover:bg-slate-700">
-              Continue in English
-            </a>
-          </div>
-
-          <!-- Tips (KO + EN) -->
-          <div class="mt-5 rounded-2xl border border-slate-100 bg-slate-50 px-4 py-3 text-xs text-slate-600 leading-relaxed dark:bg-slate-900/60 dark:border-slate-700/60 dark:text-slate-200">
-            <div><span class="font-bold text-slate-700">Tip:</span> 북마크는 <span class="font-semibold">/ko/</span> 또는 <span class="font-semibold">/en/</span>로 해두면 더 빠릅니다.</div>
-            <div class="mt-1"><span class="font-bold text-slate-700">Tip:</span> Bookmark <span class="font-semibold">/ko/</span> or <span class="font-semibold">/en/</span> for faster access.</div>
-          </div>
-
-          <div class="mt-4 text-xs text-slate-500 leading-relaxed dark:text-slate-300/70">
-            <div>This page helps search engines and users choose the right language.</div>
-            <div>이 페이지는 검색엔진과 사용자가 올바른 언어를 선택하는 데 도움이 됩니다.</div>
-          </div>
-        </div>
-      </div>
-
-      <div class="mt-6 text-center text-xs text-slate-400">© 2026 UtilityBox</div>
-    </div>
-  </main>
+<body class="bg-slate-50 text-slate-800 dark:bg-slate-950 dark:text-slate-100">
+    <div id="root"></div>
+    <script>
+      window.__UBOX_PAGE__ = { lang: "ko", tool: "home" };
+    </script>
+    <script src="/assets/app.bundle.js?v=1771655002"></script>
 </body>
 </html>
